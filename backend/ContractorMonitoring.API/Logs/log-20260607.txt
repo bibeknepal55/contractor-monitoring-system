@@ -1,0 +1,404 @@
+2026-06-07 08:48:17.972 +05:45 [WRN] Entity 'Project' has a global query filter defined and is the required end of a relationship with the entity 'ResponsibleOfficial'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-06-07 08:48:19.882 +05:45 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-06-07 08:48:20.035 +05:45 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-06-07 08:48:20.089 +05:45 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-06-07 08:48:20.442 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-06-07 08:48:20.466 +05:45 [INF] Starting Contractor Monitoring System API
+2026-06-07 08:48:20.530 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-06-07 08:48:20.611 +05:45 [INF] Background Job Service started
+2026-06-07 08:48:20.733 +05:45 [ERR] Failed executing DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."BondAmount", p."BondDocument", p."BondNumber", p."BondType", p."CreatedAt", p."CreatedBy", p."ExpiryDate", p."IsDeleted", p."IssueDate", p."IssuingBank", p."ProjectId", p."Remarks", p."RenewalDate", p."Status", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "PerformanceBonds" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:48:20.823 +05:45 [ERR] An exception occurred while iterating over the results of a query for context type 'ContractorMonitoring.Infrastructure.Data.ApplicationDbContext'.
+Npgsql.PostgresException (0x80004005): 42P01: relation "PerformanceBonds" does not exist
+
+POSITION: 279
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "PerformanceBonds" does not exist
+    Position: 279
+    File: parse_relation.c
+    Line: 1469
+    Routine: parserOpenTable
+Npgsql.PostgresException (0x80004005): 42P01: relation "PerformanceBonds" does not exist
+
+POSITION: 279
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "PerformanceBonds" does not exist
+    Position: 279
+    File: parse_relation.c
+    Line: 1469
+    Routine: parserOpenTable
+2026-06-07 08:48:20.923 +05:45 [ERR] Error in background job execution
+Npgsql.PostgresException (0x80004005): 42P01: relation "PerformanceBonds" does not exist
+
+POSITION: 279
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at ContractorMonitoring.Infrastructure.Repositories.GenericRepository`1.GetAllAsync() in D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.Infrastructure\Repositories\GenericRepository.cs:line 29
+   at ContractorMonitoring.Infrastructure.Services.BackgroundJobService.CheckExpiringPerformanceBonds(IUnitOfWork unitOfWork) in D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.Infrastructure\Services\BackgroundJobService.cs:line 50
+   at ContractorMonitoring.Infrastructure.Services.BackgroundJobService.ExecuteAsync(CancellationToken stoppingToken) in D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.Infrastructure\Services\BackgroundJobService.cs:line 33
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "PerformanceBonds" does not exist
+    Position: 279
+    File: parse_relation.c
+    Line: 1469
+    Routine: parserOpenTable
+2026-06-07 08:48:21.005 +05:45 [INF] Now listening on: http://localhost:5185
+2026-06-07 08:48:21.234 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-07 08:48:21.235 +05:45 [INF] Hosting environment: Development
+2026-06-07 08:48:21.236 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-06-07 08:48:25.074 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5185/swagger/index.html - null null
+2026-06-07 08:48:25.327 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5185/swagger/index.html - 200 null text/html;charset=utf-8 255.4192ms
+2026-06-07 08:48:25.684 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5185/swagger/v1/swagger.json - null null
+2026-06-07 08:48:26.196 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5185/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 512.0507ms
+2026-06-07 08:51:12.880 +05:45 [INF] Request starting HTTP/1.1 POST http://localhost:5185/api/v1/auth/register - application/json 160
+2026-06-07 08:51:14.431 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-06-07 08:51:15.042 +05:45 [INF] CORS policy execution successful.
+2026-06-07 08:51:27.295 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.AuthController.Register (ContractorMonitoring.API)'
+2026-06-07 08:51:27.340 +05:45 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[ContractorMonitoring.Application.DTOs.Auth.AuthResponse]]] Register(ContractorMonitoring.Application.DTOs.Auth.RegisterRequest) on controller ContractorMonitoring.API.Controllers.V1.AuthController (ContractorMonitoring.API).
+2026-06-07 08:51:27.587 +05:45 [INF] Executed DbCommand (20ms) [Parameters=[@__command_Request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = @__command_Request_Email_0)
+2026-06-07 08:51:28.451 +05:45 [INF] Executed DbCommand (21ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?', @p4='?', @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTime), @p8='?', @p9='?', @p10='?', @p11='?', @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = DateTime), @p15='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Id", "CreatedAt", "CreatedBy", "Email", "FirstName", "IsActive", "IsDeleted", "LastLoginAt", "LastName", "PasswordHash", "PhoneNumber", "RefreshToken", "RefreshTokenExpiryTime", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+2026-06-07 08:51:28.497 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:51:28.706 +05:45 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Boolean), @p4='?' (DbType = Guid), @p5='?' (DbType = Guid), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "UserRoles" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+2026-06-07 08:51:28.738 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:51:28.754 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:51:28.775 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:51:28.795 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:51:28.865 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:51:28.950 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:51:29.344 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[@p13='?' (DbType = Guid), @p0='?', @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (DbType = DateTime), @p5='?', @p6='?', @p7='?', @p8='?', @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = DateTime), @p12='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Users" SET "Email" = @p0, "FirstName" = @p1, "IsActive" = @p2, "IsDeleted" = @p3, "LastLoginAt" = @p4, "LastName" = @p5, "PasswordHash" = @p6, "PhoneNumber" = @p7, "RefreshToken" = @p8, "RefreshTokenExpiryTime" = @p9, "TenantId" = @p10, "UpdatedAt" = @p11, "UpdatedBy" = @p12
+WHERE "Id" = @p13;
+2026-06-07 08:51:29.377 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:51:29.394 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:51:29.424 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:51:29.459 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[ContractorMonitoring.Application.DTOs.Auth.AuthResponse, ContractorMonitoring.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-07 08:51:29.502 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.AuthController.Register (ContractorMonitoring.API) in 2148.0859ms
+2026-06-07 08:51:29.508 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.AuthController.Register (ContractorMonitoring.API)'
+2026-06-07 08:51:29.516 +05:45 [INF] Request finished HTTP/1.1 POST http://localhost:5185/api/v1/auth/register - 200 null application/json; charset=utf-8 16635.8711ms
+2026-06-07 08:52:35.949 +05:45 [INF] Request starting HTTP/1.1 POST http://localhost:5185/api/v1/auth/login - application/json 81
+2026-06-07 08:52:36.017 +05:45 [INF] CORS policy execution successful.
+2026-06-07 08:52:36.026 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.AuthController.Login (ContractorMonitoring.API)'
+2026-06-07 08:52:36.038 +05:45 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[ContractorMonitoring.Application.DTOs.Auth.AuthResponse]]] Login(ContractorMonitoring.Application.DTOs.Auth.LoginRequest) on controller ContractorMonitoring.API.Controllers.V1.AuthController (ContractorMonitoring.API).
+2026-06-07 08:52:36.064 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:52:36.255 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:52:36.279 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:52:36.292 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:52:36.304 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:52:36.319 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:52:36.343 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:52:36.366 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@p13='?' (DbType = Guid), @p0='?', @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (DbType = DateTime), @p5='?', @p6='?', @p7='?', @p8='?', @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = DateTime), @p12='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Users" SET "Email" = @p0, "FirstName" = @p1, "IsActive" = @p2, "IsDeleted" = @p3, "LastLoginAt" = @p4, "LastName" = @p5, "PasswordHash" = @p6, "PhoneNumber" = @p7, "RefreshToken" = @p8, "RefreshTokenExpiryTime" = @p9, "TenantId" = @p10, "UpdatedAt" = @p11, "UpdatedBy" = @p12
+WHERE "Id" = @p13;
+2026-06-07 08:52:36.379 +05:45 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:52:36.390 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:52:36.400 +05:45 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:52:36.410 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:52:36.417 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:52:36.433 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[ContractorMonitoring.Application.DTOs.Auth.AuthResponse, ContractorMonitoring.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-07 08:52:36.440 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.AuthController.Login (ContractorMonitoring.API) in 396.8601ms
+2026-06-07 08:52:36.445 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.AuthController.Login (ContractorMonitoring.API)'
+2026-06-07 08:52:36.448 +05:45 [INF] Request finished HTTP/1.1 POST http://localhost:5185/api/v1/auth/login - 200 null application/json; charset=utf-8 499.0514ms
+2026-06-07 08:53:56.867 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5185/api/v1/users?page=1&pageSize=10&search=ram&sortOrder=asc - null null
+2026-06-07 08:53:56.946 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.GetAll (ContractorMonitoring.API)'
+2026-06-07 08:53:56.956 +05:45 [INF] Route matched with {action = "GetAll", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.PagedResponse`1[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto]]] GetAll(Int32, Int32, System.String, System.String, System.String) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 08:53:57.234 +05:45 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND (u."Email" LIKE '%ram%' OR u."PasswordHash" LIKE '%ram%' OR u."FirstName" LIKE '%ram%' OR u."LastName" LIKE '%ram%' OR u."PhoneNumber" LIKE '%ram%' OR u."RefreshToken" LIKE '%ram%' OR u."CreatedBy" LIKE '%ram%' OR u."UpdatedBy" LIKE '%ram%')
+2026-06-07 08:53:57.251 +05:45 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-07 08:53:57.256 +05:45 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-07 08:53:57.265 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND (u."Email" LIKE '%ram%' OR u."PasswordHash" LIKE '%ram%' OR u."FirstName" LIKE '%ram%' OR u."LastName" LIKE '%ram%' OR u."PhoneNumber" LIKE '%ram%' OR u."RefreshToken" LIKE '%ram%' OR u."CreatedBy" LIKE '%ram%' OR u."UpdatedBy" LIKE '%ram%')
+LIMIT @__p_1 OFFSET @__p_0
+2026-06-07 08:53:57.282 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:53:57.292 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:53:57.302 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:53:57.315 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:53:57.331 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:53:57.351 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.PagedResponse`1[[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto, ContractorMonitoring.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-07 08:53:57.367 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.GetAll (ContractorMonitoring.API) in 406.1263ms
+2026-06-07 08:53:57.370 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.GetAll (ContractorMonitoring.API)'
+2026-06-07 08:53:57.377 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5185/api/v1/users?page=1&pageSize=10&search=ram&sortOrder=asc - 200 null application/json; charset=utf-8 510.1509ms
+2026-06-07 08:54:34.004 +05:45 [INF] Request starting HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/roles - application/json 32
+2026-06-07 08:54:34.013 +05:45 [INF] CORS policy execution successful.
+2026-06-07 08:54:34.025 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API)'
+2026-06-07 08:54:34.036 +05:45 [INF] Route matched with {action = "UpdateRoles", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto]]] UpdateRoles(System.Guid, ContractorMonitoring.Application.DTOs.UserManagement.UpdateUserRolesDto) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 08:54:34.069 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND u."Id" = @__id_0
+LIMIT 1
+2026-06-07 08:54:34.079 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:54:34.095 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:54:34.127 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[@p8='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Guid), @p4='?' (DbType = Guid), @p5='?' (DbType = DateTime), @p6='?', @p7='?' (DbType = Guid), @p9='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?' (DbType = Boolean), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?' (DbType = DateTime), @p16='?', @p17='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "UserRoles" SET "CreatedAt" = @p0, "CreatedBy" = @p1, "IsDeleted" = @p2, "RoleId" = @p3, "TenantId" = @p4, "UpdatedAt" = @p5, "UpdatedBy" = @p6, "UserId" = @p7
+WHERE "Id" = @p8;
+INSERT INTO "UserRoles" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy", "UserId")
+VALUES (@p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2026-06-07 08:54:34.147 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:54:34.154 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:54:34.164 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 08:54:34.169 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 08:54:34.186 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 08:54:34.209 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto, ContractorMonitoring.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-07 08:54:34.218 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API) in 171.2749ms
+2026-06-07 08:54:34.229 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API)'
+2026-06-07 08:54:34.234 +05:45 [INF] Request finished HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/roles - 200 null application/json; charset=utf-8 230.1025ms
+2026-06-07 08:55:14.489 +05:45 [INF] Request starting HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - application/json 22
+2026-06-07 08:55:14.499 +05:45 [INF] CORS policy execution successful.
+2026-06-07 08:55:14.554 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 08:55:14.565 +05:45 [INF] Route matched with {action = "UpdateStatus", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[System.Boolean]]] UpdateStatus(System.Guid, ContractorMonitoring.Application.DTOs.UserManagement.UpdateUserStatusDto) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 08:55:14.580 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND u."Id" = @__id_0
+LIMIT 1
+2026-06-07 08:55:14.589 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[@p13='?' (DbType = Guid), @p0='?', @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (DbType = DateTime), @p5='?', @p6='?', @p7='?', @p8='?', @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = DateTime), @p12='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Users" SET "Email" = @p0, "FirstName" = @p1, "IsActive" = @p2, "IsDeleted" = @p3, "LastLoginAt" = @p4, "LastName" = @p5, "PasswordHash" = @p6, "PhoneNumber" = @p7, "RefreshToken" = @p8, "RefreshTokenExpiryTime" = @p9, "TenantId" = @p10, "UpdatedAt" = @p11, "UpdatedBy" = @p12
+WHERE "Id" = @p13;
+2026-06-07 08:55:14.600 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-07 08:55:14.608 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API) in 39.21ms
+2026-06-07 08:55:14.613 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 08:55:14.618 +05:45 [INF] Request finished HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - 200 null application/json; charset=utf-8 129.1204ms
+2026-06-07 08:55:26.250 +05:45 [INF] Request starting HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - application/json 23
+2026-06-07 08:55:26.267 +05:45 [INF] CORS policy execution successful.
+2026-06-07 08:55:26.271 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 08:55:26.284 +05:45 [INF] Route matched with {action = "UpdateStatus", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[System.Boolean]]] UpdateStatus(System.Guid, ContractorMonitoring.Application.DTOs.UserManagement.UpdateUserStatusDto) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 08:55:26.299 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND u."Id" = @__id_0
+LIMIT 1
+2026-06-07 08:55:26.307 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@p13='?' (DbType = Guid), @p0='?', @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Boolean), @p4='?' (DbType = DateTime), @p5='?', @p6='?', @p7='?', @p8='?', @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = DateTime), @p12='?'], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Users" SET "Email" = @p0, "FirstName" = @p1, "IsActive" = @p2, "IsDeleted" = @p3, "LastLoginAt" = @p4, "LastName" = @p5, "PasswordHash" = @p6, "PhoneNumber" = @p7, "RefreshToken" = @p8, "RefreshTokenExpiryTime" = @p9, "TenantId" = @p10, "UpdatedAt" = @p11, "UpdatedBy" = @p12
+WHERE "Id" = @p13;
+2026-06-07 08:55:26.314 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-06-07 08:55:26.317 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API) in 21.4406ms
+2026-06-07 08:55:26.322 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 08:55:26.332 +05:45 [INF] Request finished HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - 200 null application/json; charset=utf-8 81.6485ms
+2026-06-07 09:05:17.879 +05:45 [INF] Request starting HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/roles - application/json 31
+2026-06-07 09:05:17.888 +05:45 [INF] CORS policy execution successful.
+2026-06-07 09:05:17.895 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API)'
+2026-06-07 09:05:17.905 +05:45 [INF] Route matched with {action = "UpdateRoles", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto]]] UpdateRoles(System.Guid, ContractorMonitoring.Application.DTOs.UserManagement.UpdateUserRolesDto) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 09:05:17.967 +05:45 [INF] Executed DbCommand (4ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."Email", u."FirstName", u."IsActive", u."IsDeleted", u."LastLoginAt", u."LastName", u."PasswordHash", u."PhoneNumber", u."RefreshToken", u."RefreshTokenExpiryTime", u."TenantId", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND u."Id" = @__id_0
+LIMIT 1
+2026-06-07 09:05:17.981 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 09:05:17.989 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 09:05:18.001 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[@p8='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p1='?', @p2='?' (DbType = Boolean), @p3='?' (DbType = Guid), @p4='?' (DbType = Guid), @p5='?' (DbType = DateTime), @p6='?', @p7='?' (DbType = Guid), @p9='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?' (DbType = Boolean), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?' (DbType = DateTime), @p16='?', @p17='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "UserRoles" SET "CreatedAt" = @p0, "CreatedBy" = @p1, "IsDeleted" = @p2, "RoleId" = @p3, "TenantId" = @p4, "UpdatedAt" = @p5, "UpdatedBy" = @p6, "UserId" = @p7
+WHERE "Id" = @p8;
+INSERT INTO "UserRoles" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy", "UserId")
+VALUES (@p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2026-06-07 09:05:18.017 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 09:05:18.022 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 09:05:18.029 +05:45 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."CreatedBy", u."IsDeleted", u."RoleId", u."TenantId", u."UpdatedAt", u."UpdatedBy", u."UserId"
+FROM "UserRoles" AS u
+WHERE NOT (u."IsDeleted")
+2026-06-07 09:05:18.044 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."IsDeleted", r."PermissionId", r."RoleId", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "RolePermissions" AS r
+WHERE NOT (r."IsDeleted")
+2026-06-07 09:05:18.060 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-06-07 09:05:18.070 +05:45 [INF] Executing OkObjectResult, writing value of type 'ContractorMonitoring.Application.Common.Models.ApiResponse`1[[ContractorMonitoring.Application.DTOs.UserManagement.UserManagementDto, ContractorMonitoring.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-07 09:05:18.074 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API) in 159.3366ms
+2026-06-07 09:05:18.079 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateRoles (ContractorMonitoring.API)'
+2026-06-07 09:05:18.083 +05:45 [INF] Request finished HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/roles - 200 null application/json; charset=utf-8 203.8778ms
+2026-06-07 09:05:50.672 +05:45 [INF] Request starting HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - application/json 22
+2026-06-07 09:05:50.737 +05:45 [INF] CORS policy execution successful.
+2026-06-07 09:05:50.745 +05:45 [INF] Executing endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 09:05:50.750 +05:45 [INF] Route matched with {action = "UpdateStatus", controller = "UserManagement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ContractorMonitoring.Application.Common.Models.ApiResponse`1[System.Boolean]]] UpdateStatus(System.Guid, ContractorMonitoring.Application.DTOs.UserManagement.UpdateUserStatusDto) on controller ContractorMonitoring.API.Controllers.V1.UserManagementController (ContractorMonitoring.API).
+2026-06-07 09:05:50.766 +05:45 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2026-06-07 09:05:50.784 +05:45 [INF] Executed action ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API) in 27.6429ms
+2026-06-07 09:05:50.787 +05:45 [INF] Executed endpoint 'ContractorMonitoring.API.Controllers.V1.UserManagementController.UpdateStatus (ContractorMonitoring.API)'
+2026-06-07 09:05:50.790 +05:45 [INF] Request finished HTTP/1.1 PUT http://localhost:5185/api/v1/users/336de425-0008-422e-8109-70fab8b7f80c/status - 400 null application/problem+json; charset=utf-8 117.7169ms

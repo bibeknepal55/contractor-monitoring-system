@@ -1,0 +1,131 @@
+<div class="layout-container">
+  <!-- Top Toolbar -->
+  <mat-toolbar class="app-toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button class="menu-button" (click)="sidenav.toggle()" aria-label="Toggle menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="app-logo" routerLink="/dashboard">
+        <mat-icon>engineering</mat-icon>
+        <span class="app-logo-text">{{ langSrv.t('CMS') }}</span>
+      </div>
+    </div>
+
+    <span class="toolbar-spacer"></span>
+
+    <div class="toolbar-right">
+      <button mat-icon-button class="notif-btn"
+        matTooltip="{{ langSrv.t('Pending Approvals') }}: {{ pendingApprovals }}"
+        routerLink="/approvals"
+        *ngIf="hasPermission('ApprovalWorkflow.View') && !isViewerOnly">
+        <mat-icon [matBadge]="pendingApprovals" matBadgeColor="warn" [matBadgeHidden]="pendingApprovals === 0">notifications</mat-icon>
+      </button>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+        <div class="user-avatar">
+          <img [src]="profilePictureUrl" *ngIf="profilePictureUrl" class="avatar-pic" alt="User">
+          <span *ngIf="!profilePictureUrl" class="avatar-text">{{ userInitials }}</span>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.firstName }}</span>
+          <span class="user-role">{{ getHighestRole() }}</span>
+        </div>
+        <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="menu-header">
+          <div class="menu-avatar">
+            <img [src]="profilePictureUrl" *ngIf="profilePictureUrl" class="avatar-pic" alt="User">
+            <span *ngIf="!profilePictureUrl" class="avatar-text-menu">{{ userInitials }}</span>
+          </div>
+          <div class="menu-user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</div>
+          <div class="menu-user-email">{{ currentUser?.email }}</div>
+          <span class="role-badge-inline" [ngClass]="getHighestRole().toLowerCase()">{{ getHighestRole() }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>{{ langSrv.t('My Profile') }}</span>
+        </button>
+        <button mat-menu-item (click)="changePassword()">
+          <mat-icon>lock_reset</mat-icon>
+          <span>{{ langSrv.t('Change Password') }}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{ langSrv.t('Logout') }}</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav class="app-sidenav" [mode]="'side'" [opened]="true" [fixedInViewport]="true" [fixedTopGap]="64">
+      <div class="sidebar-header">
+        <div class="sidebar-user-avatar">
+          <img [src]="profilePictureUrl" *ngIf="profilePictureUrl" class="avatar-pic" alt="User">
+          <span *ngIf="!profilePictureUrl" class="avatar-text-sidebar">{{ userInitials }}</span>
+        </div>
+        <div class="sidebar-user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</div>
+        <div class="sidebar-user-email">{{ currentUser?.email }}</div>
+        <span class="role-badge" [ngClass]="getHighestRole().toLowerCase()">{{ getHighestRole() }}</span>
+      </div>
+      <mat-divider></mat-divider>
+
+      <div class="nav-section-label">{{ langSrv.t('Main Menu') }}</div>
+      <nav class="nav-list">
+        <ng-container *ngFor="let item of visibleNavItems">
+          <ng-container *ngIf="!item.children; else groupItem">
+            <a class="nav-item"
+              [class.disabled]="isNavDisabled(item)"
+              [routerLink]="isNavDisabled(item) ? null : item.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+              (click)="isNavDisabled(item) ? $event.preventDefault() : closeSidenavOnMobile()">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span class="nav-item-label">{{ langSrv.t(item.label) }}</span>
+              <span *ngIf="item.badge" class="nav-item-badge"
+                [style.background-color]="(item.badgeColor || '#f57c00') + '20'" [style.color]="item.badgeColor">{{ item.badge }}</span>
+            </a>
+          </ng-container>
+
+          <ng-template #groupItem>
+            <div style="display:flex;flex-direction:column;">
+              <div class="nav-item" [class.disabled]="isNavDisabled(item)"
+                (click)="isNavDisabled(item) ? $event.preventDefault() : toggleGroup(item.label)" style="cursor:pointer;">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                <span class="nav-item-label">{{ langSrv.t(item.label) }}</span>
+                <mat-icon class="nav-item-arrow" [class.expanded]="isGroupExpanded(item.label)">expand_more</mat-icon>
+              </div>
+              <div class="nav-sub-items" *ngIf="isGroupExpanded(item.label)">
+                <ng-container *ngFor="let child of item.children">
+                  <a class="nav-sub-item" [class.disabled]="isNavDisabled(child)"
+                    [routerLink]="isNavDisabled(child) ? null : child.route"
+                    routerLinkActive="active"
+                    (click)="isNavDisabled(child) ? $event.preventDefault() : closeSidenavOnMobile()"
+                    *ngIf="canShowNavItem(child)">
+                    <mat-icon style="font-size:18px;width:18px;height:18px;">{{ child.icon }}</mat-icon>
+                    <span>{{ langSrv.t(child.label) }}</span>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button mat-stroked-button style="width:100%;" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          {{ langSrv.t('Logout') }}
+        </button>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,229 @@
+<app-page-header title="Executive Dashboard" subtitle="Real-time overview of all projects and contractors">
+</app-page-header>
+
+<div class="dashboard-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-text">
+      <mat-spinner diameter="48" color="primary"></mat-spinner>
+      <span>Loading dashboard data...</span>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="hasError && !isLoading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <h3>Failed to Load Dashboard</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="loadDashboard()">
+      <mat-icon>refresh</mat-icon>
+      Retry
+    </button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <ng-container *ngIf="dashboard && !isLoading">
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <app-stat-card
+        label="Total Projects"
+        [value]="dashboard.totalProjects"
+        icon="business"
+        colorClass="primary"
+        [footerText]="'Active: ' + dashboard.activeProjects + ' | Completed: ' + dashboard.completedProjects">
+      </app-stat-card>
+
+      <app-stat-card
+        label="Total Contractors"
+        [value]="dashboard.totalContractors"
+        icon="groups"
+        colorClass="success">
+      </app-stat-card>
+
+      <app-stat-card
+        label="Total Budget"
+        [value]="dashboard.totalBudget"
+        icon="account_balance_wallet"
+        colorClass="info"
+        [footerText]="'Spent: ' + formatCurrency(dashboard.totalSpent)">
+      </app-stat-card>
+
+      <app-stat-card
+        label="Budget Utilization"
+        [value]="dashboard.budgetUtilization"
+        icon="trending_up"
+        colorClass="warning"
+        [footerText]="'Avg Progress: ' + dashboard.averageProgress + '%'">
+      </app-stat-card>
+
+      <app-stat-card
+        label="Delayed Projects"
+        [value]="dashboard.delayedProjects"
+        icon="warning"
+        colorClass="danger"
+        [footerText]="'Pending Approvals: ' + dashboard.pendingApprovals">
+      </app-stat-card>
+
+      <app-stat-card
+        label="Active Performance Bonds"
+        [value]="dashboard.activePerformanceBonds"
+        icon="verified"
+        colorClass="purple"
+        [footerText]="'Expiring Guarantees: ' + dashboard.expiringGuarantees">
+      </app-stat-card>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+      <!-- Status Distribution Pie Chart -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <mat-icon>pie_chart</mat-icon>
+          Project Status Distribution
+        </div>
+        <div class="chart-container">
+          <ngx-charts-pie-chart
+            *ngIf="statusChartData.length > 0"
+            [results]="statusChartData"
+            [scheme]="colorScheme"
+            [labels]="true"
+            [doughnut]="true"
+            [arcWidth]="0.4"
+            [animations]="true"
+            [tooltipDisabled]="false"
+            style="width: 100%; height: 100%;"
+          >
+          </ngx-charts-pie-chart>
+          <p *ngIf="statusChartData.length === 0" style="color: #9e9e9e;">No data available</p>
+        </div>
+      </div>
+
+      <!-- Monthly Progress Line Chart -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <mat-icon>show_chart</mat-icon>
+          Monthly Progress (Planned vs Actual)
+        </div>
+        <div class="chart-container">
+          <ngx-charts-line-chart
+            *ngIf="progressChartData.length > 0"
+            [results]="progressChartData"
+            [scheme]="colorScheme"
+            [legend]="true"
+            [xAxis]="true"
+            [yAxis]="true"
+            [animations]="true"
+            [autoScale]="true"
+            style="width: 100%; height: 100%;"
+          >
+          </ngx-charts-line-chart>
+          <p *ngIf="progressChartData.length === 0" style="color: #9e9e9e;">No data available</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="bottom-row">
+      <!-- Top Projects by Budget -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <mat-icon>bar_chart</mat-icon>
+          Top Projects by Budget
+        </div>
+        <div class="chart-container">
+          <ngx-charts-bar-vertical
+            *ngIf="budgetChartData.length > 0"
+            [results]="budgetChartData"
+            [scheme]="colorScheme"
+            [xAxis]="true"
+            [yAxis]="true"
+            [animations]="true"
+            style="width: 100%; height: 100%;"
+          >
+          </ngx-charts-bar-vertical>
+          <p *ngIf="budgetChartData.length === 0" style="color: #9e9e9e;">No data available</p>
+        </div>
+      </div>
+
+      <!-- Recent Delays Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">
+            <mat-icon>warning</mat-icon>
+            Recent Delays
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="mini-table" *ngIf="dashboard.recentDelays && dashboard.recentDelays.length > 0">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Contractor</th>
+                <th>Days</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let delay of dashboard.recentDelays">
+                <td>{{ delay.projectName }}</td>
+                <td>{{ delay.contractorName }}</td>
+                <td>
+                  <span class="delay-days-badge" [ngClass]="getDelayClass(delay.days)">
+                    {{ delay.days }} days
+                  </span>
+                </td>
+                <td>{{ delay.reason }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="!dashboard.recentDelays || dashboard.recentDelays.length === 0" style="padding: 32px; text-align: center; color: #9e9e9e;">
+            No recent delays recorded
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Projects Table -->
+    <div class="table-card" style="margin-bottom: 0;">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon>star</mat-icon>
+          Top Projects by Budget
+        </div>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="mini-table" *ngIf="dashboard.topProjectsByBudget && dashboard.topProjectsByBudget.length > 0">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Budget</th>
+              <th>Spent</th>
+              <th>Progress</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let project of dashboard.topProjectsByBudget">
+              <td>{{ project.projectName }}</td>
+              <td>{{ formatCurrency(project.budget) }}</td>
+              <td>{{ formatCurrency(project.spent) }}</td>
+              <td>
+                <div class="progress-indicator">
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="project.progress"
+                    [color]="getProgressColor(project.progress)"
+                  >
+                  </mat-progress-bar>
+                  <span>{{ project.progress }}%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!dashboard.topProjectsByBudget || dashboard.topProjectsByBudget.length === 0" style="padding: 32px; text-align: center; color: #9e9e9e;">
+          No project data available
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

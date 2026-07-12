@@ -1,0 +1,18 @@
+# Visual Studio
+**/bin/
+**/obj/
+**/.vs/
+
+# Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Environment files (security)
+**/appsettings.Development.json
+**/environment.ts
+**/environment.prod.ts
+
+# Logs
+*.log
+

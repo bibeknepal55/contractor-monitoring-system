@@ -1,0 +1,1069 @@
+2026-05-28 21:43:25.560 +05:45 [ERR] An error occurred using the connection to database 'contractor-monitoring-backend' on server 'tcp://localhost:5432'.
+2026-05-28 21:43:25.622 +05:45 [ERR] An exception occurred while iterating over the results of a query for context type 'ContractorMonitoring.Infrastructure.Data.ApplicationDbContext'.
+Npgsql.PostgresException (0x80004005): 3D000: database "contractor-monitoring-backend" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|34_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "contractor-monitoring-backend" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+Npgsql.PostgresException (0x80004005): 3D000: database "contractor-monitoring-backend" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|34_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "contractor-monitoring-backend" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+2026-05-28 22:13:29.665 +05:45 [ERR] An error occurred using the connection to database 'contractor-monitoring-backend' on server 'tcp://localhost:5432'.
+2026-05-28 22:13:29.736 +05:45 [ERR] An exception occurred while iterating over the results of a query for context type 'ContractorMonitoring.Infrastructure.Data.ApplicationDbContext'.
+Npgsql.PostgresException (0x80004005): 3D000: database "contractor-monitoring-backend" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|34_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "contractor-monitoring-backend" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+Npgsql.PostgresException (0x80004005): 3D000: database "contractor-monitoring-backend" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|34_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "contractor-monitoring-backend" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+2026-05-28 22:20:32.535 +05:45 [ERR] Failed executing DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:20:32.617 +05:45 [ERR] An exception occurred while iterating over the results of a query for context type 'ContractorMonitoring.Infrastructure.Data.ApplicationDbContext'.
+Npgsql.PostgresException (0x80004005): 42P01: relation "Permissions" does not exist
+
+POSITION: 41
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "Permissions" does not exist
+    Position: 41
+    File: parse_relation.c
+    Line: 1469
+    Routine: parserOpenTable
+Npgsql.PostgresException (0x80004005): 42P01: relation "Permissions" does not exist
+
+POSITION: 41
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "Permissions" does not exist
+    Position: 41
+    File: parse_relation.c
+    Line: 1469
+    Routine: parserOpenTable
+2026-05-28 22:22:26.043 +05:45 [INF] Executed DbCommand (86ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2026-05-28 22:22:26.152 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2026-05-28 22:22:26.372 +05:45 [INF] Executed DbCommand (118ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-05-28 22:22:26.588 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2026-05-28 22:22:26.607 +05:45 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-28 22:22:26.629 +05:45 [INF] Applying migration '20260528163709_InitialCreate'.
+2026-05-28 22:22:26.686 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Permissions" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(200) NOT NULL,
+    "Description" character varying(500) NOT NULL,
+    "Group" character varying(100) NOT NULL,
+    "Category" character varying(50) NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone,
+    "CreatedBy" text NOT NULL,
+    "UpdatedBy" text,
+    "IsDeleted" boolean NOT NULL,
+    "TenantId" uuid NOT NULL,
+    CONSTRAINT "PK_Permissions" PRIMARY KEY ("Id")
+);
+2026-05-28 22:22:26.697 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Roles" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(50) NOT NULL,
+    "Description" character varying(500) NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone,
+    "CreatedBy" text NOT NULL,
+    "UpdatedBy" text,
+    "IsDeleted" boolean NOT NULL,
+    "TenantId" uuid NOT NULL,
+    CONSTRAINT "PK_Roles" PRIMARY KEY ("Id")
+);
+2026-05-28 22:22:26.707 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Users" (
+    "Id" uuid NOT NULL,
+    "Email" character varying(256) NOT NULL,
+    "PasswordHash" character varying(500) NOT NULL,
+    "FirstName" character varying(100) NOT NULL,
+    "LastName" character varying(100) NOT NULL,
+    "PhoneNumber" character varying(20),
+    "IsActive" boolean NOT NULL,
+    "LastLoginAt" timestamp with time zone,
+    "RefreshToken" character varying(500),
+    "RefreshTokenExpiryTime" timestamp with time zone,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone,
+    "CreatedBy" text NOT NULL,
+    "UpdatedBy" text,
+    "IsDeleted" boolean NOT NULL,
+    "TenantId" uuid NOT NULL,
+    CONSTRAINT "PK_Users" PRIMARY KEY ("Id")
+);
+2026-05-28 22:22:26.723 +05:45 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "RolePermissions" (
+    "Id" uuid NOT NULL,
+    "RoleId" uuid NOT NULL,
+    "PermissionId" uuid NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone,
+    "CreatedBy" text NOT NULL,
+    "UpdatedBy" text,
+    "IsDeleted" boolean NOT NULL,
+    "TenantId" uuid NOT NULL,
+    CONSTRAINT "PK_RolePermissions" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_RolePermissions_Permissions_PermissionId" FOREIGN KEY ("PermissionId") REFERENCES "Permissions" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_RolePermissions_Roles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "Roles" ("Id") ON DELETE CASCADE
+);
+2026-05-28 22:22:26.737 +05:45 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "UserRoles" (
+    "Id" uuid NOT NULL,
+    "UserId" uuid NOT NULL,
+    "RoleId" uuid NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone,
+    "CreatedBy" text NOT NULL,
+    "UpdatedBy" text,
+    "IsDeleted" boolean NOT NULL,
+    "TenantId" uuid NOT NULL,
+    CONSTRAINT "PK_UserRoles" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_UserRoles_Roles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "Roles" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_UserRoles_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("Id") ON DELETE CASCADE
+);
+2026-05-28 22:22:26.746 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Permissions_Group" ON "Permissions" ("Group");
+2026-05-28 22:22:26.756 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_Permissions_Name" ON "Permissions" ("Name");
+2026-05-28 22:22:26.762 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_RolePermissions_PermissionId" ON "RolePermissions" ("PermissionId");
+2026-05-28 22:22:26.770 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_RolePermissions_RoleId_PermissionId" ON "RolePermissions" ("RoleId", "PermissionId");
+2026-05-28 22:22:26.777 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_Roles_Name" ON "Roles" ("Name");
+2026-05-28 22:22:26.784 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_UserRoles_RoleId" ON "UserRoles" ("RoleId");
+2026-05-28 22:22:26.791 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_UserRoles_UserId_RoleId" ON "UserRoles" ("UserId", "RoleId");
+2026-05-28 22:22:26.798 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_Users_Email" ON "Users" ("Email");
+2026-05-28 22:22:26.804 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Users_TenantId" ON "Users" ("TenantId");
+2026-05-28 22:22:26.810 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260528163709_InitialCreate', '8.0.0');
+2026-05-28 22:24:27.008 +05:45 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:24:27.341 +05:45 [INF] Executed DbCommand (46ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?', @p5='?', @p6='?' (DbType = Boolean), @p7='?', @p8='?' (DbType = Guid), @p9='?' (DbType = DateTime), @p10='?', @p11='?' (DbType = Guid), @p12='?', @p13='?' (DbType = DateTime), @p14='?', @p15='?', @p16='?', @p17='?' (DbType = Boolean), @p18='?', @p19='?' (DbType = Guid), @p20='?' (DbType = DateTime), @p21='?', @p22='?' (DbType = Guid), @p23='?', @p24='?' (DbType = DateTime), @p25='?', @p26='?', @p27='?', @p28='?' (DbType = Boolean), @p29='?', @p30='?' (DbType = Guid), @p31='?' (DbType = DateTime), @p32='?', @p33='?' (DbType = Guid), @p34='?', @p35='?' (DbType = DateTime), @p36='?', @p37='?', @p38='?', @p39='?' (DbType = Boolean), @p40='?', @p41='?' (DbType = Guid), @p42='?' (DbType = DateTime), @p43='?', @p44='?' (DbType = Guid), @p45='?', @p46='?' (DbType = DateTime), @p47='?', @p48='?', @p49='?', @p50='?' (DbType = Boolean), @p51='?', @p52='?' (DbType = Guid), @p53='?' (DbType = DateTime), @p54='?', @p55='?' (DbType = Guid), @p56='?', @p57='?' (DbType = DateTime), @p58='?', @p59='?', @p60='?', @p61='?' (DbType = Boolean), @p62='?', @p63='?' (DbType = Guid), @p64='?' (DbType = DateTime), @p65='?', @p66='?' (DbType = Guid), @p67='?', @p68='?' (DbType = DateTime), @p69='?', @p70='?', @p71='?', @p72='?' (DbType = Boolean), @p73='?', @p74='?' (DbType = Guid), @p75='?' (DbType = DateTime), @p76='?', @p77='?' (DbType = Guid), @p78='?', @p79='?' (DbType = DateTime), @p80='?', @p81='?', @p82='?', @p83='?' (DbType = Boolean), @p84='?', @p85='?' (DbType = Guid), @p86='?' (DbType = DateTime), @p87='?', @p88='?' (DbType = Guid), @p89='?', @p90='?' (DbType = DateTime), @p91='?', @p92='?', @p93='?', @p94='?' (DbType = Boolean), @p95='?', @p96='?' (DbType = Guid), @p97='?' (DbType = DateTime), @p98='?', @p99='?' (DbType = Guid), @p100='?', @p101='?' (DbType = DateTime), @p102='?', @p103='?', @p104='?', @p105='?' (DbType = Boolean), @p106='?', @p107='?' (DbType = Guid), @p108='?' (DbType = DateTime), @p109='?', @p110='?' (DbType = Guid), @p111='?', @p112='?' (DbType = DateTime), @p113='?', @p114='?', @p115='?', @p116='?' (DbType = Boolean), @p117='?', @p118='?' (DbType = Guid), @p119='?' (DbType = DateTime), @p120='?', @p121='?' (DbType = Guid), @p122='?', @p123='?' (DbType = DateTime), @p124='?', @p125='?', @p126='?', @p127='?' (DbType = Boolean), @p128='?', @p129='?' (DbType = Guid), @p130='?' (DbType = DateTime), @p131='?', @p132='?' (DbType = Guid), @p133='?', @p134='?' (DbType = DateTime), @p135='?', @p136='?', @p137='?', @p138='?' (DbType = Boolean), @p139='?', @p140='?' (DbType = Guid), @p141='?' (DbType = DateTime), @p142='?', @p143='?' (DbType = Guid), @p144='?', @p145='?' (DbType = DateTime), @p146='?', @p147='?', @p148='?', @p149='?' (DbType = Boolean), @p150='?', @p151='?' (DbType = Guid), @p152='?' (DbType = DateTime), @p153='?', @p154='?' (DbType = Guid), @p155='?', @p156='?' (DbType = DateTime), @p157='?', @p158='?', @p159='?', @p160='?' (DbType = Boolean), @p161='?', @p162='?' (DbType = Guid), @p163='?' (DbType = DateTime), @p164='?', @p165='?' (DbType = Guid), @p166='?', @p167='?' (DbType = DateTime), @p168='?', @p169='?', @p170='?', @p171='?' (DbType = Boolean), @p172='?', @p173='?' (DbType = Guid), @p174='?' (DbType = DateTime), @p175='?', @p176='?' (DbType = Guid), @p177='?', @p178='?' (DbType = DateTime), @p179='?', @p180='?', @p181='?', @p182='?' (DbType = Boolean), @p183='?', @p184='?' (DbType = Guid), @p185='?' (DbType = DateTime), @p186='?', @p187='?' (DbType = Guid), @p188='?', @p189='?' (DbType = DateTime), @p190='?', @p191='?', @p192='?', @p193='?' (DbType = Boolean), @p194='?', @p195='?' (DbType = Guid), @p196='?' (DbType = DateTime), @p197='?', @p198='?' (DbType = Guid), @p199='?', @p200='?' (DbType = DateTime), @p201='?', @p202='?', @p203='?', @p204='?' (DbType = Boolean), @p205='?', @p206='?' (DbType = Guid), @p207='?' (DbType = DateTime), @p208='?', @p209='?' (DbType = Guid), @p210='?', @p211='?' (DbType = DateTime), @p212='?', @p213='?', @p214='?', @p215='?' (DbType = Boolean), @p216='?', @p217='?' (DbType = Guid), @p218='?' (DbType = DateTime), @p219='?', @p220='?' (DbType = Guid), @p221='?', @p222='?' (DbType = DateTime), @p223='?', @p224='?', @p225='?', @p226='?' (DbType = Boolean), @p227='?', @p228='?' (DbType = Guid), @p229='?' (DbType = DateTime), @p230='?', @p231='?' (DbType = Guid), @p232='?', @p233='?' (DbType = DateTime), @p234='?', @p235='?', @p236='?', @p237='?' (DbType = Boolean), @p238='?', @p239='?' (DbType = Guid), @p240='?' (DbType = DateTime), @p241='?', @p242='?' (DbType = Guid), @p243='?', @p244='?' (DbType = DateTime), @p245='?', @p246='?', @p247='?', @p248='?' (DbType = Boolean), @p249='?', @p250='?' (DbType = Guid), @p251='?' (DbType = DateTime), @p252='?', @p253='?' (DbType = Guid), @p254='?', @p255='?' (DbType = DateTime), @p256='?', @p257='?', @p258='?', @p259='?' (DbType = Boolean), @p260='?', @p261='?' (DbType = Guid), @p262='?' (DbType = DateTime), @p263='?', @p264='?' (DbType = Guid), @p265='?', @p266='?' (DbType = DateTime), @p267='?', @p268='?', @p269='?', @p270='?' (DbType = Boolean), @p271='?', @p272='?' (DbType = Guid), @p273='?' (DbType = DateTime), @p274='?', @p275='?' (DbType = Guid), @p276='?', @p277='?' (DbType = DateTime), @p278='?', @p279='?', @p280='?', @p281='?' (DbType = Boolean), @p282='?', @p283='?' (DbType = Guid), @p284='?' (DbType = DateTime), @p285='?', @p286='?' (DbType = Guid), @p287='?', @p288='?' (DbType = DateTime), @p289='?', @p290='?', @p291='?', @p292='?' (DbType = Boolean), @p293='?', @p294='?' (DbType = Guid), @p295='?' (DbType = DateTime), @p296='?', @p297='?' (DbType = Guid), @p298='?', @p299='?' (DbType = DateTime), @p300='?', @p301='?', @p302='?', @p303='?' (DbType = Boolean), @p304='?', @p305='?' (DbType = Guid), @p306='?' (DbType = DateTime), @p307='?', @p308='?' (DbType = Guid), @p309='?', @p310='?' (DbType = DateTime), @p311='?', @p312='?', @p313='?', @p314='?' (DbType = Boolean), @p315='?', @p316='?' (DbType = Guid), @p317='?' (DbType = DateTime), @p318='?', @p319='?' (DbType = Guid), @p320='?', @p321='?' (DbType = DateTime), @p322='?', @p323='?', @p324='?', @p325='?' (DbType = Boolean), @p326='?', @p327='?' (DbType = Guid), @p328='?' (DbType = DateTime), @p329='?', @p330='?' (DbType = Guid), @p331='?', @p332='?' (DbType = DateTime), @p333='?', @p334='?', @p335='?', @p336='?' (DbType = Boolean), @p337='?', @p338='?' (DbType = Guid), @p339='?' (DbType = DateTime), @p340='?', @p341='?' (DbType = Guid), @p342='?', @p343='?' (DbType = DateTime), @p344='?', @p345='?', @p346='?', @p347='?' (DbType = Boolean), @p348='?', @p349='?' (DbType = Guid), @p350='?' (DbType = DateTime), @p351='?', @p352='?' (DbType = Guid), @p353='?', @p354='?' (DbType = DateTime), @p355='?', @p356='?', @p357='?', @p358='?' (DbType = Boolean), @p359='?', @p360='?' (DbType = Guid), @p361='?' (DbType = DateTime), @p362='?', @p363='?' (DbType = Guid), @p364='?', @p365='?' (DbType = DateTime), @p366='?', @p367='?', @p368='?', @p369='?' (DbType = Boolean), @p370='?', @p371='?' (DbType = Guid), @p372='?' (DbType = DateTime), @p373='?', @p374='?' (DbType = Guid), @p375='?', @p376='?' (DbType = DateTime), @p377='?', @p378='?', @p379='?', @p380='?' (DbType = Boolean), @p381='?', @p382='?' (DbType = Guid), @p383='?' (DbType = DateTime), @p384='?', @p385='?' (DbType = Guid), @p386='?', @p387='?' (DbType = DateTime), @p388='?', @p389='?', @p390='?', @p391='?' (DbType = Boolean), @p392='?', @p393='?' (DbType = Guid), @p394='?' (DbType = DateTime), @p395='?', @p396='?' (DbType = Guid), @p397='?', @p398='?' (DbType = DateTime), @p399='?', @p400='?', @p401='?', @p402='?' (DbType = Boolean), @p403='?', @p404='?' (DbType = Guid), @p405='?' (DbType = DateTime), @p406='?', @p407='?' (DbType = Guid), @p408='?', @p409='?' (DbType = DateTime), @p410='?', @p411='?', @p412='?', @p413='?' (DbType = Boolean), @p414='?', @p415='?' (DbType = Guid), @p416='?' (DbType = DateTime), @p417='?', @p418='?' (DbType = Guid), @p419='?', @p420='?' (DbType = DateTime), @p421='?', @p422='?', @p423='?', @p424='?' (DbType = Boolean), @p425='?', @p426='?' (DbType = Guid), @p427='?' (DbType = DateTime), @p428='?', @p429='?' (DbType = Guid), @p430='?', @p431='?' (DbType = DateTime), @p432='?', @p433='?', @p434='?', @p435='?' (DbType = Boolean), @p436='?', @p437='?' (DbType = Guid), @p438='?' (DbType = DateTime), @p439='?', @p440='?' (DbType = Guid), @p441='?', @p442='?' (DbType = DateTime), @p443='?', @p444='?', @p445='?', @p446='?' (DbType = Boolean), @p447='?', @p448='?' (DbType = Guid), @p449='?' (DbType = DateTime), @p450='?', @p451='?' (DbType = Guid), @p452='?', @p453='?' (DbType = DateTime), @p454='?', @p455='?', @p456='?', @p457='?' (DbType = Boolean), @p458='?', @p459='?' (DbType = Guid), @p460='?' (DbType = DateTime), @p461='?', @p462='?' (DbType = Guid), @p463='?', @p464='?' (DbType = DateTime), @p465='?', @p466='?', @p467='?', @p468='?' (DbType = Boolean), @p469='?', @p470='?' (DbType = Guid), @p471='?' (DbType = DateTime), @p472='?', @p473='?' (DbType = Guid), @p474='?', @p475='?' (DbType = DateTime), @p476='?', @p477='?', @p478='?', @p479='?' (DbType = Boolean), @p480='?', @p481='?' (DbType = Guid), @p482='?' (DbType = DateTime), @p483='?', @p484='?' (DbType = Guid), @p485='?', @p486='?' (DbType = DateTime), @p487='?', @p488='?', @p489='?', @p490='?' (DbType = Boolean), @p491='?', @p492='?' (DbType = Guid), @p493='?' (DbType = DateTime), @p494='?', @p495='?' (DbType = Guid), @p496='?', @p497='?' (DbType = DateTime), @p498='?', @p499='?', @p500='?', @p501='?' (DbType = Boolean), @p502='?', @p503='?' (DbType = Guid), @p504='?' (DbType = DateTime), @p505='?', @p506='?' (DbType = Guid), @p507='?', @p508='?' (DbType = DateTime), @p509='?', @p510='?', @p511='?', @p512='?' (DbType = Boolean), @p513='?', @p514='?' (DbType = Guid), @p515='?' (DbType = DateTime), @p516='?', @p517='?' (DbType = Guid), @p518='?', @p519='?' (DbType = DateTime), @p520='?', @p521='?', @p522='?', @p523='?' (DbType = Boolean), @p524='?', @p525='?' (DbType = Guid), @p526='?' (DbType = DateTime), @p527='?', @p528='?' (DbType = Guid), @p529='?', @p530='?' (DbType = DateTime), @p531='?', @p532='?', @p533='?', @p534='?' (DbType = Boolean), @p535='?', @p536='?' (DbType = Guid), @p537='?' (DbType = DateTime), @p538='?', @p539='?' (DbType = Guid), @p540='?', @p541='?' (DbType = DateTime), @p542='?', @p543='?', @p544='?', @p545='?' (DbType = Boolean), @p546='?', @p547='?' (DbType = Guid), @p548='?' (DbType = DateTime), @p549='?', @p550='?' (DbType = Guid), @p551='?', @p552='?' (DbType = DateTime), @p553='?', @p554='?', @p555='?', @p556='?' (DbType = Boolean), @p557='?', @p558='?' (DbType = Guid), @p559='?' (DbType = DateTime), @p560='?', @p561='?' (DbType = Guid), @p562='?', @p563='?' (DbType = DateTime), @p564='?', @p565='?', @p566='?', @p567='?' (DbType = Boolean), @p568='?', @p569='?' (DbType = Guid), @p570='?' (DbType = DateTime), @p571='?', @p572='?' (DbType = Guid), @p573='?', @p574='?' (DbType = DateTime), @p575='?', @p576='?', @p577='?', @p578='?' (DbType = Boolean), @p579='?', @p580='?' (DbType = Guid), @p581='?' (DbType = DateTime), @p582='?', @p583='?' (DbType = Guid), @p584='?', @p585='?' (DbType = DateTime), @p586='?', @p587='?', @p588='?', @p589='?' (DbType = Boolean), @p590='?', @p591='?' (DbType = Guid), @p592='?' (DbType = DateTime), @p593='?', @p594='?' (DbType = Guid), @p595='?', @p596='?' (DbType = DateTime), @p597='?', @p598='?', @p599='?', @p600='?' (DbType = Boolean), @p601='?', @p602='?' (DbType = Guid), @p603='?' (DbType = DateTime), @p604='?', @p605='?' (DbType = Guid), @p606='?', @p607='?' (DbType = DateTime), @p608='?', @p609='?', @p610='?', @p611='?' (DbType = Boolean), @p612='?', @p613='?' (DbType = Guid), @p614='?' (DbType = DateTime), @p615='?', @p616='?' (DbType = Guid), @p617='?', @p618='?' (DbType = DateTime), @p619='?', @p620='?', @p621='?', @p622='?' (DbType = Boolean), @p623='?', @p624='?' (DbType = Guid), @p625='?' (DbType = DateTime), @p626='?', @p627='?' (DbType = Guid), @p628='?', @p629='?' (DbType = DateTime), @p630='?', @p631='?', @p632='?', @p633='?' (DbType = Boolean), @p634='?', @p635='?' (DbType = Guid), @p636='?' (DbType = DateTime), @p637='?', @p638='?' (DbType = Guid), @p639='?', @p640='?' (DbType = DateTime), @p641='?', @p642='?', @p643='?', @p644='?' (DbType = Boolean), @p645='?', @p646='?' (DbType = Guid), @p647='?' (DbType = DateTime), @p648='?', @p649='?' (DbType = Guid), @p650='?', @p651='?' (DbType = DateTime), @p652='?', @p653='?', @p654='?', @p655='?' (DbType = Boolean), @p656='?', @p657='?' (DbType = Guid), @p658='?' (DbType = DateTime), @p659='?', @p660='?' (DbType = Guid), @p661='?', @p662='?' (DbType = DateTime), @p663='?', @p664='?', @p665='?', @p666='?' (DbType = Boolean), @p667='?', @p668='?' (DbType = Guid), @p669='?' (DbType = DateTime), @p670='?', @p671='?' (DbType = Guid), @p672='?', @p673='?' (DbType = DateTime), @p674='?', @p675='?', @p676='?', @p677='?' (DbType = Boolean), @p678='?', @p679='?' (DbType = Guid), @p680='?' (DbType = DateTime), @p681='?', @p682='?' (DbType = Guid), @p683='?', @p684='?' (DbType = DateTime), @p685='?', @p686='?', @p687='?', @p688='?' (DbType = Boolean), @p689='?', @p690='?' (DbType = Guid), @p691='?' (DbType = DateTime), @p692='?', @p693='?' (DbType = Guid), @p694='?', @p695='?' (DbType = DateTime), @p696='?', @p697='?', @p698='?', @p699='?' (DbType = Boolean), @p700='?', @p701='?' (DbType = Guid), @p702='?' (DbType = DateTime), @p703='?', @p704='?' (DbType = Guid), @p705='?', @p706='?' (DbType = DateTime), @p707='?', @p708='?', @p709='?', @p710='?' (DbType = Boolean), @p711='?', @p712='?' (DbType = Guid), @p713='?' (DbType = DateTime), @p714='?', @p715='?' (DbType = Guid), @p716='?', @p717='?' (DbType = DateTime), @p718='?', @p719='?', @p720='?', @p721='?' (DbType = Boolean), @p722='?', @p723='?' (DbType = Guid), @p724='?' (DbType = DateTime), @p725='?', @p726='?' (DbType = Guid), @p727='?', @p728='?' (DbType = DateTime), @p729='?', @p730='?', @p731='?', @p732='?' (DbType = Boolean), @p733='?', @p734='?' (DbType = Guid), @p735='?' (DbType = DateTime), @p736='?', @p737='?' (DbType = Guid), @p738='?', @p739='?' (DbType = DateTime), @p740='?', @p741='?', @p742='?', @p743='?' (DbType = Boolean), @p744='?', @p745='?' (DbType = Guid), @p746='?' (DbType = DateTime), @p747='?', @p748='?' (DbType = Guid), @p749='?', @p750='?' (DbType = DateTime), @p751='?', @p752='?', @p753='?', @p754='?' (DbType = Boolean), @p755='?', @p756='?' (DbType = Guid), @p757='?' (DbType = DateTime), @p758='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31, @p32);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p33, @p34, @p35, @p36, @p37, @p38, @p39, @p40, @p41, @p42, @p43);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53, @p54);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p55, @p56, @p57, @p58, @p59, @p60, @p61, @p62, @p63, @p64, @p65);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p66, @p67, @p68, @p69, @p70, @p71, @p72, @p73, @p74, @p75, @p76);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p77, @p78, @p79, @p80, @p81, @p82, @p83, @p84, @p85, @p86, @p87);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p88, @p89, @p90, @p91, @p92, @p93, @p94, @p95, @p96, @p97, @p98);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107, @p108, @p109);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p110, @p111, @p112, @p113, @p114, @p115, @p116, @p117, @p118, @p119, @p120);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p121, @p122, @p123, @p124, @p125, @p126, @p127, @p128, @p129, @p130, @p131);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p132, @p133, @p134, @p135, @p136, @p137, @p138, @p139, @p140, @p141, @p142);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p143, @p144, @p145, @p146, @p147, @p148, @p149, @p150, @p151, @p152, @p153);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p154, @p155, @p156, @p157, @p158, @p159, @p160, @p161, @p162, @p163, @p164);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p165, @p166, @p167, @p168, @p169, @p170, @p171, @p172, @p173, @p174, @p175);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p176, @p177, @p178, @p179, @p180, @p181, @p182, @p183, @p184, @p185, @p186);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p187, @p188, @p189, @p190, @p191, @p192, @p193, @p194, @p195, @p196, @p197);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p198, @p199, @p200, @p201, @p202, @p203, @p204, @p205, @p206, @p207, @p208);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p209, @p210, @p211, @p212, @p213, @p214, @p215, @p216, @p217, @p218, @p219);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p220, @p221, @p222, @p223, @p224, @p225, @p226, @p227, @p228, @p229, @p230);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p231, @p232, @p233, @p234, @p235, @p236, @p237, @p238, @p239, @p240, @p241);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p242, @p243, @p244, @p245, @p246, @p247, @p248, @p249, @p250, @p251, @p252);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p253, @p254, @p255, @p256, @p257, @p258, @p259, @p260, @p261, @p262, @p263);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p264, @p265, @p266, @p267, @p268, @p269, @p270, @p271, @p272, @p273, @p274);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p275, @p276, @p277, @p278, @p279, @p280, @p281, @p282, @p283, @p284, @p285);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p286, @p287, @p288, @p289, @p290, @p291, @p292, @p293, @p294, @p295, @p296);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p297, @p298, @p299, @p300, @p301, @p302, @p303, @p304, @p305, @p306, @p307);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p308, @p309, @p310, @p311, @p312, @p313, @p314, @p315, @p316, @p317, @p318);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p319, @p320, @p321, @p322, @p323, @p324, @p325, @p326, @p327, @p328, @p329);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p330, @p331, @p332, @p333, @p334, @p335, @p336, @p337, @p338, @p339, @p340);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p341, @p342, @p343, @p344, @p345, @p346, @p347, @p348, @p349, @p350, @p351);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p352, @p353, @p354, @p355, @p356, @p357, @p358, @p359, @p360, @p361, @p362);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p363, @p364, @p365, @p366, @p367, @p368, @p369, @p370, @p371, @p372, @p373);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p374, @p375, @p376, @p377, @p378, @p379, @p380, @p381, @p382, @p383, @p384);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p385, @p386, @p387, @p388, @p389, @p390, @p391, @p392, @p393, @p394, @p395);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p396, @p397, @p398, @p399, @p400, @p401, @p402, @p403, @p404, @p405, @p406);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p407, @p408, @p409, @p410, @p411, @p412, @p413, @p414, @p415, @p416, @p417);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p418, @p419, @p420, @p421, @p422, @p423, @p424, @p425, @p426, @p427, @p428);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p429, @p430, @p431, @p432, @p433, @p434, @p435, @p436, @p437, @p438, @p439);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p440, @p441, @p442, @p443, @p444, @p445, @p446, @p447, @p448, @p449, @p450);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p451, @p452, @p453, @p454, @p455, @p456, @p457, @p458, @p459, @p460, @p461);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p462, @p463, @p464, @p465, @p466, @p467, @p468, @p469, @p470, @p471, @p472);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p473, @p474, @p475, @p476, @p477, @p478, @p479, @p480, @p481, @p482, @p483);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p484, @p485, @p486, @p487, @p488, @p489, @p490, @p491, @p492, @p493, @p494);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p495, @p496, @p497, @p498, @p499, @p500, @p501, @p502, @p503, @p504, @p505);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p506, @p507, @p508, @p509, @p510, @p511, @p512, @p513, @p514, @p515, @p516);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p517, @p518, @p519, @p520, @p521, @p522, @p523, @p524, @p525, @p526, @p527);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p528, @p529, @p530, @p531, @p532, @p533, @p534, @p535, @p536, @p537, @p538);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p539, @p540, @p541, @p542, @p543, @p544, @p545, @p546, @p547, @p548, @p549);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p550, @p551, @p552, @p553, @p554, @p555, @p556, @p557, @p558, @p559, @p560);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p561, @p562, @p563, @p564, @p565, @p566, @p567, @p568, @p569, @p570, @p571);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p572, @p573, @p574, @p575, @p576, @p577, @p578, @p579, @p580, @p581, @p582);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p583, @p584, @p585, @p586, @p587, @p588, @p589, @p590, @p591, @p592, @p593);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p594, @p595, @p596, @p597, @p598, @p599, @p600, @p601, @p602, @p603, @p604);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p605, @p606, @p607, @p608, @p609, @p610, @p611, @p612, @p613, @p614, @p615);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p616, @p617, @p618, @p619, @p620, @p621, @p622, @p623, @p624, @p625, @p626);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p627, @p628, @p629, @p630, @p631, @p632, @p633, @p634, @p635, @p636, @p637);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p638, @p639, @p640, @p641, @p642, @p643, @p644, @p645, @p646, @p647, @p648);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p649, @p650, @p651, @p652, @p653, @p654, @p655, @p656, @p657, @p658, @p659);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p660, @p661, @p662, @p663, @p664, @p665, @p666, @p667, @p668, @p669, @p670);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p671, @p672, @p673, @p674, @p675, @p676, @p677, @p678, @p679, @p680, @p681);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p682, @p683, @p684, @p685, @p686, @p687, @p688, @p689, @p690, @p691, @p692);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p693, @p694, @p695, @p696, @p697, @p698, @p699, @p700, @p701, @p702, @p703);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p704, @p705, @p706, @p707, @p708, @p709, @p710, @p711, @p712, @p713, @p714);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p715, @p716, @p717, @p718, @p719, @p720, @p721, @p722, @p723, @p724, @p725);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p726, @p727, @p728, @p729, @p730, @p731, @p732, @p733, @p734, @p735, @p736);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p737, @p738, @p739, @p740, @p741, @p742, @p743, @p744, @p745, @p746, @p747);
+INSERT INTO "Permissions" ("Id", "Category", "CreatedAt", "CreatedBy", "Description", "Group", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p748, @p749, @p750, @p751, @p752, @p753, @p754, @p755, @p756, @p757, @p758);
+2026-05-28 22:24:27.371 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:24:27.414 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?', @p4='?' (DbType = Boolean), @p5='?', @p6='?' (DbType = Guid), @p7='?' (DbType = DateTime), @p8='?', @p9='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?', @p13='?' (DbType = Boolean), @p14='?', @p15='?' (DbType = Guid), @p16='?' (DbType = DateTime), @p17='?', @p18='?' (DbType = Guid), @p19='?' (DbType = DateTime), @p20='?', @p21='?', @p22='?' (DbType = Boolean), @p23='?', @p24='?' (DbType = Guid), @p25='?' (DbType = DateTime), @p26='?', @p27='?' (DbType = Guid), @p28='?' (DbType = DateTime), @p29='?', @p30='?', @p31='?' (DbType = Boolean), @p32='?', @p33='?' (DbType = Guid), @p34='?' (DbType = DateTime), @p35='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Roles" ("Id", "CreatedAt", "CreatedBy", "Description", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+INSERT INTO "Roles" ("Id", "CreatedAt", "CreatedBy", "Description", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+INSERT INTO "Roles" ("Id", "CreatedAt", "CreatedBy", "Description", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26);
+INSERT INTO "Roles" ("Id", "CreatedAt", "CreatedBy", "Description", "IsDeleted", "Name", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34, @p35);
+2026-05-28 22:24:27.427 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:24:27.477 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Category", p."CreatedAt", p."CreatedBy", p."Description", p."Group", p."IsDeleted", p."Name", p."TenantId", p."UpdatedAt", p."UpdatedBy"
+FROM "Permissions" AS p
+WHERE NOT (p."IsDeleted")
+2026-05-28 22:24:27.490 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+2026-05-28 22:24:27.625 +05:45 [INF] Executed DbCommand (33ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Boolean), @p4='?' (DbType = Guid), @p5='?' (DbType = Guid), @p6='?' (DbType = Guid), @p7='?' (DbType = DateTime), @p8='?', @p9='?' (DbType = Guid), @p10='?' (DbType = DateTime), @p11='?', @p12='?' (DbType = Boolean), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?' (DbType = Guid), @p16='?' (DbType = DateTime), @p17='?', @p18='?' (DbType = Guid), @p19='?' (DbType = DateTime), @p20='?', @p21='?' (DbType = Boolean), @p22='?' (DbType = Guid), @p23='?' (DbType = Guid), @p24='?' (DbType = Guid), @p25='?' (DbType = DateTime), @p26='?', @p27='?' (DbType = Guid), @p28='?' (DbType = DateTime), @p29='?', @p30='?' (DbType = Boolean), @p31='?' (DbType = Guid), @p32='?' (DbType = Guid), @p33='?' (DbType = Guid), @p34='?' (DbType = DateTime), @p35='?', @p36='?' (DbType = Guid), @p37='?' (DbType = DateTime), @p38='?', @p39='?' (DbType = Boolean), @p40='?' (DbType = Guid), @p41='?' (DbType = Guid), @p42='?' (DbType = Guid), @p43='?' (DbType = DateTime), @p44='?', @p45='?' (DbType = Guid), @p46='?' (DbType = DateTime), @p47='?', @p48='?' (DbType = Boolean), @p49='?' (DbType = Guid), @p50='?' (DbType = Guid), @p51='?' (DbType = Guid), @p52='?' (DbType = DateTime), @p53='?', @p54='?' (DbType = Guid), @p55='?' (DbType = DateTime), @p56='?', @p57='?' (DbType = Boolean), @p58='?' (DbType = Guid), @p59='?' (DbType = Guid), @p60='?' (DbType = Guid), @p61='?' (DbType = DateTime), @p62='?', @p63='?' (DbType = Guid), @p64='?' (DbType = DateTime), @p65='?', @p66='?' (DbType = Boolean), @p67='?' (DbType = Guid), @p68='?' (DbType = Guid), @p69='?' (DbType = Guid), @p70='?' (DbType = DateTime), @p71='?', @p72='?' (DbType = Guid), @p73='?' (DbType = DateTime), @p74='?', @p75='?' (DbType = Boolean), @p76='?' (DbType = Guid), @p77='?' (DbType = Guid), @p78='?' (DbType = Guid), @p79='?' (DbType = DateTime), @p80='?', @p81='?' (DbType = Guid), @p82='?' (DbType = DateTime), @p83='?', @p84='?' (DbType = Boolean), @p85='?' (DbType = Guid), @p86='?' (DbType = Guid), @p87='?' (DbType = Guid), @p88='?' (DbType = DateTime), @p89='?', @p90='?' (DbType = Guid), @p91='?' (DbType = DateTime), @p92='?', @p93='?' (DbType = Boolean), @p94='?' (DbType = Guid), @p95='?' (DbType = Guid), @p96='?' (DbType = Guid), @p97='?' (DbType = DateTime), @p98='?', @p99='?' (DbType = Guid), @p100='?' (DbType = DateTime), @p101='?', @p102='?' (DbType = Boolean), @p103='?' (DbType = Guid), @p104='?' (DbType = Guid), @p105='?' (DbType = Guid), @p106='?' (DbType = DateTime), @p107='?', @p108='?' (DbType = Guid), @p109='?' (DbType = DateTime), @p110='?', @p111='?' (DbType = Boolean), @p112='?' (DbType = Guid), @p113='?' (DbType = Guid), @p114='?' (DbType = Guid), @p115='?' (DbType = DateTime), @p116='?', @p117='?' (DbType = Guid), @p118='?' (DbType = DateTime), @p119='?', @p120='?' (DbType = Boolean), @p121='?' (DbType = Guid), @p122='?' (DbType = Guid), @p123='?' (DbType = Guid), @p124='?' (DbType = DateTime), @p125='?', @p126='?' (DbType = Guid), @p127='?' (DbType = DateTime), @p128='?', @p129='?' (DbType = Boolean), @p130='?' (DbType = Guid), @p131='?' (DbType = Guid), @p132='?' (DbType = Guid), @p133='?' (DbType = DateTime), @p134='?', @p135='?' (DbType = Guid), @p136='?' (DbType = DateTime), @p137='?', @p138='?' (DbType = Boolean), @p139='?' (DbType = Guid), @p140='?' (DbType = Guid), @p141='?' (DbType = Guid), @p142='?' (DbType = DateTime), @p143='?', @p144='?' (DbType = Guid), @p145='?' (DbType = DateTime), @p146='?', @p147='?' (DbType = Boolean), @p148='?' (DbType = Guid), @p149='?' (DbType = Guid), @p150='?' (DbType = Guid), @p151='?' (DbType = DateTime), @p152='?', @p153='?' (DbType = Guid), @p154='?' (DbType = DateTime), @p155='?', @p156='?' (DbType = Boolean), @p157='?' (DbType = Guid), @p158='?' (DbType = Guid), @p159='?' (DbType = Guid), @p160='?' (DbType = DateTime), @p161='?', @p162='?' (DbType = Guid), @p163='?' (DbType = DateTime), @p164='?', @p165='?' (DbType = Boolean), @p166='?' (DbType = Guid), @p167='?' (DbType = Guid), @p168='?' (DbType = Guid), @p169='?' (DbType = DateTime), @p170='?', @p171='?' (DbType = Guid), @p172='?' (DbType = DateTime), @p173='?', @p174='?' (DbType = Boolean), @p175='?' (DbType = Guid), @p176='?' (DbType = Guid), @p177='?' (DbType = Guid), @p178='?' (DbType = DateTime), @p179='?', @p180='?' (DbType = Guid), @p181='?' (DbType = DateTime), @p182='?', @p183='?' (DbType = Boolean), @p184='?' (DbType = Guid), @p185='?' (DbType = Guid), @p186='?' (DbType = Guid), @p187='?' (DbType = DateTime), @p188='?', @p189='?' (DbType = Guid), @p190='?' (DbType = DateTime), @p191='?', @p192='?' (DbType = Boolean), @p193='?' (DbType = Guid), @p194='?' (DbType = Guid), @p195='?' (DbType = Guid), @p196='?' (DbType = DateTime), @p197='?', @p198='?' (DbType = Guid), @p199='?' (DbType = DateTime), @p200='?', @p201='?' (DbType = Boolean), @p202='?' (DbType = Guid), @p203='?' (DbType = Guid), @p204='?' (DbType = Guid), @p205='?' (DbType = DateTime), @p206='?', @p207='?' (DbType = Guid), @p208='?' (DbType = DateTime), @p209='?', @p210='?' (DbType = Boolean), @p211='?' (DbType = Guid), @p212='?' (DbType = Guid), @p213='?' (DbType = Guid), @p214='?' (DbType = DateTime), @p215='?', @p216='?' (DbType = Guid), @p217='?' (DbType = DateTime), @p218='?', @p219='?' (DbType = Boolean), @p220='?' (DbType = Guid), @p221='?' (DbType = Guid), @p222='?' (DbType = Guid), @p223='?' (DbType = DateTime), @p224='?', @p225='?' (DbType = Guid), @p226='?' (DbType = DateTime), @p227='?', @p228='?' (DbType = Boolean), @p229='?' (DbType = Guid), @p230='?' (DbType = Guid), @p231='?' (DbType = Guid), @p232='?' (DbType = DateTime), @p233='?', @p234='?' (DbType = Guid), @p235='?' (DbType = DateTime), @p236='?', @p237='?' (DbType = Boolean), @p238='?' (DbType = Guid), @p239='?' (DbType = Guid), @p240='?' (DbType = Guid), @p241='?' (DbType = DateTime), @p242='?', @p243='?' (DbType = Guid), @p244='?' (DbType = DateTime), @p245='?', @p246='?' (DbType = Boolean), @p247='?' (DbType = Guid), @p248='?' (DbType = Guid), @p249='?' (DbType = Guid), @p250='?' (DbType = DateTime), @p251='?', @p252='?' (DbType = Guid), @p253='?' (DbType = DateTime), @p254='?', @p255='?' (DbType = Boolean), @p256='?' (DbType = Guid), @p257='?' (DbType = Guid), @p258='?' (DbType = Guid), @p259='?' (DbType = DateTime), @p260='?', @p261='?' (DbType = Guid), @p262='?' (DbType = DateTime), @p263='?', @p264='?' (DbType = Boolean), @p265='?' (DbType = Guid), @p266='?' (DbType = Guid), @p267='?' (DbType = Guid), @p268='?' (DbType = DateTime), @p269='?', @p270='?' (DbType = Guid), @p271='?' (DbType = DateTime), @p272='?', @p273='?' (DbType = Boolean), @p274='?' (DbType = Guid), @p275='?' (DbType = Guid), @p276='?' (DbType = Guid), @p277='?' (DbType = DateTime), @p278='?', @p279='?' (DbType = Guid), @p280='?' (DbType = DateTime), @p281='?', @p282='?' (DbType = Boolean), @p283='?' (DbType = Guid), @p284='?' (DbType = Guid), @p285='?' (DbType = Guid), @p286='?' (DbType = DateTime), @p287='?', @p288='?' (DbType = Guid), @p289='?' (DbType = DateTime), @p290='?', @p291='?' (DbType = Boolean), @p292='?' (DbType = Guid), @p293='?' (DbType = Guid), @p294='?' (DbType = Guid), @p295='?' (DbType = DateTime), @p296='?', @p297='?' (DbType = Guid), @p298='?' (DbType = DateTime), @p299='?', @p300='?' (DbType = Boolean), @p301='?' (DbType = Guid), @p302='?' (DbType = Guid), @p303='?' (DbType = Guid), @p304='?' (DbType = DateTime), @p305='?', @p306='?' (DbType = Guid), @p307='?' (DbType = DateTime), @p308='?', @p309='?' (DbType = Boolean), @p310='?' (DbType = Guid), @p311='?' (DbType = Guid), @p312='?' (DbType = Guid), @p313='?' (DbType = DateTime), @p314='?', @p315='?' (DbType = Guid), @p316='?' (DbType = DateTime), @p317='?', @p318='?' (DbType = Boolean), @p319='?' (DbType = Guid), @p320='?' (DbType = Guid), @p321='?' (DbType = Guid), @p322='?' (DbType = DateTime), @p323='?', @p324='?' (DbType = Guid), @p325='?' (DbType = DateTime), @p326='?', @p327='?' (DbType = Boolean), @p328='?' (DbType = Guid), @p329='?' (DbType = Guid), @p330='?' (DbType = Guid), @p331='?' (DbType = DateTime), @p332='?', @p333='?' (DbType = Guid), @p334='?' (DbType = DateTime), @p335='?', @p336='?' (DbType = Boolean), @p337='?' (DbType = Guid), @p338='?' (DbType = Guid), @p339='?' (DbType = Guid), @p340='?' (DbType = DateTime), @p341='?', @p342='?' (DbType = Guid), @p343='?' (DbType = DateTime), @p344='?', @p345='?' (DbType = Boolean), @p346='?' (DbType = Guid), @p347='?' (DbType = Guid), @p348='?' (DbType = Guid), @p349='?' (DbType = DateTime), @p350='?', @p351='?' (DbType = Guid), @p352='?' (DbType = DateTime), @p353='?', @p354='?' (DbType = Boolean), @p355='?' (DbType = Guid), @p356='?' (DbType = Guid), @p357='?' (DbType = Guid), @p358='?' (DbType = DateTime), @p359='?', @p360='?' (DbType = Guid), @p361='?' (DbType = DateTime), @p362='?', @p363='?' (DbType = Boolean), @p364='?' (DbType = Guid), @p365='?' (DbType = Guid), @p366='?' (DbType = Guid), @p367='?' (DbType = DateTime), @p368='?', @p369='?' (DbType = Guid), @p370='?' (DbType = DateTime), @p371='?', @p372='?' (DbType = Boolean), @p373='?' (DbType = Guid), @p374='?' (DbType = Guid), @p375='?' (DbType = Guid), @p376='?' (DbType = DateTime), @p377='?', @p378='?' (DbType = Guid), @p379='?' (DbType = DateTime), @p380='?', @p381='?' (DbType = Boolean), @p382='?' (DbType = Guid), @p383='?' (DbType = Guid), @p384='?' (DbType = Guid), @p385='?' (DbType = DateTime), @p386='?', @p387='?' (DbType = Guid), @p388='?' (DbType = DateTime), @p389='?', @p390='?' (DbType = Boolean), @p391='?' (DbType = Guid), @p392='?' (DbType = Guid), @p393='?' (DbType = Guid), @p394='?' (DbType = DateTime), @p395='?', @p396='?' (DbType = Guid), @p397='?' (DbType = DateTime), @p398='?', @p399='?' (DbType = Boolean), @p400='?' (DbType = Guid), @p401='?' (DbType = Guid), @p402='?' (DbType = Guid), @p403='?' (DbType = DateTime), @p404='?', @p405='?' (DbType = Guid), @p406='?' (DbType = DateTime), @p407='?', @p408='?' (DbType = Boolean), @p409='?' (DbType = Guid), @p410='?' (DbType = Guid), @p411='?' (DbType = Guid), @p412='?' (DbType = DateTime), @p413='?', @p414='?' (DbType = Guid), @p415='?' (DbType = DateTime), @p416='?', @p417='?' (DbType = Boolean), @p418='?' (DbType = Guid), @p419='?' (DbType = Guid), @p420='?' (DbType = Guid), @p421='?' (DbType = DateTime), @p422='?', @p423='?' (DbType = Guid), @p424='?' (DbType = DateTime), @p425='?', @p426='?' (DbType = Boolean), @p427='?' (DbType = Guid), @p428='?' (DbType = Guid), @p429='?' (DbType = Guid), @p430='?' (DbType = DateTime), @p431='?', @p432='?' (DbType = Guid), @p433='?' (DbType = DateTime), @p434='?', @p435='?' (DbType = Boolean), @p436='?' (DbType = Guid), @p437='?' (DbType = Guid), @p438='?' (DbType = Guid), @p439='?' (DbType = DateTime), @p440='?', @p441='?' (DbType = Guid), @p442='?' (DbType = DateTime), @p443='?', @p444='?' (DbType = Boolean), @p445='?' (DbType = Guid), @p446='?' (DbType = Guid), @p447='?' (DbType = Guid), @p448='?' (DbType = DateTime), @p449='?', @p450='?' (DbType = Guid), @p451='?' (DbType = DateTime), @p452='?', @p453='?' (DbType = Boolean), @p454='?' (DbType = Guid), @p455='?' (DbType = Guid), @p456='?' (DbType = Guid), @p457='?' (DbType = DateTime), @p458='?', @p459='?' (DbType = Guid), @p460='?' (DbType = DateTime), @p461='?', @p462='?' (DbType = Boolean), @p463='?' (DbType = Guid), @p464='?' (DbType = Guid), @p465='?' (DbType = Guid), @p466='?' (DbType = DateTime), @p467='?', @p468='?' (DbType = Guid), @p469='?' (DbType = DateTime), @p470='?', @p471='?' (DbType = Boolean), @p472='?' (DbType = Guid), @p473='?' (DbType = Guid), @p474='?' (DbType = Guid), @p475='?' (DbType = DateTime), @p476='?', @p477='?' (DbType = Guid), @p478='?' (DbType = DateTime), @p479='?', @p480='?' (DbType = Boolean), @p481='?' (DbType = Guid), @p482='?' (DbType = Guid), @p483='?' (DbType = Guid), @p484='?' (DbType = DateTime), @p485='?', @p486='?' (DbType = Guid), @p487='?' (DbType = DateTime), @p488='?', @p489='?' (DbType = Boolean), @p490='?' (DbType = Guid), @p491='?' (DbType = Guid), @p492='?' (DbType = Guid), @p493='?' (DbType = DateTime), @p494='?', @p495='?' (DbType = Guid), @p496='?' (DbType = DateTime), @p497='?', @p498='?' (DbType = Boolean), @p499='?' (DbType = Guid), @p500='?' (DbType = Guid), @p501='?' (DbType = Guid), @p502='?' (DbType = DateTime), @p503='?', @p504='?' (DbType = Guid), @p505='?' (DbType = DateTime), @p506='?', @p507='?' (DbType = Boolean), @p508='?' (DbType = Guid), @p509='?' (DbType = Guid), @p510='?' (DbType = Guid), @p511='?' (DbType = DateTime), @p512='?', @p513='?' (DbType = Guid), @p514='?' (DbType = DateTime), @p515='?', @p516='?' (DbType = Boolean), @p517='?' (DbType = Guid), @p518='?' (DbType = Guid), @p519='?' (DbType = Guid), @p520='?' (DbType = DateTime), @p521='?', @p522='?' (DbType = Guid), @p523='?' (DbType = DateTime), @p524='?', @p525='?' (DbType = Boolean), @p526='?' (DbType = Guid), @p527='?' (DbType = Guid), @p528='?' (DbType = Guid), @p529='?' (DbType = DateTime), @p530='?', @p531='?' (DbType = Guid), @p532='?' (DbType = DateTime), @p533='?', @p534='?' (DbType = Boolean), @p535='?' (DbType = Guid), @p536='?' (DbType = Guid), @p537='?' (DbType = Guid), @p538='?' (DbType = DateTime), @p539='?', @p540='?' (DbType = Guid), @p541='?' (DbType = DateTime), @p542='?', @p543='?' (DbType = Boolean), @p544='?' (DbType = Guid), @p545='?' (DbType = Guid), @p546='?' (DbType = Guid), @p547='?' (DbType = DateTime), @p548='?', @p549='?' (DbType = Guid), @p550='?' (DbType = DateTime), @p551='?', @p552='?' (DbType = Boolean), @p553='?' (DbType = Guid), @p554='?' (DbType = Guid), @p555='?' (DbType = Guid), @p556='?' (DbType = DateTime), @p557='?', @p558='?' (DbType = Guid), @p559='?' (DbType = DateTime), @p560='?', @p561='?' (DbType = Boolean), @p562='?' (DbType = Guid), @p563='?' (DbType = Guid), @p564='?' (DbType = Guid), @p565='?' (DbType = DateTime), @p566='?', @p567='?' (DbType = Guid), @p568='?' (DbType = DateTime), @p569='?', @p570='?' (DbType = Boolean), @p571='?' (DbType = Guid), @p572='?' (DbType = Guid), @p573='?' (DbType = Guid), @p574='?' (DbType = DateTime), @p575='?', @p576='?' (DbType = Guid), @p577='?' (DbType = DateTime), @p578='?', @p579='?' (DbType = Boolean), @p580='?' (DbType = Guid), @p581='?' (DbType = Guid), @p582='?' (DbType = Guid), @p583='?' (DbType = DateTime), @p584='?', @p585='?' (DbType = Guid), @p586='?' (DbType = DateTime), @p587='?', @p588='?' (DbType = Boolean), @p589='?' (DbType = Guid), @p590='?' (DbType = Guid), @p591='?' (DbType = Guid), @p592='?' (DbType = DateTime), @p593='?', @p594='?' (DbType = Guid), @p595='?' (DbType = DateTime), @p596='?', @p597='?' (DbType = Boolean), @p598='?' (DbType = Guid), @p599='?' (DbType = Guid), @p600='?' (DbType = Guid), @p601='?' (DbType = DateTime), @p602='?', @p603='?' (DbType = Guid), @p604='?' (DbType = DateTime), @p605='?', @p606='?' (DbType = Boolean), @p607='?' (DbType = Guid), @p608='?' (DbType = Guid), @p609='?' (DbType = Guid), @p610='?' (DbType = DateTime), @p611='?', @p612='?' (DbType = Guid), @p613='?' (DbType = DateTime), @p614='?', @p615='?' (DbType = Boolean), @p616='?' (DbType = Guid), @p617='?' (DbType = Guid), @p618='?' (DbType = Guid), @p619='?' (DbType = DateTime), @p620='?', @p621='?' (DbType = Guid), @p622='?' (DbType = DateTime), @p623='?', @p624='?' (DbType = Boolean), @p625='?' (DbType = Guid), @p626='?' (DbType = Guid), @p627='?' (DbType = Guid), @p628='?' (DbType = DateTime), @p629='?', @p630='?' (DbType = Guid), @p631='?' (DbType = DateTime), @p632='?', @p633='?' (DbType = Boolean), @p634='?' (DbType = Guid), @p635='?' (DbType = Guid), @p636='?' (DbType = Guid), @p637='?' (DbType = DateTime), @p638='?', @p639='?' (DbType = Guid), @p640='?' (DbType = DateTime), @p641='?', @p642='?' (DbType = Boolean), @p643='?' (DbType = Guid), @p644='?' (DbType = Guid), @p645='?' (DbType = Guid), @p646='?' (DbType = DateTime), @p647='?', @p648='?' (DbType = Guid), @p649='?' (DbType = DateTime), @p650='?', @p651='?' (DbType = Boolean), @p652='?' (DbType = Guid), @p653='?' (DbType = Guid), @p654='?' (DbType = Guid), @p655='?' (DbType = DateTime), @p656='?', @p657='?' (DbType = Guid), @p658='?' (DbType = DateTime), @p659='?', @p660='?' (DbType = Boolean), @p661='?' (DbType = Guid), @p662='?' (DbType = Guid), @p663='?' (DbType = Guid), @p664='?' (DbType = DateTime), @p665='?', @p666='?' (DbType = Guid), @p667='?' (DbType = DateTime), @p668='?', @p669='?' (DbType = Boolean), @p670='?' (DbType = Guid), @p671='?' (DbType = Guid), @p672='?' (DbType = Guid), @p673='?' (DbType = DateTime), @p674='?', @p675='?' (DbType = Guid), @p676='?' (DbType = DateTime), @p677='?', @p678='?' (DbType = Boolean), @p679='?' (DbType = Guid), @p680='?' (DbType = Guid), @p681='?' (DbType = Guid), @p682='?' (DbType = DateTime), @p683='?', @p684='?' (DbType = Guid), @p685='?' (DbType = DateTime), @p686='?', @p687='?' (DbType = Boolean), @p688='?' (DbType = Guid), @p689='?' (DbType = Guid), @p690='?' (DbType = Guid), @p691='?' (DbType = DateTime), @p692='?', @p693='?' (DbType = Guid), @p694='?' (DbType = DateTime), @p695='?', @p696='?' (DbType = Boolean), @p697='?' (DbType = Guid), @p698='?' (DbType = Guid), @p699='?' (DbType = Guid), @p700='?' (DbType = DateTime), @p701='?', @p702='?' (DbType = Guid), @p703='?' (DbType = DateTime), @p704='?', @p705='?' (DbType = Boolean), @p706='?' (DbType = Guid), @p707='?' (DbType = Guid), @p708='?' (DbType = Guid), @p709='?' (DbType = DateTime), @p710='?', @p711='?' (DbType = Guid), @p712='?' (DbType = DateTime), @p713='?', @p714='?' (DbType = Boolean), @p715='?' (DbType = Guid), @p716='?' (DbType = Guid), @p717='?' (DbType = Guid), @p718='?' (DbType = DateTime), @p719='?', @p720='?' (DbType = Guid), @p721='?' (DbType = DateTime), @p722='?', @p723='?' (DbType = Boolean), @p724='?' (DbType = Guid), @p725='?' (DbType = Guid), @p726='?' (DbType = Guid), @p727='?' (DbType = DateTime), @p728='?', @p729='?' (DbType = Guid), @p730='?' (DbType = DateTime), @p731='?', @p732='?' (DbType = Boolean), @p733='?' (DbType = Guid), @p734='?' (DbType = Guid), @p735='?' (DbType = Guid), @p736='?' (DbType = DateTime), @p737='?', @p738='?' (DbType = Guid), @p739='?' (DbType = DateTime), @p740='?', @p741='?' (DbType = Boolean), @p742='?' (DbType = Guid), @p743='?' (DbType = Guid), @p744='?' (DbType = Guid), @p745='?' (DbType = DateTime), @p746='?', @p747='?' (DbType = Guid), @p748='?' (DbType = DateTime), @p749='?', @p750='?' (DbType = Boolean), @p751='?' (DbType = Guid), @p752='?' (DbType = Guid), @p753='?' (DbType = Guid), @p754='?' (DbType = DateTime), @p755='?', @p756='?' (DbType = Guid), @p757='?' (DbType = DateTime), @p758='?', @p759='?' (DbType = Boolean), @p760='?' (DbType = Guid), @p761='?' (DbType = Guid), @p762='?' (DbType = Guid), @p763='?' (DbType = DateTime), @p764='?', @p765='?' (DbType = Guid), @p766='?' (DbType = DateTime), @p767='?', @p768='?' (DbType = Boolean), @p769='?' (DbType = Guid), @p770='?' (DbType = Guid), @p771='?' (DbType = Guid), @p772='?' (DbType = DateTime), @p773='?', @p774='?' (DbType = Guid), @p775='?' (DbType = DateTime), @p776='?', @p777='?' (DbType = Boolean), @p778='?' (DbType = Guid), @p779='?' (DbType = Guid), @p780='?' (DbType = Guid), @p781='?' (DbType = DateTime), @p782='?', @p783='?' (DbType = Guid), @p784='?' (DbType = DateTime), @p785='?', @p786='?' (DbType = Boolean), @p787='?' (DbType = Guid), @p788='?' (DbType = Guid), @p789='?' (DbType = Guid), @p790='?' (DbType = DateTime), @p791='?', @p792='?' (DbType = Guid), @p793='?' (DbType = DateTime), @p794='?', @p795='?' (DbType = Boolean), @p796='?' (DbType = Guid), @p797='?' (DbType = Guid), @p798='?' (DbType = Guid), @p799='?' (DbType = DateTime), @p800='?', @p801='?' (DbType = Guid), @p802='?' (DbType = DateTime), @p803='?', @p804='?' (DbType = Boolean), @p805='?' (DbType = Guid), @p806='?' (DbType = Guid), @p807='?' (DbType = Guid), @p808='?' (DbType = DateTime), @p809='?', @p810='?' (DbType = Guid), @p811='?' (DbType = DateTime), @p812='?', @p813='?' (DbType = Boolean), @p814='?' (DbType = Guid), @p815='?' (DbType = Guid), @p816='?' (DbType = Guid), @p817='?' (DbType = DateTime), @p818='?', @p819='?' (DbType = Guid), @p820='?' (DbType = DateTime), @p821='?', @p822='?' (DbType = Boolean), @p823='?' (DbType = Guid), @p824='?' (DbType = Guid), @p825='?' (DbType = Guid), @p826='?' (DbType = DateTime), @p827='?', @p828='?' (DbType = Guid), @p829='?' (DbType = DateTime), @p830='?', @p831='?' (DbType = Boolean), @p832='?' (DbType = Guid), @p833='?' (DbType = Guid), @p834='?' (DbType = Guid), @p835='?' (DbType = DateTime), @p836='?', @p837='?' (DbType = Guid), @p838='?' (DbType = DateTime), @p839='?', @p840='?' (DbType = Boolean), @p841='?' (DbType = Guid), @p842='?' (DbType = Guid), @p843='?' (DbType = Guid), @p844='?' (DbType = DateTime), @p845='?', @p846='?' (DbType = Guid), @p847='?' (DbType = DateTime), @p848='?', @p849='?' (DbType = Boolean), @p850='?' (DbType = Guid), @p851='?' (DbType = Guid), @p852='?' (DbType = Guid), @p853='?' (DbType = DateTime), @p854='?', @p855='?' (DbType = Guid), @p856='?' (DbType = DateTime), @p857='?', @p858='?' (DbType = Boolean), @p859='?' (DbType = Guid), @p860='?' (DbType = Guid), @p861='?' (DbType = Guid), @p862='?' (DbType = DateTime), @p863='?', @p864='?' (DbType = Guid), @p865='?' (DbType = DateTime), @p866='?', @p867='?' (DbType = Boolean), @p868='?' (DbType = Guid), @p869='?' (DbType = Guid), @p870='?' (DbType = Guid), @p871='?' (DbType = DateTime), @p872='?', @p873='?' (DbType = Guid), @p874='?' (DbType = DateTime), @p875='?', @p876='?' (DbType = Boolean), @p877='?' (DbType = Guid), @p878='?' (DbType = Guid), @p879='?' (DbType = Guid), @p880='?' (DbType = DateTime), @p881='?', @p882='?' (DbType = Guid), @p883='?' (DbType = DateTime), @p884='?', @p885='?' (DbType = Boolean), @p886='?' (DbType = Guid), @p887='?' (DbType = Guid), @p888='?' (DbType = Guid), @p889='?' (DbType = DateTime), @p890='?', @p891='?' (DbType = Guid), @p892='?' (DbType = DateTime), @p893='?', @p894='?' (DbType = Boolean), @p895='?' (DbType = Guid), @p896='?' (DbType = Guid), @p897='?' (DbType = Guid), @p898='?' (DbType = DateTime), @p899='?', @p900='?' (DbType = Guid), @p901='?' (DbType = DateTime), @p902='?', @p903='?' (DbType = Boolean), @p904='?' (DbType = Guid), @p905='?' (DbType = Guid), @p906='?' (DbType = Guid), @p907='?' (DbType = DateTime), @p908='?', @p909='?' (DbType = Guid), @p910='?' (DbType = DateTime), @p911='?', @p912='?' (DbType = Boolean), @p913='?' (DbType = Guid), @p914='?' (DbType = Guid), @p915='?' (DbType = Guid), @p916='?' (DbType = DateTime), @p917='?', @p918='?' (DbType = Guid), @p919='?' (DbType = DateTime), @p920='?', @p921='?' (DbType = Boolean), @p922='?' (DbType = Guid), @p923='?' (DbType = Guid), @p924='?' (DbType = Guid), @p925='?' (DbType = DateTime), @p926='?', @p927='?' (DbType = Guid), @p928='?' (DbType = DateTime), @p929='?', @p930='?' (DbType = Boolean), @p931='?' (DbType = Guid), @p932='?' (DbType = Guid), @p933='?' (DbType = Guid), @p934='?' (DbType = DateTime), @p935='?', @p936='?' (DbType = Guid), @p937='?' (DbType = DateTime), @p938='?', @p939='?' (DbType = Boolean), @p940='?' (DbType = Guid), @p941='?' (DbType = Guid), @p942='?' (DbType = Guid), @p943='?' (DbType = DateTime), @p944='?', @p945='?' (DbType = Guid), @p946='?' (DbType = DateTime), @p947='?', @p948='?' (DbType = Boolean), @p949='?' (DbType = Guid), @p950='?' (DbType = Guid), @p951='?' (DbType = Guid), @p952='?' (DbType = DateTime), @p953='?', @p954='?' (DbType = Guid), @p955='?' (DbType = DateTime), @p956='?', @p957='?' (DbType = Boolean), @p958='?' (DbType = Guid), @p959='?' (DbType = Guid), @p960='?' (DbType = Guid), @p961='?' (DbType = DateTime), @p962='?', @p963='?' (DbType = Guid), @p964='?' (DbType = DateTime), @p965='?', @p966='?' (DbType = Boolean), @p967='?' (DbType = Guid), @p968='?' (DbType = Guid), @p969='?' (DbType = Guid), @p970='?' (DbType = DateTime), @p971='?', @p972='?' (DbType = Guid), @p973='?' (DbType = DateTime), @p974='?', @p975='?' (DbType = Boolean), @p976='?' (DbType = Guid), @p977='?' (DbType = Guid), @p978='?' (DbType = Guid), @p979='?' (DbType = DateTime), @p980='?', @p981='?' (DbType = Guid), @p982='?' (DbType = DateTime), @p983='?', @p984='?' (DbType = Boolean), @p985='?' (DbType = Guid), @p986='?' (DbType = Guid), @p987='?' (DbType = Guid), @p988='?' (DbType = DateTime), @p989='?', @p990='?' (DbType = Guid), @p991='?' (DbType = DateTime), @p992='?', @p993='?' (DbType = Boolean), @p994='?' (DbType = Guid), @p995='?' (DbType = Guid), @p996='?' (DbType = Guid), @p997='?' (DbType = DateTime), @p998='?', @p999='?' (DbType = Guid), @p1000='?' (DbType = DateTime), @p1001='?', @p1002='?' (DbType = Boolean), @p1003='?' (DbType = Guid), @p1004='?' (DbType = Guid), @p1005='?' (DbType = Guid), @p1006='?' (DbType = DateTime), @p1007='?', @p1008='?' (DbType = Guid), @p1009='?' (DbType = DateTime), @p1010='?', @p1011='?' (DbType = Boolean), @p1012='?' (DbType = Guid), @p1013='?' (DbType = Guid), @p1014='?' (DbType = Guid), @p1015='?' (DbType = DateTime), @p1016='?', @p1017='?' (DbType = Guid), @p1018='?' (DbType = DateTime), @p1019='?', @p1020='?' (DbType = Boolean), @p1021='?' (DbType = Guid), @p1022='?' (DbType = Guid), @p1023='?' (DbType = Guid), @p1024='?' (DbType = DateTime), @p1025='?', @p1026='?' (DbType = Guid), @p1027='?' (DbType = DateTime), @p1028='?', @p1029='?' (DbType = Boolean), @p1030='?' (DbType = Guid), @p1031='?' (DbType = Guid), @p1032='?' (DbType = Guid), @p1033='?' (DbType = DateTime), @p1034='?', @p1035='?' (DbType = Guid), @p1036='?' (DbType = DateTime), @p1037='?', @p1038='?' (DbType = Boolean), @p1039='?' (DbType = Guid), @p1040='?' (DbType = Guid), @p1041='?' (DbType = Guid), @p1042='?' (DbType = DateTime), @p1043='?', @p1044='?' (DbType = Guid), @p1045='?' (DbType = DateTime), @p1046='?', @p1047='?' (DbType = Boolean), @p1048='?' (DbType = Guid), @p1049='?' (DbType = Guid), @p1050='?' (DbType = Guid), @p1051='?' (DbType = DateTime), @p1052='?', @p1053='?' (DbType = Guid), @p1054='?' (DbType = DateTime), @p1055='?', @p1056='?' (DbType = Boolean), @p1057='?' (DbType = Guid), @p1058='?' (DbType = Guid), @p1059='?' (DbType = Guid), @p1060='?' (DbType = DateTime), @p1061='?', @p1062='?' (DbType = Guid), @p1063='?' (DbType = DateTime), @p1064='?', @p1065='?' (DbType = Boolean), @p1066='?' (DbType = Guid), @p1067='?' (DbType = Guid), @p1068='?' (DbType = Guid), @p1069='?' (DbType = DateTime), @p1070='?', @p1071='?' (DbType = Guid), @p1072='?' (DbType = DateTime), @p1073='?', @p1074='?' (DbType = Boolean), @p1075='?' (DbType = Guid), @p1076='?' (DbType = Guid), @p1077='?' (DbType = Guid), @p1078='?' (DbType = DateTime), @p1079='?', @p1080='?' (DbType = Guid), @p1081='?' (DbType = DateTime), @p1082='?', @p1083='?' (DbType = Boolean), @p1084='?' (DbType = Guid), @p1085='?' (DbType = Guid), @p1086='?' (DbType = Guid), @p1087='?' (DbType = DateTime), @p1088='?', @p1089='?' (DbType = Guid), @p1090='?' (DbType = DateTime), @p1091='?', @p1092='?' (DbType = Boolean), @p1093='?' (DbType = Guid), @p1094='?' (DbType = Guid), @p1095='?' (DbType = Guid), @p1096='?' (DbType = DateTime), @p1097='?', @p1098='?' (DbType = Guid), @p1099='?' (DbType = DateTime), @p1100='?', @p1101='?' (DbType = Boolean), @p1102='?' (DbType = Guid), @p1103='?' (DbType = Guid), @p1104='?' (DbType = Guid), @p1105='?' (DbType = DateTime), @p1106='?', @p1107='?' (DbType = Guid), @p1108='?' (DbType = DateTime), @p1109='?', @p1110='?' (DbType = Boolean), @p1111='?' (DbType = Guid), @p1112='?' (DbType = Guid), @p1113='?' (DbType = Guid), @p1114='?' (DbType = DateTime), @p1115='?', @p1116='?' (DbType = Guid), @p1117='?' (DbType = DateTime), @p1118='?', @p1119='?' (DbType = Boolean), @p1120='?' (DbType = Guid), @p1121='?' (DbType = Guid), @p1122='?' (DbType = Guid), @p1123='?' (DbType = DateTime), @p1124='?', @p1125='?' (DbType = Guid), @p1126='?' (DbType = DateTime), @p1127='?', @p1128='?' (DbType = Boolean), @p1129='?' (DbType = Guid), @p1130='?' (DbType = Guid), @p1131='?' (DbType = Guid), @p1132='?' (DbType = DateTime), @p1133='?', @p1134='?' (DbType = Guid), @p1135='?' (DbType = DateTime), @p1136='?', @p1137='?' (DbType = Boolean), @p1138='?' (DbType = Guid), @p1139='?' (DbType = Guid), @p1140='?' (DbType = Guid), @p1141='?' (DbType = DateTime), @p1142='?', @p1143='?' (DbType = Guid), @p1144='?' (DbType = DateTime), @p1145='?', @p1146='?' (DbType = Boolean), @p1147='?' (DbType = Guid), @p1148='?' (DbType = Guid), @p1149='?' (DbType = Guid), @p1150='?' (DbType = DateTime), @p1151='?', @p1152='?' (DbType = Guid), @p1153='?' (DbType = DateTime), @p1154='?', @p1155='?' (DbType = Boolean), @p1156='?' (DbType = Guid), @p1157='?' (DbType = Guid), @p1158='?' (DbType = Guid), @p1159='?' (DbType = DateTime), @p1160='?', @p1161='?' (DbType = Guid), @p1162='?' (DbType = DateTime), @p1163='?', @p1164='?' (DbType = Boolean), @p1165='?' (DbType = Guid), @p1166='?' (DbType = Guid), @p1167='?' (DbType = Guid), @p1168='?' (DbType = DateTime), @p1169='?', @p1170='?' (DbType = Guid), @p1171='?' (DbType = DateTime), @p1172='?', @p1173='?' (DbType = Boolean), @p1174='?' (DbType = Guid), @p1175='?' (DbType = Guid), @p1176='?' (DbType = Guid), @p1177='?' (DbType = DateTime), @p1178='?', @p1179='?' (DbType = Guid), @p1180='?' (DbType = DateTime), @p1181='?', @p1182='?' (DbType = Boolean), @p1183='?' (DbType = Guid), @p1184='?' (DbType = Guid), @p1185='?' (DbType = Guid), @p1186='?' (DbType = DateTime), @p1187='?', @p1188='?' (DbType = Guid), @p1189='?' (DbType = DateTime), @p1190='?', @p1191='?' (DbType = Boolean), @p1192='?' (DbType = Guid), @p1193='?' (DbType = Guid), @p1194='?' (DbType = Guid), @p1195='?' (DbType = DateTime), @p1196='?', @p1197='?' (DbType = Guid), @p1198='?' (DbType = DateTime), @p1199='?', @p1200='?' (DbType = Boolean), @p1201='?' (DbType = Guid), @p1202='?' (DbType = Guid), @p1203='?' (DbType = Guid), @p1204='?' (DbType = DateTime), @p1205='?', @p1206='?' (DbType = Guid), @p1207='?' (DbType = DateTime), @p1208='?', @p1209='?' (DbType = Boolean), @p1210='?' (DbType = Guid), @p1211='?' (DbType = Guid), @p1212='?' (DbType = Guid), @p1213='?' (DbType = DateTime), @p1214='?', @p1215='?' (DbType = Guid), @p1216='?' (DbType = DateTime), @p1217='?', @p1218='?' (DbType = Boolean), @p1219='?' (DbType = Guid), @p1220='?' (DbType = Guid), @p1221='?' (DbType = Guid), @p1222='?' (DbType = DateTime), @p1223='?', @p1224='?' (DbType = Guid), @p1225='?' (DbType = DateTime), @p1226='?', @p1227='?' (DbType = Boolean), @p1228='?' (DbType = Guid), @p1229='?' (DbType = Guid), @p1230='?' (DbType = Guid), @p1231='?' (DbType = DateTime), @p1232='?', @p1233='?' (DbType = Guid), @p1234='?' (DbType = DateTime), @p1235='?', @p1236='?' (DbType = Boolean), @p1237='?' (DbType = Guid), @p1238='?' (DbType = Guid), @p1239='?' (DbType = Guid), @p1240='?' (DbType = DateTime), @p1241='?', @p1242='?' (DbType = Guid), @p1243='?' (DbType = DateTime), @p1244='?', @p1245='?' (DbType = Boolean), @p1246='?' (DbType = Guid), @p1247='?' (DbType = Guid), @p1248='?' (DbType = Guid), @p1249='?' (DbType = DateTime), @p1250='?', @p1251='?' (DbType = Guid), @p1252='?' (DbType = DateTime), @p1253='?', @p1254='?' (DbType = Boolean), @p1255='?' (DbType = Guid), @p1256='?' (DbType = Guid), @p1257='?' (DbType = Guid), @p1258='?' (DbType = DateTime), @p1259='?', @p1260='?' (DbType = Guid), @p1261='?' (DbType = DateTime), @p1262='?', @p1263='?' (DbType = Boolean), @p1264='?' (DbType = Guid), @p1265='?' (DbType = Guid), @p1266='?' (DbType = Guid), @p1267='?' (DbType = DateTime), @p1268='?', @p1269='?' (DbType = Guid), @p1270='?' (DbType = DateTime), @p1271='?', @p1272='?' (DbType = Boolean), @p1273='?' (DbType = Guid), @p1274='?' (DbType = Guid), @p1275='?' (DbType = Guid), @p1276='?' (DbType = DateTime), @p1277='?', @p1278='?' (DbType = Guid), @p1279='?' (DbType = DateTime), @p1280='?', @p1281='?' (DbType = Boolean), @p1282='?' (DbType = Guid), @p1283='?' (DbType = Guid), @p1284='?' (DbType = Guid), @p1285='?' (DbType = DateTime), @p1286='?', @p1287='?' (DbType = Guid), @p1288='?' (DbType = DateTime), @p1289='?', @p1290='?' (DbType = Boolean), @p1291='?' (DbType = Guid), @p1292='?' (DbType = Guid), @p1293='?' (DbType = Guid), @p1294='?' (DbType = DateTime), @p1295='?', @p1296='?' (DbType = Guid), @p1297='?' (DbType = DateTime), @p1298='?', @p1299='?' (DbType = Boolean), @p1300='?' (DbType = Guid), @p1301='?' (DbType = Guid), @p1302='?' (DbType = Guid), @p1303='?' (DbType = DateTime), @p1304='?', @p1305='?' (DbType = Guid), @p1306='?' (DbType = DateTime), @p1307='?', @p1308='?' (DbType = Boolean), @p1309='?' (DbType = Guid), @p1310='?' (DbType = Guid), @p1311='?' (DbType = Guid), @p1312='?' (DbType = DateTime), @p1313='?', @p1314='?' (DbType = Guid), @p1315='?' (DbType = DateTime), @p1316='?', @p1317='?' (DbType = Boolean), @p1318='?' (DbType = Guid), @p1319='?' (DbType = Guid), @p1320='?' (DbType = Guid), @p1321='?' (DbType = DateTime), @p1322='?', @p1323='?' (DbType = Guid), @p1324='?' (DbType = DateTime), @p1325='?', @p1326='?' (DbType = Boolean), @p1327='?' (DbType = Guid), @p1328='?' (DbType = Guid), @p1329='?' (DbType = Guid), @p1330='?' (DbType = DateTime), @p1331='?', @p1332='?' (DbType = Guid), @p1333='?' (DbType = DateTime), @p1334='?', @p1335='?' (DbType = Boolean), @p1336='?' (DbType = Guid), @p1337='?' (DbType = Guid), @p1338='?' (DbType = Guid), @p1339='?' (DbType = DateTime), @p1340='?', @p1341='?' (DbType = Guid), @p1342='?' (DbType = DateTime), @p1343='?', @p1344='?' (DbType = Boolean), @p1345='?' (DbType = Guid), @p1346='?' (DbType = Guid), @p1347='?' (DbType = Guid), @p1348='?' (DbType = DateTime), @p1349='?', @p1350='?' (DbType = Guid), @p1351='?' (DbType = DateTime), @p1352='?', @p1353='?' (DbType = Boolean), @p1354='?' (DbType = Guid), @p1355='?' (DbType = Guid), @p1356='?' (DbType = Guid), @p1357='?' (DbType = DateTime), @p1358='?', @p1359='?' (DbType = Guid), @p1360='?' (DbType = DateTime), @p1361='?', @p1362='?' (DbType = Boolean), @p1363='?' (DbType = Guid), @p1364='?' (DbType = Guid), @p1365='?' (DbType = Guid), @p1366='?' (DbType = DateTime), @p1367='?', @p1368='?' (DbType = Guid), @p1369='?' (DbType = DateTime), @p1370='?', @p1371='?' (DbType = Boolean), @p1372='?' (DbType = Guid), @p1373='?' (DbType = Guid), @p1374='?' (DbType = Guid), @p1375='?' (DbType = DateTime), @p1376='?', @p1377='?' (DbType = Guid), @p1378='?' (DbType = DateTime), @p1379='?', @p1380='?' (DbType = Boolean), @p1381='?' (DbType = Guid), @p1382='?' (DbType = Guid), @p1383='?' (DbType = Guid), @p1384='?' (DbType = DateTime), @p1385='?', @p1386='?' (DbType = Guid), @p1387='?' (DbType = DateTime), @p1388='?', @p1389='?' (DbType = Boolean), @p1390='?' (DbType = Guid), @p1391='?' (DbType = Guid), @p1392='?' (DbType = Guid), @p1393='?' (DbType = DateTime), @p1394='?', @p1395='?' (DbType = Guid), @p1396='?' (DbType = DateTime), @p1397='?', @p1398='?' (DbType = Boolean), @p1399='?' (DbType = Guid), @p1400='?' (DbType = Guid), @p1401='?' (DbType = Guid), @p1402='?' (DbType = DateTime), @p1403='?', @p1404='?' (DbType = Guid), @p1405='?' (DbType = DateTime), @p1406='?', @p1407='?' (DbType = Boolean), @p1408='?' (DbType = Guid), @p1409='?' (DbType = Guid), @p1410='?' (DbType = Guid), @p1411='?' (DbType = DateTime), @p1412='?', @p1413='?' (DbType = Guid), @p1414='?' (DbType = DateTime), @p1415='?', @p1416='?' (DbType = Boolean), @p1417='?' (DbType = Guid), @p1418='?' (DbType = Guid), @p1419='?' (DbType = Guid), @p1420='?' (DbType = DateTime), @p1421='?', @p1422='?' (DbType = Guid), @p1423='?' (DbType = DateTime), @p1424='?', @p1425='?' (DbType = Boolean), @p1426='?' (DbType = Guid), @p1427='?' (DbType = Guid), @p1428='?' (DbType = Guid), @p1429='?' (DbType = DateTime), @p1430='?', @p1431='?' (DbType = Guid), @p1432='?' (DbType = DateTime), @p1433='?', @p1434='?' (DbType = Boolean), @p1435='?' (DbType = Guid), @p1436='?' (DbType = Guid), @p1437='?' (DbType = Guid), @p1438='?' (DbType = DateTime), @p1439='?', @p1440='?' (DbType = Guid), @p1441='?' (DbType = DateTime), @p1442='?', @p1443='?' (DbType = Boolean), @p1444='?' (DbType = Guid), @p1445='?' (DbType = Guid), @p1446='?' (DbType = Guid), @p1447='?' (DbType = DateTime), @p1448='?', @p1449='?' (DbType = Guid), @p1450='?' (DbType = DateTime), @p1451='?', @p1452='?' (DbType = Boolean), @p1453='?' (DbType = Guid), @p1454='?' (DbType = Guid), @p1455='?' (DbType = Guid), @p1456='?' (DbType = DateTime), @p1457='?', @p1458='?' (DbType = Guid), @p1459='?' (DbType = DateTime), @p1460='?', @p1461='?' (DbType = Boolean), @p1462='?' (DbType = Guid), @p1463='?' (DbType = Guid), @p1464='?' (DbType = Guid), @p1465='?' (DbType = DateTime), @p1466='?', @p1467='?' (DbType = Guid), @p1468='?' (DbType = DateTime), @p1469='?', @p1470='?' (DbType = Boolean), @p1471='?' (DbType = Guid), @p1472='?' (DbType = Guid), @p1473='?' (DbType = Guid), @p1474='?' (DbType = DateTime), @p1475='?', @p1476='?' (DbType = Guid), @p1477='?' (DbType = DateTime), @p1478='?', @p1479='?' (DbType = Boolean), @p1480='?' (DbType = Guid), @p1481='?' (DbType = Guid), @p1482='?' (DbType = Guid), @p1483='?' (DbType = DateTime), @p1484='?', @p1485='?' (DbType = Guid), @p1486='?' (DbType = DateTime), @p1487='?', @p1488='?' (DbType = Boolean), @p1489='?' (DbType = Guid), @p1490='?' (DbType = Guid), @p1491='?' (DbType = Guid), @p1492='?' (DbType = DateTime), @p1493='?', @p1494='?' (DbType = Guid), @p1495='?' (DbType = DateTime), @p1496='?', @p1497='?' (DbType = Boolean), @p1498='?' (DbType = Guid), @p1499='?' (DbType = Guid), @p1500='?' (DbType = Guid), @p1501='?' (DbType = DateTime), @p1502='?', @p1503='?' (DbType = Guid), @p1504='?' (DbType = DateTime), @p1505='?', @p1506='?' (DbType = Boolean), @p1507='?' (DbType = Guid), @p1508='?' (DbType = Guid), @p1509='?' (DbType = Guid), @p1510='?' (DbType = DateTime), @p1511='?', @p1512='?' (DbType = Guid), @p1513='?' (DbType = DateTime), @p1514='?', @p1515='?' (DbType = Boolean), @p1516='?' (DbType = Guid), @p1517='?' (DbType = Guid), @p1518='?' (DbType = Guid), @p1519='?' (DbType = DateTime), @p1520='?', @p1521='?' (DbType = Guid), @p1522='?' (DbType = DateTime), @p1523='?', @p1524='?' (DbType = Boolean), @p1525='?' (DbType = Guid), @p1526='?' (DbType = Guid), @p1527='?' (DbType = Guid), @p1528='?' (DbType = DateTime), @p1529='?', @p1530='?' (DbType = Guid), @p1531='?' (DbType = DateTime), @p1532='?', @p1533='?' (DbType = Boolean), @p1534='?' (DbType = Guid), @p1535='?' (DbType = Guid), @p1536='?' (DbType = Guid), @p1537='?' (DbType = DateTime), @p1538='?', @p1539='?' (DbType = Guid), @p1540='?' (DbType = DateTime), @p1541='?', @p1542='?' (DbType = Boolean), @p1543='?' (DbType = Guid), @p1544='?' (DbType = Guid), @p1545='?' (DbType = Guid), @p1546='?' (DbType = DateTime), @p1547='?', @p1548='?' (DbType = Guid), @p1549='?' (DbType = DateTime), @p1550='?', @p1551='?' (DbType = Boolean), @p1552='?' (DbType = Guid), @p1553='?' (DbType = Guid), @p1554='?' (DbType = Guid), @p1555='?' (DbType = DateTime), @p1556='?', @p1557='?' (DbType = Guid), @p1558='?' (DbType = DateTime), @p1559='?', @p1560='?' (DbType = Boolean), @p1561='?' (DbType = Guid), @p1562='?' (DbType = Guid), @p1563='?' (DbType = Guid), @p1564='?' (DbType = DateTime), @p1565='?', @p1566='?' (DbType = Guid), @p1567='?' (DbType = DateTime), @p1568='?', @p1569='?' (DbType = Boolean), @p1570='?' (DbType = Guid), @p1571='?' (DbType = Guid), @p1572='?' (DbType = Guid), @p1573='?' (DbType = DateTime), @p1574='?', @p1575='?' (DbType = Guid), @p1576='?' (DbType = DateTime), @p1577='?', @p1578='?' (DbType = Boolean), @p1579='?' (DbType = Guid), @p1580='?' (DbType = Guid), @p1581='?' (DbType = Guid), @p1582='?' (DbType = DateTime), @p1583='?', @p1584='?' (DbType = Guid), @p1585='?' (DbType = DateTime), @p1586='?', @p1587='?' (DbType = Boolean), @p1588='?' (DbType = Guid), @p1589='?' (DbType = Guid), @p1590='?' (DbType = Guid), @p1591='?' (DbType = DateTime), @p1592='?', @p1593='?' (DbType = Guid), @p1594='?' (DbType = DateTime), @p1595='?', @p1596='?' (DbType = Boolean), @p1597='?' (DbType = Guid), @p1598='?' (DbType = Guid), @p1599='?' (DbType = Guid), @p1600='?' (DbType = DateTime), @p1601='?', @p1602='?' (DbType = Guid), @p1603='?' (DbType = DateTime), @p1604='?', @p1605='?' (DbType = Boolean), @p1606='?' (DbType = Guid), @p1607='?' (DbType = Guid), @p1608='?' (DbType = Guid), @p1609='?' (DbType = DateTime), @p1610='?', @p1611='?' (DbType = Guid), @p1612='?' (DbType = DateTime), @p1613='?', @p1614='?' (DbType = Boolean), @p1615='?' (DbType = Guid), @p1616='?' (DbType = Guid), @p1617='?' (DbType = Guid), @p1618='?' (DbType = DateTime), @p1619='?', @p1620='?' (DbType = Guid), @p1621='?' (DbType = DateTime), @p1622='?', @p1623='?' (DbType = Boolean), @p1624='?' (DbType = Guid), @p1625='?' (DbType = Guid), @p1626='?' (DbType = Guid), @p1627='?' (DbType = DateTime), @p1628='?', @p1629='?' (DbType = Guid), @p1630='?' (DbType = DateTime), @p1631='?', @p1632='?' (DbType = Boolean), @p1633='?' (DbType = Guid), @p1634='?' (DbType = Guid), @p1635='?' (DbType = Guid), @p1636='?' (DbType = DateTime), @p1637='?', @p1638='?' (DbType = Guid), @p1639='?' (DbType = DateTime), @p1640='?', @p1641='?' (DbType = Boolean), @p1642='?' (DbType = Guid), @p1643='?' (DbType = Guid), @p1644='?' (DbType = Guid), @p1645='?' (DbType = DateTime), @p1646='?', @p1647='?' (DbType = Guid), @p1648='?' (DbType = DateTime), @p1649='?', @p1650='?' (DbType = Boolean), @p1651='?' (DbType = Guid), @p1652='?' (DbType = Guid), @p1653='?' (DbType = Guid), @p1654='?' (DbType = DateTime), @p1655='?', @p1656='?' (DbType = Guid), @p1657='?' (DbType = DateTime), @p1658='?', @p1659='?' (DbType = Boolean), @p1660='?' (DbType = Guid), @p1661='?' (DbType = Guid), @p1662='?' (DbType = Guid), @p1663='?' (DbType = DateTime), @p1664='?', @p1665='?' (DbType = Guid), @p1666='?' (DbType = DateTime), @p1667='?', @p1668='?' (DbType = Boolean), @p1669='?' (DbType = Guid), @p1670='?' (DbType = Guid), @p1671='?' (DbType = Guid), @p1672='?' (DbType = DateTime), @p1673='?', @p1674='?' (DbType = Guid), @p1675='?' (DbType = DateTime), @p1676='?', @p1677='?' (DbType = Boolean), @p1678='?' (DbType = Guid), @p1679='?' (DbType = Guid), @p1680='?' (DbType = Guid), @p1681='?' (DbType = DateTime), @p1682='?', @p1683='?' (DbType = Guid), @p1684='?' (DbType = DateTime), @p1685='?', @p1686='?' (DbType = Boolean), @p1687='?' (DbType = Guid), @p1688='?' (DbType = Guid), @p1689='?' (DbType = Guid), @p1690='?' (DbType = DateTime), @p1691='?', @p1692='?' (DbType = Guid), @p1693='?' (DbType = DateTime), @p1694='?', @p1695='?' (DbType = Boolean), @p1696='?' (DbType = Guid), @p1697='?' (DbType = Guid), @p1698='?' (DbType = Guid), @p1699='?' (DbType = DateTime), @p1700='?', @p1701='?' (DbType = Guid), @p1702='?' (DbType = DateTime), @p1703='?', @p1704='?' (DbType = Boolean), @p1705='?' (DbType = Guid), @p1706='?' (DbType = Guid), @p1707='?' (DbType = Guid), @p1708='?' (DbType = DateTime), @p1709='?', @p1710='?' (DbType = Guid), @p1711='?' (DbType = DateTime), @p1712='?', @p1713='?' (DbType = Boolean), @p1714='?' (DbType = Guid), @p1715='?' (DbType = Guid), @p1716='?' (DbType = Guid), @p1717='?' (DbType = DateTime), @p1718='?', @p1719='?' (DbType = Guid), @p1720='?' (DbType = DateTime), @p1721='?', @p1722='?' (DbType = Boolean), @p1723='?' (DbType = Guid), @p1724='?' (DbType = Guid), @p1725='?' (DbType = Guid), @p1726='?' (DbType = DateTime), @p1727='?', @p1728='?' (DbType = Guid), @p1729='?' (DbType = DateTime), @p1730='?', @p1731='?' (DbType = Boolean), @p1732='?' (DbType = Guid), @p1733='?' (DbType = Guid), @p1734='?' (DbType = Guid), @p1735='?' (DbType = DateTime), @p1736='?', @p1737='?' (DbType = Guid), @p1738='?' (DbType = DateTime), @p1739='?', @p1740='?' (DbType = Boolean), @p1741='?' (DbType = Guid), @p1742='?' (DbType = Guid), @p1743='?' (DbType = Guid), @p1744='?' (DbType = DateTime), @p1745='?', @p1746='?' (DbType = Guid), @p1747='?' (DbType = DateTime), @p1748='?', @p1749='?' (DbType = Boolean), @p1750='?' (DbType = Guid), @p1751='?' (DbType = Guid), @p1752='?' (DbType = Guid), @p1753='?' (DbType = DateTime), @p1754='?', @p1755='?' (DbType = Guid), @p1756='?' (DbType = DateTime), @p1757='?', @p1758='?' (DbType = Boolean), @p1759='?' (DbType = Guid), @p1760='?' (DbType = Guid), @p1761='?' (DbType = Guid), @p1762='?' (DbType = DateTime), @p1763='?', @p1764='?' (DbType = Guid), @p1765='?' (DbType = DateTime), @p1766='?', @p1767='?' (DbType = Boolean), @p1768='?' (DbType = Guid), @p1769='?' (DbType = Guid), @p1770='?' (DbType = Guid), @p1771='?' (DbType = DateTime), @p1772='?', @p1773='?' (DbType = Guid), @p1774='?' (DbType = DateTime), @p1775='?', @p1776='?' (DbType = Boolean), @p1777='?' (DbType = Guid), @p1778='?' (DbType = Guid), @p1779='?' (DbType = Guid), @p1780='?' (DbType = DateTime), @p1781='?', @p1782='?' (DbType = Guid), @p1783='?' (DbType = DateTime), @p1784='?', @p1785='?' (DbType = Boolean), @p1786='?' (DbType = Guid), @p1787='?' (DbType = Guid), @p1788='?' (DbType = Guid), @p1789='?' (DbType = DateTime), @p1790='?', @p1791='?' (DbType = Guid), @p1792='?' (DbType = DateTime), @p1793='?', @p1794='?' (DbType = Boolean), @p1795='?' (DbType = Guid), @p1796='?' (DbType = Guid), @p1797='?' (DbType = Guid), @p1798='?' (DbType = DateTime), @p1799='?', @p1800='?' (DbType = Guid), @p1801='?' (DbType = DateTime), @p1802='?', @p1803='?' (DbType = Boolean), @p1804='?' (DbType = Guid), @p1805='?' (DbType = Guid), @p1806='?' (DbType = Guid), @p1807='?' (DbType = DateTime), @p1808='?', @p1809='?' (DbType = Guid), @p1810='?' (DbType = DateTime), @p1811='?', @p1812='?' (DbType = Boolean), @p1813='?' (DbType = Guid), @p1814='?' (DbType = Guid), @p1815='?' (DbType = Guid), @p1816='?' (DbType = DateTime), @p1817='?', @p1818='?' (DbType = Guid), @p1819='?' (DbType = DateTime), @p1820='?', @p1821='?' (DbType = Boolean), @p1822='?' (DbType = Guid), @p1823='?' (DbType = Guid), @p1824='?' (DbType = Guid), @p1825='?' (DbType = DateTime), @p1826='?', @p1827='?' (DbType = Guid), @p1828='?' (DbType = DateTime), @p1829='?', @p1830='?' (DbType = Boolean), @p1831='?' (DbType = Guid), @p1832='?' (DbType = Guid), @p1833='?' (DbType = Guid), @p1834='?' (DbType = DateTime), @p1835='?', @p1836='?' (DbType = Guid), @p1837='?' (DbType = DateTime), @p1838='?', @p1839='?' (DbType = Boolean), @p1840='?' (DbType = Guid), @p1841='?' (DbType = Guid), @p1842='?' (DbType = Guid), @p1843='?' (DbType = DateTime), @p1844='?', @p1845='?' (DbType = Guid), @p1846='?' (DbType = DateTime), @p1847='?', @p1848='?' (DbType = Boolean), @p1849='?' (DbType = Guid), @p1850='?' (DbType = Guid), @p1851='?' (DbType = Guid), @p1852='?' (DbType = DateTime), @p1853='?', @p1854='?' (DbType = Guid), @p1855='?' (DbType = DateTime), @p1856='?', @p1857='?' (DbType = Boolean), @p1858='?' (DbType = Guid), @p1859='?' (DbType = Guid), @p1860='?' (DbType = Guid), @p1861='?' (DbType = DateTime), @p1862='?', @p1863='?' (DbType = Guid), @p1864='?' (DbType = DateTime), @p1865='?', @p1866='?' (DbType = Boolean), @p1867='?' (DbType = Guid), @p1868='?' (DbType = Guid), @p1869='?' (DbType = Guid), @p1870='?' (DbType = DateTime), @p1871='?', @p1872='?' (DbType = Guid), @p1873='?' (DbType = DateTime), @p1874='?', @p1875='?' (DbType = Boolean), @p1876='?' (DbType = Guid), @p1877='?' (DbType = Guid), @p1878='?' (DbType = Guid), @p1879='?' (DbType = DateTime), @p1880='?', @p1881='?' (DbType = Guid), @p1882='?' (DbType = DateTime), @p1883='?', @p1884='?' (DbType = Boolean), @p1885='?' (DbType = Guid), @p1886='?' (DbType = Guid), @p1887='?' (DbType = Guid), @p1888='?' (DbType = DateTime), @p1889='?', @p1890='?' (DbType = Guid), @p1891='?' (DbType = DateTime), @p1892='?', @p1893='?' (DbType = Boolean), @p1894='?' (DbType = Guid), @p1895='?' (DbType = Guid), @p1896='?' (DbType = Guid), @p1897='?' (DbType = DateTime), @p1898='?', @p1899='?' (DbType = Guid), @p1900='?' (DbType = DateTime), @p1901='?', @p1902='?' (DbType = Boolean), @p1903='?' (DbType = Guid), @p1904='?' (DbType = Guid), @p1905='?' (DbType = Guid), @p1906='?' (DbType = DateTime), @p1907='?', @p1908='?' (DbType = Guid), @p1909='?' (DbType = DateTime), @p1910='?', @p1911='?' (DbType = Boolean), @p1912='?' (DbType = Guid), @p1913='?' (DbType = Guid), @p1914='?' (DbType = Guid), @p1915='?' (DbType = DateTime), @p1916='?', @p1917='?' (DbType = Guid), @p1918='?' (DbType = DateTime), @p1919='?', @p1920='?' (DbType = Boolean), @p1921='?' (DbType = Guid), @p1922='?' (DbType = Guid), @p1923='?' (DbType = Guid), @p1924='?' (DbType = DateTime), @p1925='?', @p1926='?' (DbType = Guid), @p1927='?' (DbType = DateTime), @p1928='?', @p1929='?' (DbType = Boolean), @p1930='?' (DbType = Guid), @p1931='?' (DbType = Guid), @p1932='?' (DbType = Guid), @p1933='?' (DbType = DateTime), @p1934='?', @p1935='?' (DbType = Guid), @p1936='?' (DbType = DateTime), @p1937='?', @p1938='?' (DbType = Boolean), @p1939='?' (DbType = Guid), @p1940='?' (DbType = Guid), @p1941='?' (DbType = Guid), @p1942='?' (DbType = DateTime), @p1943='?', @p1944='?' (DbType = Guid), @p1945='?' (DbType = DateTime), @p1946='?', @p1947='?' (DbType = Boolean), @p1948='?' (DbType = Guid), @p1949='?' (DbType = Guid), @p1950='?' (DbType = Guid), @p1951='?' (DbType = DateTime), @p1952='?', @p1953='?' (DbType = Guid), @p1954='?' (DbType = DateTime), @p1955='?', @p1956='?' (DbType = Boolean), @p1957='?' (DbType = Guid), @p1958='?' (DbType = Guid), @p1959='?' (DbType = Guid), @p1960='?' (DbType = DateTime), @p1961='?', @p1962='?' (DbType = Guid), @p1963='?' (DbType = DateTime), @p1964='?', @p1965='?' (DbType = Boolean), @p1966='?' (DbType = Guid), @p1967='?' (DbType = Guid), @p1968='?' (DbType = Guid), @p1969='?' (DbType = DateTime), @p1970='?', @p1971='?' (DbType = Guid), @p1972='?' (DbType = DateTime), @p1973='?', @p1974='?' (DbType = Boolean), @p1975='?' (DbType = Guid), @p1976='?' (DbType = Guid), @p1977='?' (DbType = Guid), @p1978='?' (DbType = DateTime), @p1979='?', @p1980='?' (DbType = Guid), @p1981='?' (DbType = DateTime), @p1982='?', @p1983='?' (DbType = Boolean), @p1984='?' (DbType = Guid), @p1985='?' (DbType = Guid), @p1986='?' (DbType = Guid), @p1987='?' (DbType = DateTime), @p1988='?', @p1989='?' (DbType = Guid), @p1990='?' (DbType = DateTime), @p1991='?', @p1992='?' (DbType = Boolean), @p1993='?' (DbType = Guid), @p1994='?' (DbType = Guid), @p1995='?' (DbType = Guid), @p1996='?' (DbType = DateTime), @p1997='?', @p1998='?' (DbType = Guid), @p1999='?' (DbType = DateTime), @p2000='?', @p2001='?' (DbType = Boolean), @p2002='?' (DbType = Guid), @p2003='?' (DbType = Guid), @p2004='?' (DbType = Guid), @p2005='?' (DbType = DateTime), @p2006='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34, @p35);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p36, @p37, @p38, @p39, @p40, @p41, @p42, @p43, @p44);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p54, @p55, @p56, @p57, @p58, @p59, @p60, @p61, @p62);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p63, @p64, @p65, @p66, @p67, @p68, @p69, @p70, @p71);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p72, @p73, @p74, @p75, @p76, @p77, @p78, @p79, @p80);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p81, @p82, @p83, @p84, @p85, @p86, @p87, @p88, @p89);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p90, @p91, @p92, @p93, @p94, @p95, @p96, @p97, @p98);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p108, @p109, @p110, @p111, @p112, @p113, @p114, @p115, @p116);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p117, @p118, @p119, @p120, @p121, @p122, @p123, @p124, @p125);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p126, @p127, @p128, @p129, @p130, @p131, @p132, @p133, @p134);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p135, @p136, @p137, @p138, @p139, @p140, @p141, @p142, @p143);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p144, @p145, @p146, @p147, @p148, @p149, @p150, @p151, @p152);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p153, @p154, @p155, @p156, @p157, @p158, @p159, @p160, @p161);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p162, @p163, @p164, @p165, @p166, @p167, @p168, @p169, @p170);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p171, @p172, @p173, @p174, @p175, @p176, @p177, @p178, @p179);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p180, @p181, @p182, @p183, @p184, @p185, @p186, @p187, @p188);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p189, @p190, @p191, @p192, @p193, @p194, @p195, @p196, @p197);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p198, @p199, @p200, @p201, @p202, @p203, @p204, @p205, @p206);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p207, @p208, @p209, @p210, @p211, @p212, @p213, @p214, @p215);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p216, @p217, @p218, @p219, @p220, @p221, @p222, @p223, @p224);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p225, @p226, @p227, @p228, @p229, @p230, @p231, @p232, @p233);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p234, @p235, @p236, @p237, @p238, @p239, @p240, @p241, @p242);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p243, @p244, @p245, @p246, @p247, @p248, @p249, @p250, @p251);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p252, @p253, @p254, @p255, @p256, @p257, @p258, @p259, @p260);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p261, @p262, @p263, @p264, @p265, @p266, @p267, @p268, @p269);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p270, @p271, @p272, @p273, @p274, @p275, @p276, @p277, @p278);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p279, @p280, @p281, @p282, @p283, @p284, @p285, @p286, @p287);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p288, @p289, @p290, @p291, @p292, @p293, @p294, @p295, @p296);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p297, @p298, @p299, @p300, @p301, @p302, @p303, @p304, @p305);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p306, @p307, @p308, @p309, @p310, @p311, @p312, @p313, @p314);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p315, @p316, @p317, @p318, @p319, @p320, @p321, @p322, @p323);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p324, @p325, @p326, @p327, @p328, @p329, @p330, @p331, @p332);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p333, @p334, @p335, @p336, @p337, @p338, @p339, @p340, @p341);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p342, @p343, @p344, @p345, @p346, @p347, @p348, @p349, @p350);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p351, @p352, @p353, @p354, @p355, @p356, @p357, @p358, @p359);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p360, @p361, @p362, @p363, @p364, @p365, @p366, @p367, @p368);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p369, @p370, @p371, @p372, @p373, @p374, @p375, @p376, @p377);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p378, @p379, @p380, @p381, @p382, @p383, @p384, @p385, @p386);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p387, @p388, @p389, @p390, @p391, @p392, @p393, @p394, @p395);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p396, @p397, @p398, @p399, @p400, @p401, @p402, @p403, @p404);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p405, @p406, @p407, @p408, @p409, @p410, @p411, @p412, @p413);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p414, @p415, @p416, @p417, @p418, @p419, @p420, @p421, @p422);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p423, @p424, @p425, @p426, @p427, @p428, @p429, @p430, @p431);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p432, @p433, @p434, @p435, @p436, @p437, @p438, @p439, @p440);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p441, @p442, @p443, @p444, @p445, @p446, @p447, @p448, @p449);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p450, @p451, @p452, @p453, @p454, @p455, @p456, @p457, @p458);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p459, @p460, @p461, @p462, @p463, @p464, @p465, @p466, @p467);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p468, @p469, @p470, @p471, @p472, @p473, @p474, @p475, @p476);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p477, @p478, @p479, @p480, @p481, @p482, @p483, @p484, @p485);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p486, @p487, @p488, @p489, @p490, @p491, @p492, @p493, @p494);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p495, @p496, @p497, @p498, @p499, @p500, @p501, @p502, @p503);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p504, @p505, @p506, @p507, @p508, @p509, @p510, @p511, @p512);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p513, @p514, @p515, @p516, @p517, @p518, @p519, @p520, @p521);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p522, @p523, @p524, @p525, @p526, @p527, @p528, @p529, @p530);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p531, @p532, @p533, @p534, @p535, @p536, @p537, @p538, @p539);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p540, @p541, @p542, @p543, @p544, @p545, @p546, @p547, @p548);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p549, @p550, @p551, @p552, @p553, @p554, @p555, @p556, @p557);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p558, @p559, @p560, @p561, @p562, @p563, @p564, @p565, @p566);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p567, @p568, @p569, @p570, @p571, @p572, @p573, @p574, @p575);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p576, @p577, @p578, @p579, @p580, @p581, @p582, @p583, @p584);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p585, @p586, @p587, @p588, @p589, @p590, @p591, @p592, @p593);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p594, @p595, @p596, @p597, @p598, @p599, @p600, @p601, @p602);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p603, @p604, @p605, @p606, @p607, @p608, @p609, @p610, @p611);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p612, @p613, @p614, @p615, @p616, @p617, @p618, @p619, @p620);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p621, @p622, @p623, @p624, @p625, @p626, @p627, @p628, @p629);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p630, @p631, @p632, @p633, @p634, @p635, @p636, @p637, @p638);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p639, @p640, @p641, @p642, @p643, @p644, @p645, @p646, @p647);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p648, @p649, @p650, @p651, @p652, @p653, @p654, @p655, @p656);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p657, @p658, @p659, @p660, @p661, @p662, @p663, @p664, @p665);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p666, @p667, @p668, @p669, @p670, @p671, @p672, @p673, @p674);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p675, @p676, @p677, @p678, @p679, @p680, @p681, @p682, @p683);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p684, @p685, @p686, @p687, @p688, @p689, @p690, @p691, @p692);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p693, @p694, @p695, @p696, @p697, @p698, @p699, @p700, @p701);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p702, @p703, @p704, @p705, @p706, @p707, @p708, @p709, @p710);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p711, @p712, @p713, @p714, @p715, @p716, @p717, @p718, @p719);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p720, @p721, @p722, @p723, @p724, @p725, @p726, @p727, @p728);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p729, @p730, @p731, @p732, @p733, @p734, @p735, @p736, @p737);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p738, @p739, @p740, @p741, @p742, @p743, @p744, @p745, @p746);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p747, @p748, @p749, @p750, @p751, @p752, @p753, @p754, @p755);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p756, @p757, @p758, @p759, @p760, @p761, @p762, @p763, @p764);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p765, @p766, @p767, @p768, @p769, @p770, @p771, @p772, @p773);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p774, @p775, @p776, @p777, @p778, @p779, @p780, @p781, @p782);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p783, @p784, @p785, @p786, @p787, @p788, @p789, @p790, @p791);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p792, @p793, @p794, @p795, @p796, @p797, @p798, @p799, @p800);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p801, @p802, @p803, @p804, @p805, @p806, @p807, @p808, @p809);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p810, @p811, @p812, @p813, @p814, @p815, @p816, @p817, @p818);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p819, @p820, @p821, @p822, @p823, @p824, @p825, @p826, @p827);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p828, @p829, @p830, @p831, @p832, @p833, @p834, @p835, @p836);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p837, @p838, @p839, @p840, @p841, @p842, @p843, @p844, @p845);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p846, @p847, @p848, @p849, @p850, @p851, @p852, @p853, @p854);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p855, @p856, @p857, @p858, @p859, @p860, @p861, @p862, @p863);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p864, @p865, @p866, @p867, @p868, @p869, @p870, @p871, @p872);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p873, @p874, @p875, @p876, @p877, @p878, @p879, @p880, @p881);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p882, @p883, @p884, @p885, @p886, @p887, @p888, @p889, @p890);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p891, @p892, @p893, @p894, @p895, @p896, @p897, @p898, @p899);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p900, @p901, @p902, @p903, @p904, @p905, @p906, @p907, @p908);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p909, @p910, @p911, @p912, @p913, @p914, @p915, @p916, @p917);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p918, @p919, @p920, @p921, @p922, @p923, @p924, @p925, @p926);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p927, @p928, @p929, @p930, @p931, @p932, @p933, @p934, @p935);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p936, @p937, @p938, @p939, @p940, @p941, @p942, @p943, @p944);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p945, @p946, @p947, @p948, @p949, @p950, @p951, @p952, @p953);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p954, @p955, @p956, @p957, @p958, @p959, @p960, @p961, @p962);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p963, @p964, @p965, @p966, @p967, @p968, @p969, @p970, @p971);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p972, @p973, @p974, @p975, @p976, @p977, @p978, @p979, @p980);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p981, @p982, @p983, @p984, @p985, @p986, @p987, @p988, @p989);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p990, @p991, @p992, @p993, @p994, @p995, @p996, @p997, @p998);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p999, @p1000, @p1001, @p1002, @p1003, @p1004, @p1005, @p1006, @p1007);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1008, @p1009, @p1010, @p1011, @p1012, @p1013, @p1014, @p1015, @p1016);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1017, @p1018, @p1019, @p1020, @p1021, @p1022, @p1023, @p1024, @p1025);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1026, @p1027, @p1028, @p1029, @p1030, @p1031, @p1032, @p1033, @p1034);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1035, @p1036, @p1037, @p1038, @p1039, @p1040, @p1041, @p1042, @p1043);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1044, @p1045, @p1046, @p1047, @p1048, @p1049, @p1050, @p1051, @p1052);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1053, @p1054, @p1055, @p1056, @p1057, @p1058, @p1059, @p1060, @p1061);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1062, @p1063, @p1064, @p1065, @p1066, @p1067, @p1068, @p1069, @p1070);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1071, @p1072, @p1073, @p1074, @p1075, @p1076, @p1077, @p1078, @p1079);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1080, @p1081, @p1082, @p1083, @p1084, @p1085, @p1086, @p1087, @p1088);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1089, @p1090, @p1091, @p1092, @p1093, @p1094, @p1095, @p1096, @p1097);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1098, @p1099, @p1100, @p1101, @p1102, @p1103, @p1104, @p1105, @p1106);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1107, @p1108, @p1109, @p1110, @p1111, @p1112, @p1113, @p1114, @p1115);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1116, @p1117, @p1118, @p1119, @p1120, @p1121, @p1122, @p1123, @p1124);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1125, @p1126, @p1127, @p1128, @p1129, @p1130, @p1131, @p1132, @p1133);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1134, @p1135, @p1136, @p1137, @p1138, @p1139, @p1140, @p1141, @p1142);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1143, @p1144, @p1145, @p1146, @p1147, @p1148, @p1149, @p1150, @p1151);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1152, @p1153, @p1154, @p1155, @p1156, @p1157, @p1158, @p1159, @p1160);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1161, @p1162, @p1163, @p1164, @p1165, @p1166, @p1167, @p1168, @p1169);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1170, @p1171, @p1172, @p1173, @p1174, @p1175, @p1176, @p1177, @p1178);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1179, @p1180, @p1181, @p1182, @p1183, @p1184, @p1185, @p1186, @p1187);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1188, @p1189, @p1190, @p1191, @p1192, @p1193, @p1194, @p1195, @p1196);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1197, @p1198, @p1199, @p1200, @p1201, @p1202, @p1203, @p1204, @p1205);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1206, @p1207, @p1208, @p1209, @p1210, @p1211, @p1212, @p1213, @p1214);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1215, @p1216, @p1217, @p1218, @p1219, @p1220, @p1221, @p1222, @p1223);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1224, @p1225, @p1226, @p1227, @p1228, @p1229, @p1230, @p1231, @p1232);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1233, @p1234, @p1235, @p1236, @p1237, @p1238, @p1239, @p1240, @p1241);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1242, @p1243, @p1244, @p1245, @p1246, @p1247, @p1248, @p1249, @p1250);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1251, @p1252, @p1253, @p1254, @p1255, @p1256, @p1257, @p1258, @p1259);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1260, @p1261, @p1262, @p1263, @p1264, @p1265, @p1266, @p1267, @p1268);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1269, @p1270, @p1271, @p1272, @p1273, @p1274, @p1275, @p1276, @p1277);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1278, @p1279, @p1280, @p1281, @p1282, @p1283, @p1284, @p1285, @p1286);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1287, @p1288, @p1289, @p1290, @p1291, @p1292, @p1293, @p1294, @p1295);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1296, @p1297, @p1298, @p1299, @p1300, @p1301, @p1302, @p1303, @p1304);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1305, @p1306, @p1307, @p1308, @p1309, @p1310, @p1311, @p1312, @p1313);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1314, @p1315, @p1316, @p1317, @p1318, @p1319, @p1320, @p1321, @p1322);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1323, @p1324, @p1325, @p1326, @p1327, @p1328, @p1329, @p1330, @p1331);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1332, @p1333, @p1334, @p1335, @p1336, @p1337, @p1338, @p1339, @p1340);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1341, @p1342, @p1343, @p1344, @p1345, @p1346, @p1347, @p1348, @p1349);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1350, @p1351, @p1352, @p1353, @p1354, @p1355, @p1356, @p1357, @p1358);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1359, @p1360, @p1361, @p1362, @p1363, @p1364, @p1365, @p1366, @p1367);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1368, @p1369, @p1370, @p1371, @p1372, @p1373, @p1374, @p1375, @p1376);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1377, @p1378, @p1379, @p1380, @p1381, @p1382, @p1383, @p1384, @p1385);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1386, @p1387, @p1388, @p1389, @p1390, @p1391, @p1392, @p1393, @p1394);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1395, @p1396, @p1397, @p1398, @p1399, @p1400, @p1401, @p1402, @p1403);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1404, @p1405, @p1406, @p1407, @p1408, @p1409, @p1410, @p1411, @p1412);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1413, @p1414, @p1415, @p1416, @p1417, @p1418, @p1419, @p1420, @p1421);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1422, @p1423, @p1424, @p1425, @p1426, @p1427, @p1428, @p1429, @p1430);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1431, @p1432, @p1433, @p1434, @p1435, @p1436, @p1437, @p1438, @p1439);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1440, @p1441, @p1442, @p1443, @p1444, @p1445, @p1446, @p1447, @p1448);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1449, @p1450, @p1451, @p1452, @p1453, @p1454, @p1455, @p1456, @p1457);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1458, @p1459, @p1460, @p1461, @p1462, @p1463, @p1464, @p1465, @p1466);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1467, @p1468, @p1469, @p1470, @p1471, @p1472, @p1473, @p1474, @p1475);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1476, @p1477, @p1478, @p1479, @p1480, @p1481, @p1482, @p1483, @p1484);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1485, @p1486, @p1487, @p1488, @p1489, @p1490, @p1491, @p1492, @p1493);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1494, @p1495, @p1496, @p1497, @p1498, @p1499, @p1500, @p1501, @p1502);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1503, @p1504, @p1505, @p1506, @p1507, @p1508, @p1509, @p1510, @p1511);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1512, @p1513, @p1514, @p1515, @p1516, @p1517, @p1518, @p1519, @p1520);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1521, @p1522, @p1523, @p1524, @p1525, @p1526, @p1527, @p1528, @p1529);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1530, @p1531, @p1532, @p1533, @p1534, @p1535, @p1536, @p1537, @p1538);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1539, @p1540, @p1541, @p1542, @p1543, @p1544, @p1545, @p1546, @p1547);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1548, @p1549, @p1550, @p1551, @p1552, @p1553, @p1554, @p1555, @p1556);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1557, @p1558, @p1559, @p1560, @p1561, @p1562, @p1563, @p1564, @p1565);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1566, @p1567, @p1568, @p1569, @p1570, @p1571, @p1572, @p1573, @p1574);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1575, @p1576, @p1577, @p1578, @p1579, @p1580, @p1581, @p1582, @p1583);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1584, @p1585, @p1586, @p1587, @p1588, @p1589, @p1590, @p1591, @p1592);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1593, @p1594, @p1595, @p1596, @p1597, @p1598, @p1599, @p1600, @p1601);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1602, @p1603, @p1604, @p1605, @p1606, @p1607, @p1608, @p1609, @p1610);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1611, @p1612, @p1613, @p1614, @p1615, @p1616, @p1617, @p1618, @p1619);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1620, @p1621, @p1622, @p1623, @p1624, @p1625, @p1626, @p1627, @p1628);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1629, @p1630, @p1631, @p1632, @p1633, @p1634, @p1635, @p1636, @p1637);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1638, @p1639, @p1640, @p1641, @p1642, @p1643, @p1644, @p1645, @p1646);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1647, @p1648, @p1649, @p1650, @p1651, @p1652, @p1653, @p1654, @p1655);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1656, @p1657, @p1658, @p1659, @p1660, @p1661, @p1662, @p1663, @p1664);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1665, @p1666, @p1667, @p1668, @p1669, @p1670, @p1671, @p1672, @p1673);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1674, @p1675, @p1676, @p1677, @p1678, @p1679, @p1680, @p1681, @p1682);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1683, @p1684, @p1685, @p1686, @p1687, @p1688, @p1689, @p1690, @p1691);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1692, @p1693, @p1694, @p1695, @p1696, @p1697, @p1698, @p1699, @p1700);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1701, @p1702, @p1703, @p1704, @p1705, @p1706, @p1707, @p1708, @p1709);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1710, @p1711, @p1712, @p1713, @p1714, @p1715, @p1716, @p1717, @p1718);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1719, @p1720, @p1721, @p1722, @p1723, @p1724, @p1725, @p1726, @p1727);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1728, @p1729, @p1730, @p1731, @p1732, @p1733, @p1734, @p1735, @p1736);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1737, @p1738, @p1739, @p1740, @p1741, @p1742, @p1743, @p1744, @p1745);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1746, @p1747, @p1748, @p1749, @p1750, @p1751, @p1752, @p1753, @p1754);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1755, @p1756, @p1757, @p1758, @p1759, @p1760, @p1761, @p1762, @p1763);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1764, @p1765, @p1766, @p1767, @p1768, @p1769, @p1770, @p1771, @p1772);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1773, @p1774, @p1775, @p1776, @p1777, @p1778, @p1779, @p1780, @p1781);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1782, @p1783, @p1784, @p1785, @p1786, @p1787, @p1788, @p1789, @p1790);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1791, @p1792, @p1793, @p1794, @p1795, @p1796, @p1797, @p1798, @p1799);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1800, @p1801, @p1802, @p1803, @p1804, @p1805, @p1806, @p1807, @p1808);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1809, @p1810, @p1811, @p1812, @p1813, @p1814, @p1815, @p1816, @p1817);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1818, @p1819, @p1820, @p1821, @p1822, @p1823, @p1824, @p1825, @p1826);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1827, @p1828, @p1829, @p1830, @p1831, @p1832, @p1833, @p1834, @p1835);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1836, @p1837, @p1838, @p1839, @p1840, @p1841, @p1842, @p1843, @p1844);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1845, @p1846, @p1847, @p1848, @p1849, @p1850, @p1851, @p1852, @p1853);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1854, @p1855, @p1856, @p1857, @p1858, @p1859, @p1860, @p1861, @p1862);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1863, @p1864, @p1865, @p1866, @p1867, @p1868, @p1869, @p1870, @p1871);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1872, @p1873, @p1874, @p1875, @p1876, @p1877, @p1878, @p1879, @p1880);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1881, @p1882, @p1883, @p1884, @p1885, @p1886, @p1887, @p1888, @p1889);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1890, @p1891, @p1892, @p1893, @p1894, @p1895, @p1896, @p1897, @p1898);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1899, @p1900, @p1901, @p1902, @p1903, @p1904, @p1905, @p1906, @p1907);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1908, @p1909, @p1910, @p1911, @p1912, @p1913, @p1914, @p1915, @p1916);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1917, @p1918, @p1919, @p1920, @p1921, @p1922, @p1923, @p1924, @p1925);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1926, @p1927, @p1928, @p1929, @p1930, @p1931, @p1932, @p1933, @p1934);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1935, @p1936, @p1937, @p1938, @p1939, @p1940, @p1941, @p1942, @p1943);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1944, @p1945, @p1946, @p1947, @p1948, @p1949, @p1950, @p1951, @p1952);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1953, @p1954, @p1955, @p1956, @p1957, @p1958, @p1959, @p1960, @p1961);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1962, @p1963, @p1964, @p1965, @p1966, @p1967, @p1968, @p1969, @p1970);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1971, @p1972, @p1973, @p1974, @p1975, @p1976, @p1977, @p1978, @p1979);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1980, @p1981, @p1982, @p1983, @p1984, @p1985, @p1986, @p1987, @p1988);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1989, @p1990, @p1991, @p1992, @p1993, @p1994, @p1995, @p1996, @p1997);
+INSERT INTO "RolePermissions" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "PermissionId", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p1998, @p1999, @p2000, @p2001, @p2002, @p2003, @p2004, @p2005, @p2006);
+2026-05-28 22:24:34.782 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-05-28 22:24:34.792 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."Description", r."IsDeleted", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted") AND r."Name" = 'SuperAdmin'
+LIMIT 1
+2026-05-28 22:24:35.258 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?', @p4='?', @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTime), @p8='?', @p9='?', @p10='?', @p11='?', @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = DateTime), @p15='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Id", "CreatedAt", "CreatedBy", "Email", "FirstName", "IsActive", "IsDeleted", "LastLoginAt", "LastName", "PasswordHash", "PhoneNumber", "RefreshToken", "RefreshTokenExpiryTime", "TenantId", "UpdatedAt", "UpdatedBy")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+2026-05-28 22:24:35.300 +05:45 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?', @p3='?' (DbType = Boolean), @p4='?' (DbType = Guid), @p5='?' (DbType = Guid), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "UserRoles" ("Id", "CreatedAt", "CreatedBy", "IsDeleted", "RoleId", "TenantId", "UpdatedAt", "UpdatedBy", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+2026-05-28 22:24:35.305 +05:45 [INF] Starting Contractor Monitoring System API
+2026-05-28 22:24:35.329 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-28 22:24:35.544 +05:45 [INF] Now listening on: http://localhost:5185
+2026-05-28 22:24:35.547 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-28 22:24:35.547 +05:45 [INF] Hosting environment: Development
+2026-05-28 22:24:35.547 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-05-28 22:25:50.777 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5185/ - null null
+2026-05-28 22:25:50.855 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-05-28 22:25:52.509 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5185/ - 404 0 null 1734.1892ms
+2026-05-28 22:25:52.513 +05:45 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5185/, Response status code: 404
+2026-05-28 22:31:06.507 +05:45 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:31:06.628 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:31:06.638 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:31:06.752 +05:45 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-05-28 22:31:06.758 +05:45 [INF] Starting Contractor Monitoring System API
+2026-05-28 22:31:06.812 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-28 22:31:07.200 +05:45 [INF] Now listening on: https://localhost:7044
+2026-05-28 22:31:07.204 +05:45 [INF] Now listening on: http://localhost:5185
+2026-05-28 22:31:07.317 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-28 22:31:07.319 +05:45 [INF] Hosting environment: Development
+2026-05-28 22:31:07.320 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-05-28 22:31:10.278 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger - null null
+2026-05-28 22:31:10.656 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger - 301 0 null 397.5601ms
+2026-05-28 22:31:10.660 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/index.html - null null
+2026-05-28 22:31:10.762 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/index.html - 200 null text/html;charset=utf-8 101.8562ms
+2026-05-28 22:31:10.775 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/swagger-ui.css - null null
+2026-05-28 22:31:10.776 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - null null
+2026-05-28 22:31:10.776 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/swagger-ui-standalone-preset.js - null null
+2026-05-28 22:31:10.776 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/swagger-ui-bundle.js - null null
+2026-05-28 22:31:10.787 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_vs/browserLink - null null
+2026-05-28 22:31:10.811 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - 200 16533 application/javascript; charset=utf-8 34.8056ms
+2026-05-28 22:31:10.873 +05:45 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-05-28 22:31:10.879 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/swagger-ui.css - 200 144929 text/css 103.9052ms
+2026-05-28 22:31:10.892 +05:45 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-05-28 22:31:10.919 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/swagger-ui-standalone-preset.js - 200 312163 text/javascript 142.9562ms
+2026-05-28 22:31:10.936 +05:45 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-05-28 22:31:10.938 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/swagger-ui-bundle.js - 200 1061536 text/javascript 162.1185ms
+2026-05-28 22:31:10.985 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_vs/browserLink - 200 null text/javascript; charset=UTF-8 197.9785ms
+2026-05-28 22:31:11.134 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - null null
+2026-05-28 22:31:11.151 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 17.8156ms
+2026-05-28 22:31:11.169 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/favicon-32x32.png - null null
+2026-05-28 22:31:11.172 +05:45 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-05-28 22:31:11.175 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/favicon-32x32.png - 200 628 image/png 5.9346ms
+2026-05-28 22:34:41.476 +05:45 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:34:41.593 +05:45 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:34:41.603 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:34:41.736 +05:45 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-05-28 22:34:41.743 +05:45 [INF] Starting Contractor Monitoring System API
+2026-05-28 22:34:41.794 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-28 22:34:42.092 +05:45 [INF] Now listening on: https://localhost:7044
+2026-05-28 22:34:42.094 +05:45 [INF] Now listening on: http://localhost:5185
+2026-05-28 22:34:42.198 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-28 22:34:42.200 +05:45 [INF] Hosting environment: Development
+2026-05-28 22:34:42.200 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-05-28 22:34:43.205 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/index.html - null null
+2026-05-28 22:34:43.488 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/index.html - 200 null text/html;charset=utf-8 291.7802ms
+2026-05-28 22:34:43.506 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - null null
+2026-05-28 22:34:43.507 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_vs/browserLink - null null
+2026-05-28 22:34:43.516 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - 200 16533 application/javascript; charset=utf-8 10.0363ms
+2026-05-28 22:34:43.575 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_vs/browserLink - 200 null text/javascript; charset=UTF-8 68.8319ms
+2026-05-28 22:34:43.729 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - null null
+2026-05-28 22:34:43.746 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 16.9878ms
+2026-05-28 22:39:19.195 +05:45 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:39:19.321 +05:45 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:39:19.331 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:39:19.442 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-05-28 22:39:19.448 +05:45 [INF] Starting Contractor Monitoring System API
+2026-05-28 22:39:19.505 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-28 22:39:19.844 +05:45 [INF] Now listening on: https://localhost:7044
+2026-05-28 22:39:19.848 +05:45 [INF] Now listening on: http://localhost:5185
+2026-05-28 22:39:20.059 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-28 22:39:20.060 +05:45 [INF] Hosting environment: Development
+2026-05-28 22:39:20.061 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-05-28 22:39:21.402 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/index.html - null null
+2026-05-28 22:39:21.708 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/index.html - 200 null text/html;charset=utf-8 316.3351ms
+2026-05-28 22:39:21.786 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - null null
+2026-05-28 22:39:21.795 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/_vs/browserLink - null null
+2026-05-28 22:39:21.840 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_framework/aspnetcore-browser-refresh.js - 200 16533 application/javascript; charset=utf-8 54.4927ms
+2026-05-28 22:39:21.949 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/_vs/browserLink - 200 null text/javascript; charset=UTF-8 153.6218ms
+2026-05-28 22:39:22.048 +05:45 [INF] Request starting HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - null null
+2026-05-28 22:39:22.097 +05:45 [INF] Request finished HTTP/2 GET https://localhost:7044/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 48.7999ms
+2026-05-28 22:41:49.946 +05:45 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+2026-05-28 22:41:50.055 +05:45 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:41:50.071 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+2026-05-28 22:41:50.168 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring')
+2026-05-28 22:41:50.177 +05:45 [INF] Starting Contractor Monitoring System API
+2026-05-28 22:41:50.203 +05:45 [INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-05-28 22:41:50.364 +05:45 [INF] Now listening on: http://localhost:5185
+2026-05-28 22:41:50.368 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-28 22:41:50.370 +05:45 [INF] Hosting environment: Development
+2026-05-28 22:41:50.373 +05:45 [INF] Content root path: D:\Dot-Net\ContractorMonitoring\ContractorMonitoring.API
+2026-05-28 22:42:11.125 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5185/ - null null
+2026-05-28 22:42:11.234 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-05-28 22:42:12.903 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5185/ - 404 0 null 1778.7318ms
+2026-05-28 22:42:12.923 +05:45 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5185/, Response status code: 404
+2026-05-28 22:43:57.717 +05:45 [INF] Application is shutting down...

@@ -1,0 +1,87 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+  <div class="form-header">
+    <h2>Create Account</h2>
+    <p>Register to access the Contractor Monitoring System</p>
+  </div>
+
+  <div *ngIf="registerError" class="error-message">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ registerError }}</span>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="Enter your first name" autocomplete="given-name">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+        {{ getFirstNameErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Enter your last name" autocomplete="family-name">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+        {{ getLastNameErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email Address</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="Enter your email" autocomplete="email">
+    <mat-icon matPrefix>email</mat-icon>
+    <mat-error *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+      {{ getEmailErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Phone Number (Optional)</mat-label>
+    <input matInput type="tel" formControlName="phoneNumber" placeholder="+1234567890" autocomplete="tel">
+    <mat-icon matPrefix>phone</mat-icon>
+    <mat-hint>Include country code (e.g., +1234567890)</mat-hint>
+    <mat-error *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched">
+      {{ getPhoneErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Create a strong password" autocomplete="new-password">
+    <mat-icon matPrefix>lock</mat-icon>
+    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-hint>Min 8 chars: uppercase, lowercase, number, special char</mat-hint>
+    <mat-error *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      {{ getPasswordErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Confirm Password</mat-label>
+    <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+    <mat-icon matPrefix>lock</mat-icon>
+    <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+      <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-error *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+      {{ getConfirmPasswordErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" class="register-button" [disabled]="isLoading || registerForm.invalid">
+    <mat-icon *ngIf="!isLoading">person_add</mat-icon>
+    <span *ngIf="!isLoading">Create Account</span>
+    <span *ngIf="isLoading">Creating Account...</span>
+  </button>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="login-link">
+    <p>Already have an account? <a routerLink="/auth/login">Sign In</a></p>
+  </div>
+</form>
