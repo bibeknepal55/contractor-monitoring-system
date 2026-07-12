@@ -1,18 +1,50 @@
-# Visual Studio
+# =======X=====================================
+# VISUAL STUDIO
+# ============================================
 **/bin/
 **/obj/
 **/.vs/
+*.user
+*.suo
+*.cache
+*.pdb
 
-# Angular
+# ============================================
+# LOGS
+# ============================================
+**/Logs/
+
+# ============================================
+# UPLOADS (Profile Pictures)
+# ============================================
+**/Uploads/
+
+# ============================================
+# ANGULAR
+# ============================================
 **/node_modules/
 **/dist/
 **/.angular/
 
-# Environment files (security)
+# ============================================
+# ENVIRONMENT / SECRETS
+# ============================================
 **/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.example.json
 **/environment.ts
 **/environment.prod.ts
+**/launchSettings.json
 
-# Logs
+# ============================================
+# MIGRATIONS (optional - keep if you want)
+# ============================================
+# **/Migrations/
+
+# ============================================
+# MISC
+# ============================================
 *.log
-
+*.tmp
+.DS_Store
+Thumbs.db
