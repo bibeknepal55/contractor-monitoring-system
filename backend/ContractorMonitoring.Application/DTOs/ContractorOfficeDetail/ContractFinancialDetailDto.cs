@@ -52,4 +52,5 @@ public class UpdateContractFinancialDetailDto
     public string? BankBranch { get; set; }
     public string? SwiftCode { get; set; }
     public string? PaymentStatus { get; set; }
+    public DateTime? ContractSigningDate { get; set; }
 }

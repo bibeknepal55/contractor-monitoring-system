@@ -36,6 +36,16 @@ public class CreateLabTestDto
 
 public class UpdateLabTestDto
 {
+    public Guid ProjectId { get; set; }
+    public string TestName { get; set; } = string.Empty;
+    public string TestCode { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public DateTime TestDate { get; set; }
+    public string? LabName { get; set; }
+    public string? TechnicianName { get; set; }
+    public string TestStandard { get; set; } = string.Empty;
+    public string? ParameterTested { get; set; }
+    public string? SpecificationLimit { get; set; }
     public string? TestResult { get; set; }
     public string? ActualValue { get; set; }
     public string? TestReportPath { get; set; }

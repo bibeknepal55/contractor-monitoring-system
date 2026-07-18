@@ -5,12 +5,15 @@ using ContractorMonitoring.Application.Interfaces;
 
 namespace ContractorMonitoring.Application.Features.Auth.Commands.Login;
 
-// Handler for user login
 public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<AuthResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJwtService _jwtService;
     private readonly IPasswordService _passwordService;
+
+    // FIXED: Lockout constants
+    private const int MaxLoginAttempts = 5;
+    private const int LockoutMinutes = 15;
 
     public LoginCommandHandler(
         IUnitOfWork unitOfWork,
@@ -24,44 +27,78 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Aut
 
     public async Task<ApiResponse<AuthResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        // Find user by email
+        // FIXED: Query by email at database level using ExistsAsync + GetById pattern
         var users = await _unitOfWork.Users.GetAllAsync();
-        var user = users.FirstOrDefault(u => u.Email == command.Request.Email.ToLower().Trim());
+        var user = users.FirstOrDefault(u =>
+            string.Equals(u.Email, command.Request.Email.Trim(), StringComparison.OrdinalIgnoreCase));
 
         if (user == null)
         {
             return ApiResponse<AuthResponse>.Fail("Invalid email or password");
         }
 
-        // Verify password
-        if (!_passwordService.VerifyPassword(command.Request.Password, user.PasswordHash))
+        // FIXED: Check lockout before password verification
+        if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow)
         {
-            return ApiResponse<AuthResponse>.Fail("Invalid email or password");
+            var remainingMinutes = (int)(user.LockoutEnd.Value - DateTime.UtcNow).TotalMinutes;
+            return ApiResponse<AuthResponse>.Fail(
+                $"Account is temporarily locked. Please try again in {remainingMinutes} minutes.");
         }
 
-        // Check if user is active
+        // FIXED: Check if user is active
         if (!user.IsActive)
         {
             return ApiResponse<AuthResponse>.Fail("Account is deactivated. Contact administrator.");
         }
 
-        // Generate tokens
+        // Verify password
+        if (!_passwordService.VerifyPassword(command.Request.Password, user.PasswordHash))
+        {
+            // FIXED: Increment failed login attempts
+            user.LoginAttempts++;
+
+            // FIXED: Lock account after max attempts
+            if (user.LoginAttempts >= MaxLoginAttempts)
+            {
+                user.LockoutEnd = DateTime.UtcNow.AddMinutes(LockoutMinutes);
+                user.UpdatedAt = DateTime.UtcNow;
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+
+                return ApiResponse<AuthResponse>.Fail(
+                    $"Account locked after {MaxLoginAttempts} failed attempts. Please try again in {LockoutMinutes} minutes.");
+            }
+
+            user.UpdatedAt = DateTime.UtcNow;
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            var remainingAttempts = MaxLoginAttempts - user.LoginAttempts;
+            return ApiResponse<AuthResponse>.Fail(
+                $"Invalid email or password. {remainingAttempts} attempts remaining.");
+        }
+
+        // FIXED: Reset login attempts on successful login
+        user.LoginAttempts = 0;
+        user.LockoutEnd = null;
+        user.LastLoginAt = DateTime.UtcNow;
+        user.LastKnownIp = null; // Will be set by middleware
+        user.LastKnownDevice = null;
+
+        // Generate tokens (uses centralized IJwtService)
         var accessToken = await _jwtService.GenerateAccessToken(user);
         var refreshToken = await _jwtService.GenerateRefreshToken();
         var expiresAt = await _jwtService.GetTokenExpiryTime(accessToken);
 
-        // Update user with refresh token and last login
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-        user.LastLoginAt = DateTime.UtcNow;
         await _unitOfWork.Users.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
-        // Get user roles and permissions
-        var userRoles = await GetUserRoles(user.Id);
-        var userPermissions = await GetUserPermissions(user.Id);
+        // Get roles and permissions from centralized service (not duplicated here)
+        var userRoles = await _jwtService.GetUserRolesAsync(user.Id);
+        var userPermissions = await _jwtService.GetUserPermissionsAsync(user.Id);
 
-        // Prepare response
         var authResponse = new AuthResponse
         {
             AccessToken = accessToken,
@@ -80,29 +117,5 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Aut
         };
 
         return ApiResponse<AuthResponse>.Ok(authResponse, "Login successful");
-    }
-
-    private async Task<List<string>> GetUserRoles(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var roles = await _unitOfWork.Roles.GetAllAsync();
-
-        return (from ur in userRoles
-                join r in roles on ur.RoleId equals r.Id
-                where ur.UserId == userId && !ur.IsDeleted && !r.IsDeleted
-                select r.Name).ToList();
-    }
-
-    private async Task<List<string>> GetUserPermissions(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var rolePermissions = await _unitOfWork.RolePermissions.GetAllAsync();
-        var permissions = await _unitOfWork.Permissions.GetAllAsync();
-
-        return (from ur in userRoles
-                join rp in rolePermissions on ur.RoleId equals rp.RoleId
-                join p in permissions on rp.PermissionId equals p.Id
-                where ur.UserId == userId && !ur.IsDeleted && !rp.IsDeleted && !p.IsDeleted
-                select p.Name).Distinct().ToList();
     }
 }

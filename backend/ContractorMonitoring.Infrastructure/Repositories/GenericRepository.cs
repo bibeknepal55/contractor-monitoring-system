@@ -7,7 +7,6 @@ using ContractorMonitoring.Infrastructure.Data;
 
 namespace ContractorMonitoring.Infrastructure.Repositories;
 
-// Generic repository implementation with all CRUD operations
 public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEntity
 {
     protected readonly ApplicationDbContext _context;
@@ -21,6 +20,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEnt
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
+        // Global soft-delete filter is automatically applied via EF Core query filter
         return await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
     }
 
@@ -36,80 +36,35 @@ public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEnt
     {
         IQueryable<T> query = _dbSet;
 
-        // Apply includes for eager loading
+        // Apply includes
         if (includes != null && includes.Any())
         {
             foreach (var include in includes)
-            {
                 query = query.Include(include);
-            }
         }
 
-        // Apply filtering
+        // Apply filter predicate
         if (predicate != null)
-        {
             query = query.Where(predicate);
-        }
 
-        // Apply search if provided
+        // FIXED: Apply search only on specific searchable fields per entity
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
-            var searchTerm = filter.Search.ToLower();
-            var properties = typeof(T).GetProperties()
-                .Where(p => p.PropertyType == typeof(string));
-
-            if (properties.Any())
-            {
-                var parameter = Expression.Parameter(typeof(T), "x");
-                Expression? searchExpression = null;
-
-                foreach (var property in properties)
-                {
-                    var propertyAccess = Expression.Property(parameter, property);
-                    var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-
-                    if (containsMethod != null)
-                    {
-                        var searchConstant = Expression.Constant(searchTerm);
-                        var containsExpression = Expression.Call(propertyAccess, containsMethod, searchConstant);
-
-                        searchExpression = searchExpression == null
-                            ? containsExpression
-                            : Expression.OrElse(searchExpression, containsExpression);
-                    }
-                }
-
-                if (searchExpression != null)
-                {
-                    var lambda = Expression.Lambda<Func<T, bool>>(searchExpression, parameter);
-                    query = query.Where(lambda);
-                }
-            }
+            query = ApplySearch(query, filter.Search);
         }
 
         // Apply sorting
         if (!string.IsNullOrWhiteSpace(filter.SortBy))
         {
-            var property = typeof(T).GetProperty(filter.SortBy);
-            if (property != null)
-            {
-                var parameter = Expression.Parameter(typeof(T), "x");
-                var propertyAccess = Expression.Property(parameter, property);
-                var lambda = Expression.Lambda(propertyAccess, parameter);
-
-                var methodName = filter.SortOrder?.ToLower() == "desc" ? "OrderByDescending" : "OrderBy";
-                var method = typeof(Queryable).GetMethods()
-                    .First(m => m.Name == methodName && m.GetParameters().Length == 2)
-                    .MakeGenericMethod(typeof(T), property.PropertyType);
-
-                query = (IQueryable<T>)method.Invoke(null, new object[] { query, lambda })!;
-            }
+            query = ApplySorting(query, filter.SortBy, filter.SortOrder);
+        }
+        else
+        {
+            query = query.OrderByDescending(e => e.CreatedAt);
         }
 
-        // Get total count before pagination
         var totalCount = await query.CountAsync();
 
-        // Apply pagination
         var items = await query
             .Skip(filter.Skip)
             .Take(filter.PageSize)
@@ -123,6 +78,84 @@ public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEnt
             TotalCount = totalCount,
             TotalPages = (int)Math.Ceiling(totalCount / (double)filter.PageSize)
         };
+    }
+
+    // FIXED: Apply search on known searchable fields per entity type
+    private IQueryable<T> ApplySearch(IQueryable<T> query, string searchTerm)
+    {
+        var searchLower = searchTerm.ToLower();
+        var entityType = typeof(T).Name;
+
+        // Define searchable fields per entity type
+        var searchableFields = GetSearchableFields(entityType);
+
+        if (searchableFields.Length == 0)
+            return query;
+
+        var parameter = Expression.Parameter(typeof(T), "x");
+        Expression? searchExpression = null;
+
+        foreach (var field in searchableFields)
+        {
+            var property = typeof(T).GetProperty(field);
+            if (property != null && property.PropertyType == typeof(string))
+            {
+                var propertyAccess = Expression.Property(parameter, property);
+                var toLower = Expression.Call(propertyAccess, typeof(string).GetMethod("ToLower", Type.EmptyTypes)!);
+                var searchConstant = Expression.Constant(searchLower);
+                var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                var containsExpression = Expression.Call(toLower, containsMethod!, searchConstant);
+
+                searchExpression = searchExpression == null
+                    ? containsExpression
+                    : Expression.OrElse(searchExpression, containsExpression);
+            }
+        }
+
+        if (searchExpression != null)
+        {
+            var lambda = Expression.Lambda<Func<T, bool>>(searchExpression, parameter);
+            query = query.Where(lambda);
+        }
+
+        return query;
+    }
+
+    private static string[] GetSearchableFields(string entityName) => entityName switch
+    {
+        "Project" => new[] { "ProjectName", "ProjectCode", "Description", "Location", "ProjectManager" },
+        "ContractorOfficeDetail" => new[] { "CompanyName", "RegistrationNumber", "Email", "ContactPerson" },
+        "ContractFinancialDetail" => new[] { "BankName", "PaymentTerms", "Currency" },
+        "PriceAdjustment" => new[] { "Reason", "AdjustmentType" },
+        "PerformanceBond" => new[] { "BondNumber", "IssuingBank" },
+        "AdvancePaymentGuarantee" => new[] { "GuaranteeNumber", "IssuingBank" },
+        "PhysicalProgress" => new[] { "ActivityDescription", "ReportedBy" },
+        "TimeExtension" => new[] { "ExtensionNumber", "Reason" },
+        "DelayReason" => new[] { "Description", "DelayCategory" },
+        "RawMaterial" => new[] { "MaterialName", "MaterialCode", "SupplierName" },
+        "LabTest" => new[] { "TestName", "TestCode" },
+        "PhotoMonitoring" => new[] { "Title", "Description", "Tags" },
+        "Subcontractor" => new[] { "CompanyName", "ScopeOfWork" },
+        "ResponsibleOfficial" => new[] { "FullName", "Position", "Email" },
+        "User" => new[] { "Email", "FirstName", "LastName", "PhoneNumber" },
+        _ => Array.Empty<string>()
+    };
+
+    private IQueryable<T> ApplySorting(IQueryable<T> query, string sortBy, string? sortOrder)
+    {
+        var property = typeof(T).GetProperty(sortBy);
+        if (property == null) return query.OrderByDescending(e => e.CreatedAt);
+
+        var parameter = Expression.Parameter(typeof(T), "x");
+        var propertyAccess = Expression.Property(parameter, property);
+        var lambda = Expression.Lambda(propertyAccess, parameter);
+
+        var methodName = sortOrder?.ToLower() == "desc" ? "OrderByDescending" : "OrderBy";
+        var method = typeof(Queryable).GetMethods()
+            .First(m => m.Name == methodName && m.GetParameters().Length == 2)
+            .MakeGenericMethod(typeof(T), property.PropertyType);
+
+        return (IQueryable<T>)method.Invoke(null, new object[] { query, lambda })!;
     }
 
     public async Task<T> AddAsync(T entity)

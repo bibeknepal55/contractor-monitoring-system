@@ -32,17 +32,17 @@ public class JwtService : IJwtService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // Get user roles and permissions
+        // Get user roles and permissions from centralized methods
         var roles = await GetUserRolesAsync(user.Id);
         var permissions = await GetUserPermissionsAsync(user.Id);
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.GivenName, user.FirstName),
-            new Claim(ClaimTypes.Surname, user.LastName),
-            new Claim("TenantId", user.TenantId.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.GivenName, user.FirstName),
+            new(ClaimTypes.Surname, user.LastName),
+            new("TenantId", user.TenantId.ToString()),
         };
 
         // Add role claims
@@ -118,8 +118,8 @@ public class JwtService : IJwtService
         return await Task.FromResult(jwtToken.ValidTo);
     }
 
-    // Helper method to get user roles
-    private async Task<List<string>> GetUserRolesAsync(Guid userId)
+    // Public - Centralized role resolution for reuse by Login/Register handlers
+    public async Task<List<string>> GetUserRolesAsync(Guid userId)
     {
         var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
         var roles = await _unitOfWork.Roles.GetAllAsync();
@@ -130,8 +130,8 @@ public class JwtService : IJwtService
                 select r.Name).ToList();
     }
 
-    // Helper method to get user permissions
-    private async Task<List<string>> GetUserPermissionsAsync(Guid userId)
+    // Public - Centralized permission resolution for reuse by Login/Register handlers
+    public async Task<List<string>> GetUserPermissionsAsync(Guid userId)
     {
         var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
         var rolePermissions = await _unitOfWork.RolePermissions.GetAllAsync();
@@ -146,7 +146,7 @@ public class JwtService : IJwtService
 
         if (userRoleList.Contains("SuperAdmin"))
         {
-            return permissions.Select(p => p.Name).ToList();
+            return permissions.Where(p => !p.IsDeleted).Select(p => p.Name).ToList();
         }
 
         return (from ur in userRoles

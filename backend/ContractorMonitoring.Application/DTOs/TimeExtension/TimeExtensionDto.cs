@@ -31,6 +31,11 @@ public class CreateTimeExtensionDto
 
 public class UpdateTimeExtensionDto
 {
+    public Guid ProjectId { get; set; }
+    public DateTime RequestDate { get; set; }
+    public int DaysRequested { get; set; }
+    public DateTime OriginalCompletionDate { get; set; }
+    public string Reason { get; set; } = string.Empty;
     public int? DaysGranted { get; set; }
     public DateTime? RevisedCompletionDate { get; set; }
     public string Status { get; set; } = string.Empty;

@@ -21,6 +21,12 @@ public class GetAllPerformanceBondsQueryHandler : IRequestHandler<GetAllPerforma
     {
         var paged = await _unitOfWork.PerformanceBonds.GetPagedAsync(request.Filter, predicate: x => x.TenantId == request.TenantId);
         var dtos = _mapper.Map<List<PerformanceBondDto>>(paged.Data);
+        foreach (var dto in dtos)
+        {
+            var project = await _unitOfWork.Projects.GetByIdAsync(dto.ProjectId);
+            dto.ProjectName = project?.ProjectName ?? "Unknown";
+
+        }
 
         return new PagedResponse<PerformanceBondDto>
         {

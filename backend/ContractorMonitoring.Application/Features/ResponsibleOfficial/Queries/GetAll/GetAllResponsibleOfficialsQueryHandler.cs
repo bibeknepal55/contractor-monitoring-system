@@ -21,6 +21,11 @@ public class GetAllResponsibleOfficialsQueryHandler : IRequestHandler<GetAllResp
     {
         var paged = await _unitOfWork.ResponsibleOfficials.GetPagedAsync(request.Filter, predicate: x => x.TenantId == request.TenantId);
         var dtos = _mapper.Map<List<ResponsibleOfficialDto>>(paged.Data);
+        foreach (var dto in dtos)
+        {
+            var project = await _unitOfWork.Projects.GetByIdAsync(dto.ProjectId);
+            dto.ProjectName = project?.ProjectName ?? "Unknown";
+        }
 
         return new PagedResponse<ResponsibleOfficialDto>
         {

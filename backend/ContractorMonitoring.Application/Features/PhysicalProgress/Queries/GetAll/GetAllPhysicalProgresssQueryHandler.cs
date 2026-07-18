@@ -21,6 +21,11 @@ public class GetAllPhysicalProgressesQueryHandler : IRequestHandler<GetAllPhysic
     {
         var paged = await _unitOfWork.PhysicalProgresses.GetPagedAsync(request.Filter, predicate: x => x.TenantId == request.TenantId);
         var dtos = _mapper.Map<List<PhysicalProgressDto>>(paged.Data);
+        foreach (var dto in dtos)
+        {
+            var project = await _unitOfWork.Projects.GetByIdAsync(dto.ProjectId);
+            dto.ProjectName = project?.ProjectName ?? "Unknown";
+        }
 
         return new PagedResponse<PhysicalProgressDto>
         {

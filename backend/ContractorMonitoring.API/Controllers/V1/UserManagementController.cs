@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using ContractorMonitoring.Application.Common.Models;
 using ContractorMonitoring.Application.DTOs.UserManagement;
+using ContractorMonitoring.Application.Features.UserManagement.Commands.CreateUser;
 using ContractorMonitoring.Application.Features.UserManagement.Commands.DeleteUser;
 using ContractorMonitoring.Application.Features.UserManagement.Commands.UpdateRolePermissions;
 using ContractorMonitoring.Application.Features.UserManagement.Commands.UpdateRoles;
@@ -90,4 +91,23 @@ public class UserManagementController : ControllerBase
 
         return result.Success ? Ok(result) : BadRequest(result);
     }
+
+    // POST: api/v1/users
+    [HttpPost]
+    [Authorize(Policy = Permissions.UserManagement.Create)]
+    public async Task<ActionResult<ApiResponse<UserManagementDto>>> CreateUser([FromBody] CreateUserDto request)
+    {
+        var createdBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty);
+        var tenantId = Guid.Parse(User.FindFirst("TenantId")?.Value ?? Guid.Empty.ToString());
+
+        var result = await _mediator.Send(new CreateUserCommand
+        {
+            Request = request,
+            CreatedBy = createdBy,
+            TenantId = tenantId
+        });
+
+        return result.Success ? CreatedAtAction(nameof(GetAll), new { id = result.Data?.Id }, result) : BadRequest(result);
+    }
+
 }

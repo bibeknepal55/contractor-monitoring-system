@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PriceAdjustmentService } from '../../../core/services/price-adjustment.service';
 import { ProjectService } from '../../../core/services/project.service';
@@ -23,7 +25,7 @@ import moment from 'moment';
   imports: [
     CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule,
     MatDatepickerModule, MatNativeDateModule, MatButtonModule, MatIconModule, MatCardModule,
-    MatSlideToggleModule, RouterLink,
+    MatSlideToggleModule, MatTooltipModule, MatChipsModule, RouterLink,
   ],
   template: `
     <div class="form-page">
@@ -139,11 +141,44 @@ import moment from 'moment';
               </mat-form-field>
 
               <div class="grid-2">
+                <!-- Reference Document Name -->
                 <mat-form-field appearance="outline">
-                  <mat-label>Reference Document</mat-label>
+                  <mat-label>Reference Document Name</mat-label>
                   <input matInput formControlName="referenceDocument" placeholder="e.g., REF-2026-001">
-                  <mat-icon matPrefix>attachment</mat-icon>
+                  <mat-icon matPrefix>description</mat-icon>
                 </mat-form-field>
+                
+                <!-- File Upload -->
+                <div class="file-upload-wrapper">
+                  <label class="file-label">Attach Document</label>
+                  <div class="file-upload-area" (click)="fileInput.click()" 
+                    [class.has-file]="selectedFile || form.get('attachmentUrl')?.value">
+                    <input #fileInput type="file" (change)="onFileSelected($event)" 
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png,.jpeg" style="display:none;">
+                    <mat-icon class="upload-icon">
+                      {{ selectedFile || form.get('attachmentUrl')?.value ? 'description' : 'cloud_upload' }}
+                    </mat-icon>
+                    <div class="upload-text">
+                      <span class="upload-title">
+                        {{ selectedFile ? selectedFile.name : (form.get('attachmentUrl')?.value ? 'Document attached' : 'Click to upload') }}
+                      </span>
+                      <span class="upload-hint" *ngIf="!selectedFile && !form.get('attachmentUrl')?.value">
+                        PDF, DOC, XLS, JPG, PNG (Max 10MB)
+                      </span>
+                      <span class="upload-hint" *ngIf="selectedFile">
+                        {{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB
+                      </span>
+                    </div>
+                    <button mat-icon-button type="button" class="remove-file-btn" 
+                      *ngIf="selectedFile || form.get('attachmentUrl')?.value"
+                      (click)="removeFile($event)" matTooltip="Remove file">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2">
                 <mat-form-field appearance="outline">
                   <mat-label>Requested By</mat-label>
                   <input matInput formControlName="requestedBy">
@@ -159,11 +194,12 @@ import moment from 'moment';
             </mat-card-content>
           </mat-card>
 
-          <!-- Approval -->
-          <mat-card class="form-card">
+          <!-- Approval - Only visible to users with full CRUD permissions -->
+          <mat-card class="form-card" *ngIf="canApprove">
             <mat-card-header>
               <mat-icon mat-card-avatar>fact_check</mat-icon>
               <mat-card-title>Approval Status</mat-card-title>
+              <mat-card-subtitle>Only visible to authorized approvers</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <div class="grid-2">
@@ -201,11 +237,30 @@ import moment from 'moment';
     .form-card { border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid #e8eaed; }
     .form-card mat-card-header { padding: 16px 20px 0; }
     .form-card mat-card-title { font-size: 1rem; font-weight: 600; color: #333; }
+    .form-card mat-card-subtitle { font-size: 0.75rem; color: #999; }
     .form-card mat-card-content { padding: 16px 20px 20px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     mat-form-field { width: 100%; }
     .impact-summary { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #f8f9fa; border-radius: 8px; margin-top: 8px; }
+    
+    /* File Upload */
+    .file-upload-wrapper { display: flex; flex-direction: column; gap: 4px; }
+    .file-label { font-size: 0.75rem; color: rgba(0,0,0,0.6); font-weight: 500; }
+    .file-upload-area { 
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      border: 2px dashed #d0d5dd; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s; min-height: 48px; position: relative;
+    }
+    .file-upload-area:hover { border-color: #1a73e8; background: #f8faff; }
+    .file-upload-area.has-file { border-color: #059669; border-style: solid; background: #f9fefb; }
+    .upload-icon { color: #1a73e8; font-size: 28px; width: 28px; height: 28px; flex-shrink: 0; }
+    .has-file .upload-icon { color: #059669; }
+    .upload-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+    .upload-title { font-size: 0.85rem; color: #333; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .upload-hint { font-size: 0.72rem; color: #999; }
+    .remove-file-btn { position: absolute; top: 4px; right: 4px; color: #dc2626; }
+
     .form-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 8px 0 24px; }
     .form-actions button { min-width: 130px; height: 44px; font-weight: 500; border-radius: 8px; }
     @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .form-page { padding: 16px; } }
@@ -225,6 +280,17 @@ export class PriceAdjustmentFormComponent implements OnInit {
   isEdit = false;
   id: string | null = null;
   loading = false;
+  selectedFile: File | null = null;
+
+  // Only users with Create+Update permission (or SuperAdmin/Admin) can approve
+  get canApprove(): boolean {
+    const hasCreate = this.auth.hasPermission('PriceAdjustment.Create');
+    const hasUpdate = this.auth.hasPermission('PriceAdjustment.Update');
+    const hasView = this.auth.hasPermission('PriceAdjustment.View');
+    const isAdmin = this.auth.hasAnyRole(['SuperAdmin', 'Admin']);
+    // User must have Create AND Update AND View to see approval
+    return isAdmin || (hasCreate && hasUpdate && hasView);
+  }
 
   form = this.fb.group({
     projectId: ['', Validators.required],
@@ -236,6 +302,7 @@ export class PriceAdjustmentFormComponent implements OnInit {
     adjustmentDate: [new Date()],
     reason: ['', Validators.required],
     referenceDocument: [''],
+    attachmentUrl: [''],
     requestedBy: [''],
     remarks: [''],
     isApproved: [false],
@@ -251,12 +318,43 @@ export class PriceAdjustmentFormComponent implements OnInit {
       if (r.success) this.projects = r.data;
     });
 
-    // Auto-calculate percentage change
     this.form.get('previousAmount')?.valueChanges.subscribe(() => this.calculatePercentage());
     this.form.get('newAmount')?.valueChanges.subscribe(() => this.calculatePercentage());
 
     const iid = this.route.snapshot.paramMap.get('id');
     if (iid) { this.isEdit = true; this.id = iid; this.load(iid); }
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      this.notify.error('File size must be less than 10MB');
+      return;
+    }
+    
+    // Validate file type
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.jpg', '.jpeg', '.png'];
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+    if (!allowedTypes.includes(ext)) {
+      this.notify.error('Invalid file type. Allowed: PDF, DOC, XLS, JPG, PNG');
+      return;
+    }
+    
+    this.selectedFile = file;
+    // Auto-fill reference name from file if empty
+    if (!this.form.get('referenceDocument')?.value) {
+      this.form.patchValue({ referenceDocument: file.name.replace(ext, '') });
+    }
+    event.target.value = '';
+  }
+
+  removeFile(event: Event): void {
+    event.stopPropagation();
+    this.selectedFile = null;
+    this.form.patchValue({ attachmentUrl: '' });
   }
 
   calculatePercentage(): void {
@@ -296,6 +394,7 @@ export class PriceAdjustmentFormComponent implements OnInit {
             adjustmentDate: d.adjustmentDate ? moment(d.adjustmentDate).toDate() : new Date(),
             reason: d.reason,
             referenceDocument: d.referenceDocument || '',
+            attachmentUrl: d.attachmentUrl || '',
             requestedBy: d.requestedBy || this.currentUser,
             remarks: d.remarks || '',
             isApproved: d.isApproved || false,
@@ -313,6 +412,10 @@ export class PriceAdjustmentFormComponent implements OnInit {
     this.loading = true;
     const v = this.form.getRawValue();
 
+    // If user can't approve, force isApproved to false
+    const isApproved = this.canApprove ? (v.isApproved || false) : false;
+    const effectiveDate = this.canApprove ? (v.effectiveDate ? moment(v.effectiveDate).toISOString() : null) : null;
+
     const body: any = {
       projectId: v.projectId,
       adjustmentType: v.adjustmentType,
@@ -323,21 +426,44 @@ export class PriceAdjustmentFormComponent implements OnInit {
       adjustmentDate: v.adjustmentDate ? moment(v.adjustmentDate).toISOString() : new Date().toISOString(),
       reason: (v.reason || '').trim(),
       referenceDocument: (v.referenceDocument || '').trim(),
+      attachmentUrl: v.attachmentUrl || '',
       requestedBy: (v.requestedBy || '').trim() || this.currentUser,
       remarks: (v.remarks || '').trim(),
-      isApproved: v.isApproved || false,
-      effectiveDate: v.effectiveDate ? moment(v.effectiveDate).toISOString() : null,
+      isApproved: isApproved,
+      effectiveDate: effectiveDate,
     };
 
-    console.log('Saving adjustment:', this.isEdit ? 'UPDATE' : 'CREATE', body);
+    // Upload file first if selected
+    if (this.selectedFile) {
+      this.uploadFileAndSave(body);
+    } else {
+      this.submitData(body);
+    }
+  }
 
+  private uploadFileAndSave(body: any): void {
+    if (!this.selectedFile) { this.submitData(body); return; }
+    
+    // Convert file to base64 for storage (or use multipart upload)
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      body.attachmentUrl = e.target.result;
+      body.attachmentFileName = this.selectedFile!.name;
+      body.attachmentFileSize = this.selectedFile!.size;
+      this.submitData(body);
+    };
+    reader.readAsDataURL(this.selectedFile);
+  }
+
+  private submitData(body: any): void {
     const req$ = this.isEdit ? this.srv.update(this.id!, body) : this.srv.create(body);
     req$.subscribe({
       next: (r) => {
         this.loading = false;
-        console.log('Save response:', r);
         if (r.success) {
-          this.notify.success(this.isEdit ? 'Price adjustment updated!' : 'Price adjustment created!');
+          const action = this.isEdit ? 'updated' : 'created';
+          const approvalMsg = body.isApproved ? ' and approved' : '';
+          this.notify.success(`Price adjustment ${action}${approvalMsg}!`);
           this.router.navigate(['/price-adjustments']);
         } else {
           this.notify.error(r.message || 'Failed');
@@ -345,7 +471,6 @@ export class PriceAdjustmentFormComponent implements OnInit {
       },
       error: (e) => {
         this.loading = false;
-        console.error('Save error:', e);
         this.notify.error(e?.error?.message || 'Failed');
       }
     });

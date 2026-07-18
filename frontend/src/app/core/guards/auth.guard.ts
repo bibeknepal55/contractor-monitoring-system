@@ -7,6 +7,8 @@ export const authGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   if (authService.isAuthenticated()) {
+    // Refresh permissions silently on each navigation
+    authService.refreshUserPermissions();
     return true;
   }
 
@@ -33,6 +35,9 @@ export const roleGuard = (requiredRoles: string[]): CanActivateFn => {
       return router.createUrlTree(['/auth/login']);
     }
 
+    // Refresh permissions before checking
+    authService.refreshUserPermissions();
+
     if (authService.hasAnyRole(requiredRoles)) {
       return true;
     }
@@ -49,6 +54,9 @@ export const permissionGuard = (requiredPermissions: string[]): CanActivateFn =>
     if (!authService.isAuthenticated()) {
       return router.createUrlTree(['/auth/login']);
     }
+
+    // Refresh permissions before checking
+    authService.refreshUserPermissions();
 
     if (authService.hasAnyPermission(requiredPermissions)) {
       return true;

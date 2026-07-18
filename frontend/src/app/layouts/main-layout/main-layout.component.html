@@ -14,6 +14,11 @@
     <span class="toolbar-spacer"></span>
 
     <div class="toolbar-right">
+      <!-- Training Session Button -->
+      <button mat-icon-button class="training-btn" (click)="openTraining()" matTooltip="Training Session">
+        <mat-icon>school</mat-icon>
+      </button>
+
       <button mat-icon-button class="notif-btn"
         matTooltip="{{ langSrv.t('Pending Approvals') }}: {{ pendingApprovals }}"
         routerLink="/approvals"
@@ -129,3 +134,6 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+
+<!-- Training Session Panel -->
+<app-training-panel *ngIf="showTraining" (close)="showTraining = false"></app-training-panel>

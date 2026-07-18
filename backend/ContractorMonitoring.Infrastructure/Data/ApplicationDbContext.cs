@@ -1,12 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ContractorMonitoring.Domain.Entities;
+﻿using ContractorMonitoring.Domain.Entities;
 using ContractorMonitoring.Domain.Entities.Base;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractorMonitoring.Infrastructure.Data;
 
-// Application database context with audit trail and soft delete support
 public class ApplicationDbContext : DbContext
 {
+    private readonly Guid? _currentTenantId;
+
+    // Runtime constructor: Injects IHttpContextAccessor to resolve the current tenant
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options,
+        IHttpContextAccessor? httpContextAccessor = null) : base(options)
+    {
+        // Extract tenant from current HTTP context (set by TenantMiddleware)
+        if (httpContextAccessor?.HttpContext?.Items["TenantId"] is Guid tenantId)
+        {
+            _currentTenantId = tenantId;
+        }
+    }
+
+    // Design-time constructor: Used by EF Core CLI for migrations (no HTTP context)
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
@@ -18,7 +33,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserRole> UserRoles { get; set; } = null!;
     public DbSet<RolePermission> RolePermissions { get; set; } = null!;
 
-    // Project Management tables
+    // Business / Project Management tables
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<ContractorOfficeDetail> ContractorOfficeDetails { get; set; } = null!;
     public DbSet<ContractFinancialDetail> ContractFinancialDetails { get; set; } = null!;
@@ -39,36 +54,63 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Apply all entity configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        // Capture locally for use in the expression tree (ensures thread safety per scoped request)
+        var currentTenantId = _currentTenantId;
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            // 1. GLOBAL SOFT DELETE FILTER
+            if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType, "e");
+                var property = System.Linq.Expressions.Expression.Property(parameter, "IsDeleted");
+                var notDeleted = System.Linq.Expressions.Expression.Not(property);
+                var lambda = System.Linq.Expressions.Expression.Lambda(notDeleted, parameter);
+
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+            }
+
+            // 2. GLOBAL MULTI-TENANCY FILTER
+            // Automatically applies to ANY entity that has a 'TenantId' property of type Guid
+            var tenantIdProperty = entityType.FindProperty("TenantId");
+            if (tenantIdProperty != null && tenantIdProperty.ClrType == typeof(Guid) && currentTenantId.HasValue)
+            {
+                var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType, "e");
+                var property = System.Linq.Expressions.Expression.Property(parameter, "TenantId");
+                var constant = System.Linq.Expressions.Expression.Constant(currentTenantId.Value, typeof(Guid));
+                var equal = System.Linq.Expressions.Expression.Equal(property, constant);
+                var lambda = System.Linq.Expressions.Expression.Lambda(equal, parameter);
+
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+            }
+        }
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // Automatic audit trail population
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
             switch (entry.State)
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
-                    entry.Entity.Id = entry.Entity.Id == Guid.Empty ? Guid.NewGuid() : entry.Entity.Id;
+                    if (entry.Entity.Id == Guid.Empty)
+                        entry.Entity.Id = Guid.NewGuid();
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
-
-                    // Prevent modification of CreatedAt and CreatedBy
+                    // Prevent malicious or accidental modification of creation metadata
                     entry.Property(x => x.CreatedAt).IsModified = false;
                     entry.Property(x => x.CreatedBy).IsModified = false;
                     break;
             }
         }
 
-        // Soft delete handling - convert Delete to Update with IsDeleted flag
-        foreach (var entry in ChangeTracker.Entries<AuditableEntity>()
-                     .Where(e => e.State == EntityState.Deleted))
+        // Soft delete: convert Delete to Update with IsDeleted flag
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>().Where(e => e.State == EntityState.Deleted))
         {
             entry.State = EntityState.Modified;
             entry.Entity.IsDeleted = true;
@@ -76,5 +118,12 @@ public class ApplicationDbContext : DbContext
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    // Helper to bypass soft-delete filter for admin purge/recovery operations
+    // Note: Bypassing tenant filters is intentionally omitted here for security reasons.
+    public IQueryable<T> WithoutSoftDelete<T>() where T : AuditableEntity
+    {
+        return Set<T>().IgnoreQueryFilters();
     }
 }

@@ -16,6 +16,10 @@ export class UserService {
     return this.api.get(`${this.ep}/${id}`);
   }
 
+  createUser(data: any): Observable<ApiResponse<any>> {
+    return this.api.post(this.ep, data);
+  }
+
   updateUserRoles(id: string, roles: string[]): Observable<ApiResponse<any>> {
     return this.api.put(`${this.ep}/${id}/roles`, { roles });
   }

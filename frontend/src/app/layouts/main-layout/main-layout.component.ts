@@ -15,9 +15,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { LanguageService } from '../../core/services/language.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ApprovalService } from '../../core/services/approval.service';
+import { TrainingService } from '../../core/services/training.service';
+import { TrainingPanelComponent } from '../../features/training/training-panel.component';
 import { UserProfile } from '../../core/models/api-response.model';
 import { ROLE_COLORS } from '../../core/models/user.model';
 import { Observable, map, shareReplay } from 'rxjs';
+import Swal from 'sweetalert2';
 
 interface NavItem {
   label: string;
@@ -33,7 +36,7 @@ interface NavItem {
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatDividerModule, MatTooltipModule, MatBadgeModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatDividerModule, MatTooltipModule, MatBadgeModule, TrainingPanelComponent],
   templateUrl: './main-layout.component.html',
   styles: [`
     :host { display: block; height: 100vh; }
@@ -47,6 +50,8 @@ interface NavItem {
     .toolbar-spacer { flex: 1; }
     .toolbar-right { display: flex; align-items: center; gap: 6px; }
     .notif-btn { color: white; margin-right: 4px; }
+    .training-btn { color: #ffd54f !important; margin-right: 4px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
     .user-button { display: flex; align-items: center; gap: 10px; padding: 4px 14px 4px 6px; border-radius: 24px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); transition: background 0.2s; height: 42px; min-width: auto; line-height: normal; cursor: pointer; }
     .user-button:hover { background: rgba(255,255,255,0.22); }
     .user-avatar { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; overflow: hidden; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -88,14 +93,11 @@ interface NavItem {
     .nav-sub-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px; margin: 1px 0; border-radius: 8px; color: #616161; text-decoration: none; transition: all 0.2s; font-size: 0.8rem; }
     .nav-sub-item:hover { background: #f5f5f5; color: #1a73e8; }
     .nav-sub-item.active { background: #e8eaf6; color: #1a73e8; font-weight: 500; }
-
-    /* DISABLED STYLES FOR VIEWER */
     .nav-item.disabled { color: #bdbdbd !important; cursor: not-allowed !important; pointer-events: none !important; opacity: 0.5; background: transparent !important; }
     .nav-item.disabled:hover { background: transparent !important; color: #bdbdbd !important; }
     .nav-item.disabled mat-icon { color: #bdbdbd !important; opacity: 0.5; }
     .nav-sub-item.disabled { color: #bdbdbd !important; cursor: not-allowed !important; pointer-events: none !important; opacity: 0.5; }
     .nav-sub-item.disabled:hover { background: transparent !important; color: #bdbdbd !important; }
-
     .sidebar-footer { padding: 16px; border-top: 1px solid #e0e0e0; margin-top: auto; }
     .main-content { background: #f5f7fa; min-height: 100%; }
     @media (max-width: 768px) { .app-logo-text { display: none; } .user-name, .user-role, .user-info { display: none; } .user-button { padding: 4px 10px 4px 4px; } .dropdown-arrow { margin-left: 0; } }
@@ -109,6 +111,7 @@ export class MainLayoutComponent implements OnInit {
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly approvalService = inject(ApprovalService);
   private readonly zone = inject(NgZone);
+  private trainingSrv = inject(TrainingService);
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
@@ -118,6 +121,7 @@ export class MainLayoutComponent implements OnInit {
   pendingApprovals: number = 0;
   profilePictureUrl: string = '';
   isViewerOnly = false;
+  showTraining = false;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait]).pipe(map((result) => result.matches), shareReplay(1));
   expandedGroups: Set<string> = new Set(['Business Modules']);
@@ -143,25 +147,23 @@ export class MainLayoutComponent implements OnInit {
         { label: 'Responsible Officials', icon: 'badge', route: '/officials', permission: 'ResponsibleOfficial.View' },
       ],
     },
-    { label: 'Approval Workflow', icon: 'fact_check', route: '/approvals', permission: 'ApprovalWorkflow.View', roles: ['SuperAdmin', 'Admin', 'Test'], badge: '0', badgeColor: '#f57c00' },
-    { label: 'Reports', icon: 'assessment', route: '/reports', permission: 'Reports.View', roles: ['SuperAdmin', 'Admin', 'Test'] },
+    { label: 'Approval Workflow', icon: 'fact_check', route: '/approvals', permission: 'ApprovalWorkflow.View', badge: '0', badgeColor: '#f57c00' },
+    { label: 'Reports', icon: 'assessment', route: '/reports', permission: 'Reports.View' },
   ];
 
   adminNavItems: NavItem[] = [
-    { label: 'User Management', icon: 'people', route: '/users', permission: 'UserManagement.View', roles: ['SuperAdmin', 'Admin'] },
-    { label: 'Role Management', icon: 'admin_panel_settings', route: '/roles', permission: 'UserManagement.View', roles: ['SuperAdmin'] },
+    { label: 'User Management', icon: 'people', route: '/users', permission: 'UserManagement.View' },
+    { label: 'Role Management', icon: 'admin_panel_settings', route: '/roles', permission: 'RoleManagement.View' },
     {
       label: 'User Activity',
       icon: 'history',
       route: '',
-      roles: ['SuperAdmin', 'Admin'],
       children: [
         { label: 'User Logs', icon: 'list_alt', route: '/user-logs', permission: 'UserManagement.View' },
       ]
     },
   ];
 
-  // ========== USER-SPECIFIC PROFILE PICTURE KEY ==========
   private get userPictureKey(): string {
     const userId = this.currentUser?.id || 'anonymous';
     return `profilePicture_${userId}`;
@@ -179,18 +181,15 @@ export class MainLayoutComponent implements OnInit {
     }
     const roles = this.currentUser?.roles || [];
     this.isViewerOnly = roles.length === 1 && roles[0] === 'Viewer';
-
     this.refreshProfilePicture();
     this.zone.runOutsideAngular(() => {
       setInterval(() => {
-        // Use user-specific key to get the correct picture for the logged-in user
         const savedPic = localStorage.getItem(this.userPictureKey);
         if (savedPic && savedPic !== 'undefined' && savedPic !== 'null' && savedPic.length > 100) {
           if (savedPic !== this.profilePictureUrl) {
             this.zone.run(() => { this.profilePictureUrl = savedPic; });
           }
         } else {
-          // If no picture for this user, clear the URL
           if (this.profilePictureUrl) {
             this.zone.run(() => { this.profilePictureUrl = ''; });
           }
@@ -199,10 +198,23 @@ export class MainLayoutComponent implements OnInit {
     });
     this.isHandset$.subscribe(isHandset => { if (this.sidenav) { this.sidenav.mode = isHandset ? 'over' : 'side'; isHandset ? this.sidenav.close() : this.sidenav.open(); } });
     this.loadPendingCount();
+    setTimeout(() => this.checkTrainingPopup(), 1500);
   }
 
+  async checkTrainingPopup(): Promise<void> {
+    if (!this.trainingSrv.shouldShowPopup()) return;
+    const result = await Swal.fire({
+      title: '🎉 Welcome to Contractor Monitoring!',
+      html: `<div style="text-align:left;padding:8px 0;"><p style="margin:0 0 12px;color:#374151;font-size:0.9rem;">It looks like you're new here! Would you like a quick tour of the system?</p><p style="margin:0;color:#6b7280;font-size:0.82rem;">The <strong>Training Session</strong> will guide you through all the modules available to your role (<strong>${this.getHighestRole()}</strong>). You can access it anytime by clicking the 🎓 icon in the top bar.</p></div>`,
+      icon: 'info', showCancelButton: true, confirmButtonColor: '#1a73e8',
+      confirmButtonText: 'Yes, show me!', cancelButtonText: 'Skip for now', reverseButtons: true
+    });
+    if (result.isConfirmed) this.showTraining = true;
+  }
+
+  openTraining(): void { this.showTraining = true; }
+
   refreshProfilePicture(): void {
-    // Use user-specific key
     const savedPic = localStorage.getItem(this.userPictureKey);
     if (savedPic && savedPic !== 'undefined' && savedPic !== 'null' && savedPic.length > 100) {
       this.profilePictureUrl = savedPic;
@@ -222,7 +234,7 @@ export class MainLayoutComponent implements OnInit {
   hasPermission(p: string): boolean { return this.authService.hasPermission(p); }
 
   canShowNavItem(item: NavItem): boolean {
-    if (item.roles?.length && !this.authService.hasAnyRole(item.roles)) return false;
+    if (this.authService.hasRole('SuperAdmin')) return true;
     if (item.permission && !this.authService.hasPermission(item.permission)) return false;
     if (item.children) return item.children.some(c => this.canShowNavItem(c));
     return true;

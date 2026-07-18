@@ -42,6 +42,7 @@ public class CreatePriceAdjustmentDto
 
 public class UpdatePriceAdjustmentDto
 {
+    public Guid ProjectId { get; set; }
     public string AdjustmentType { get; set; } = string.Empty;
     public decimal? PreviousAmount { get; set; }
     public decimal NewAmount { get; set; }
@@ -56,4 +57,5 @@ public class UpdatePriceAdjustmentDto
     public DateTime? ApprovalDate { get; set; }
     public DateTime? EffectiveDate { get; set; }
     public string? Remarks { get; set; }
+    public DateTime? AdjustmentDate { get; set; }
 }

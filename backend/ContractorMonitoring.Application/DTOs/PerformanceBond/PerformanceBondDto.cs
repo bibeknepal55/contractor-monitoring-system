@@ -32,7 +32,12 @@ public class CreatePerformanceBondDto
 
 public class UpdatePerformanceBondDto
 {
+    public Guid ProjectId { get; set; }
+    public string BondNumber { get; set; } = string.Empty;
     public decimal BondAmount { get; set; }
+    public string BondType { get; set; } = string.Empty;
+    public string IssuingBank { get; set; } = string.Empty;
+    public DateTime IssueDate { get; set; }
     public DateTime ExpiryDate { get; set; }
     public DateTime? RenewalDate { get; set; }
     public string Status { get; set; } = string.Empty;

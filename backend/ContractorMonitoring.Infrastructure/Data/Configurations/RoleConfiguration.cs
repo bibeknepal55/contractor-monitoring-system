@@ -20,6 +20,13 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.Property(r => r.Description)
             .HasMaxLength(500);
 
+        // New fields for custom role management
+        builder.Property(r => r.IsSystem)
+            .HasDefaultValue(false);
+
+        builder.Property(r => r.CreatedByUser)
+            .HasMaxLength(200);
+
         // Indexes
         builder.HasIndex(r => r.Name)
             .IsUnique();

@@ -31,9 +31,14 @@ public class CreatePhotoMonitoringDto
 
 public class UpdatePhotoMonitoringDto
 {
+    public Guid ProjectId { get; set; }
+    public string PhotoPath { get; set; } = string.Empty;
+    public DateTime PhotoDate { get; set; }
+    public string Location { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string? Direction { get; set; }
+    public string? PhotoType { get; set; }
     public string? Tags { get; set; }
 }
 
@@ -43,6 +48,7 @@ public class UploadPhotoDto
     public Guid ProjectId { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string PhotoPath { get; set; } = string.Empty;
     public DateTime PhotoDate { get; set; }
     public string Location { get; set; } = string.Empty;
     public string? Direction { get; set; }

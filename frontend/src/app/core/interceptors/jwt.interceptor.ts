@@ -11,7 +11,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, nex
 
   const token = authService.getAccessToken();
   const isApiUrl = req.url.startsWith(environment.apiUrl);
-  const isAuthEndpoint = req.url.includes('/auth/login') || req.url.includes('/auth/register') || req.url.includes('/auth/refresh-token');
+  const isAuthEndpoint = req.url.includes('/auth/login') || 
+    req.url.includes('/auth/register') || 
+    req.url.includes('/auth/refresh-token');
 
   if (token && isApiUrl && !isAuthEndpoint) {
     req = addToken(req, token);
@@ -35,7 +37,12 @@ function addToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown
   });
 }
 
-function handleUnauthorizedError(req: HttpRequest<unknown>, next: HttpHandlerFn, authService: AuthService, router: Router) {
+function handleUnauthorizedError(
+  req: HttpRequest<unknown>, 
+  next: HttpHandlerFn, 
+  authService: AuthService, 
+  router: Router
+) {
   const refreshToken = authService.getRefreshToken();
   const accessToken = authService.getAccessToken();
 

@@ -21,6 +21,11 @@ public class GetAllPriceAdjustmentsQueryHandler : IRequestHandler<GetAllPriceAdj
     {
         var paged = await _unitOfWork.PriceAdjustments.GetPagedAsync(request.Filter, predicate: x => x.TenantId == request.TenantId);
         var dtos = _mapper.Map<List<PriceAdjustmentDto>>(paged.Data);
+        foreach (var dto in dtos)
+        {
+            var project = await _unitOfWork.Projects.GetByIdAsync(dto.ProjectId);
+            dto.ProjectName = project?.ProjectName ?? "Unknown";
+        }
 
         return new PagedResponse<PriceAdjustmentDto>
         {

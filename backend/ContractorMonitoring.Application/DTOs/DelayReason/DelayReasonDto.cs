@@ -32,7 +32,12 @@ public class CreateDelayReasonDto
 
 public class UpdateDelayReasonDto
 {
+    public Guid ProjectId { get; set; }
+    public string DelayCategory { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public DateTime DelayStartDate { get; set; }
     public DateTime? DelayEndDate { get; set; }
+    public string? ResponsibleParty { get; set; }
     public int DelayDays { get; set; }
     public string ImpactLevel { get; set; } = string.Empty;
     public string? MitigationAction { get; set; }

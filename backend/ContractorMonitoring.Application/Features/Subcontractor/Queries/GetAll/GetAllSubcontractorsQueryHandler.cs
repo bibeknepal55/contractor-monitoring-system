@@ -21,6 +21,11 @@ public class GetAllSubcontractorsQueryHandler : IRequestHandler<GetAllSubcontrac
     {
         var paged = await _unitOfWork.Subcontractors.GetPagedAsync(request.Filter, predicate: x => x.TenantId == request.TenantId);
         var dtos = _mapper.Map<List<SubcontractorDto>>(paged.Data);
+        foreach (var dto in dtos)
+        {
+            var project = await _unitOfWork.Projects.GetByIdAsync(dto.ProjectId);
+            dto.ProjectName = project?.ProjectName ?? "Unknown";
+        }
 
         return new PagedResponse<SubcontractorDto>
         {

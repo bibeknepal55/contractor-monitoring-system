@@ -41,6 +41,9 @@ public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesComm
         bool isUpdaterAdmin = updaterRoles.Contains("Admin");
         bool isUpdaterTest = updaterRoles.Contains("Test");
 
+        // System roles that cannot be assigned by non-SuperAdmin
+        var systemRoleNames = new HashSet<string> { "SuperAdmin", "Admin" };
+
         // RBAC: Check role assignment permissions
         foreach (var roleName in command.Request.Roles)
         {
@@ -48,9 +51,25 @@ public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesComm
             if (isUpdaterSuperAdmin)
                 continue;
 
-            // Admin can only assign Test and Viewer
-            if (isUpdaterAdmin && (roleName == "Test" || roleName == "Viewer"))
-                continue;
+            // System roles can only be assigned by SuperAdmin
+            if (systemRoleNames.Contains(roleName) && !isUpdaterSuperAdmin)
+                return ApiResponse<UserManagementDto>.Fail($"Only SuperAdmin can assign the role: {roleName}");
+
+            // Admin can assign: Test, Viewer, and any custom (non-system) role
+            if (isUpdaterAdmin)
+            {
+                // Check if it's a system role Admin CAN assign
+                if (roleName == "Test" || roleName == "Viewer")
+                    continue;
+
+                // Check if it's a custom role (not SuperAdmin, not Admin)
+                var role = allRoles.FirstOrDefault(r => r.Name == roleName && !r.IsDeleted);
+                if (role != null && !role.IsSystem)
+                    continue;
+
+                // If we get here, Admin cannot assign this role
+                return ApiResponse<UserManagementDto>.Fail($"You do not have permission to assign the role: {roleName}");
+            }
 
             // Test can only assign Test
             if (isUpdaterTest && roleName == "Test")
@@ -60,10 +79,6 @@ public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesComm
             return ApiResponse<UserManagementDto>.Fail($"You do not have permission to assign the role: {roleName}");
         }
 
-        // RBAC: Prevent assigning SuperAdmin by non-SuperAdmin
-        if (!isUpdaterSuperAdmin && command.Request.Roles.Contains("SuperAdmin"))
-            return ApiResponse<UserManagementDto>.Fail("Only SuperAdmin can assign SuperAdmin role");
-
         // RBAC: Prevent modifying SuperAdmin users
         if (targetUserRoles.Contains("SuperAdmin") && !isUpdaterSuperAdmin)
             return ApiResponse<UserManagementDto>.Fail("Cannot modify SuperAdmin user");
@@ -72,19 +87,16 @@ public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesComm
         if (targetUserRoles.Contains("Admin") && isUpdaterAdmin && command.UserId != command.UpdatedBy)
             return ApiResponse<UserManagementDto>.Fail("Admin cannot modify other Admin users");
 
-        // ENTERPRISE MULTI-TENANT 
-        // When a Viewer is upgraded to Test/Admin/SuperAdmin, move them to the
-        // shared main tenant (Guid.Empty) so they can see all shared data.
-        // Viewers stay isolated. SuperAdmin, Admin, Test share the same workspace.
-      
+        // Multi-tenant: When Viewer is upgraded, move to shared tenant
         bool isCurrentlyOnlyViewer = targetUserRoles.Count == 1 && targetUserRoles.Contains("Viewer");
         bool isBeingUpgraded = command.Request.Roles.Contains("Test") ||
                               command.Request.Roles.Contains("Admin") ||
-                              command.Request.Roles.Contains("SuperAdmin");
+                              command.Request.Roles.Contains("SuperAdmin") ||
+                              command.Request.Roles.Any(r => !systemRoleNames.Contains(r) && r != "Viewer" && r != "Test");
 
         if (isBeingUpgraded && isCurrentlyOnlyViewer)
         {
-            user.TenantId = Guid.Empty; // Move to shared main tenant
+            user.TenantId = Guid.Empty;
             await _unitOfWork.Users.UpdateAsync(user);
         }
 
@@ -109,14 +121,12 @@ public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesComm
 
                 if (existingDeleted != null)
                 {
-                    // Reactivate
                     existingDeleted.IsDeleted = false;
                     existingDeleted.UpdatedAt = DateTime.UtcNow;
                     existingDeleted.UpdatedBy = command.UpdatedBy.ToString();
                 }
                 else
                 {
-                    // Create new
                     await _unitOfWork.UserRoles.AddAsync(new UserRole
                     {
                         Id = Guid.NewGuid(),

@@ -33,12 +33,26 @@ public class CreateRawMaterialDto
     public decimal UnitPrice { get; set; }
     public string? SupplierName { get; set; }
     public DateTime? OrderDate { get; set; }
-}
-
-public class UpdateRawMaterialDto
-{
     public decimal QuantityReceived { get; set; }
     public decimal QuantityUsed { get; set; }
     public DateTime? DeliveryDate { get; set; }
     public string Status { get; set; } = string.Empty;
+}
+
+public class UpdateRawMaterialDto
+{
+    public Guid ProjectId { get; set; }
+    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialCode { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public decimal QuantityOrdered { get; set; }
+    public string Unit { get; set; } = string.Empty;
+    public decimal UnitPrice { get; set; }
+    public string? SupplierName { get; set; }
+    public DateTime? OrderDate { get; set; }
+    public decimal QuantityReceived { get; set; }
+    public decimal QuantityUsed { get; set; }
+    public DateTime? DeliveryDate { get; set; }
+    public string Status { get; set; } = string.Empty;
+
 }

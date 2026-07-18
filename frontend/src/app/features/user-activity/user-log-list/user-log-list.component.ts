@@ -76,7 +76,7 @@ import Swal from 'sweetalert2';
       <div class="filters">
         <mat-form-field appearance="outline" class="fld">
           <mat-label>Date</mat-label>
-          <mat-select [(ngModel)]="dateRange" (selectionChange)="loadData()">
+          <mat-select [(ngModel)]="dateRange" (selectionChange)="onFilterChange()">
             <mat-option value="today">Today</mat-option>
             <mat-option value="yesterday">Yesterday</mat-option>
             <mat-option value="week">This Week</mat-option>
@@ -86,7 +86,7 @@ import Swal from 'sweetalert2';
         </mat-form-field>
         <mat-form-field appearance="outline" class="fld">
           <mat-label>Type</mat-label>
-          <mat-select [(ngModel)]="filterType" (selectionChange)="loadData()">
+          <mat-select [(ngModel)]="filterType" (selectionChange)="onFilterChange()">
             <mat-option value="">All Types</mat-option>
             <mat-option value="Login">Login</mat-option>
             <mat-option value="Logout">Logout</mat-option>
@@ -100,15 +100,15 @@ import Swal from 'sweetalert2';
         </mat-form-field>
         <mat-form-field appearance="outline" class="fld">
           <mat-label>Module</mat-label>
-          <mat-select [(ngModel)]="filterModule" (selectionChange)="loadData()">
+          <mat-select [(ngModel)]="filterModule" (selectionChange)="onFilterChange()">
             <mat-option value="">All Modules</mat-option>
             <mat-option *ngFor="let m of activeModules" [value]="m">{{ m }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="search">
           <mat-icon matPrefix>search</mat-icon>
-          <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearch($event)" placeholder="Search...">
-          <button matSuffix mat-icon-button *ngIf="searchText" (click)="searchText=''; loadData()"><mat-icon>close</mat-icon></button>
+          <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChange($event)" placeholder="Search...">
+          <button matSuffix mat-icon-button *ngIf="searchText" (click)="clearSearch()"><mat-icon>close</mat-icon></button>
         </mat-form-field>
         <button mat-stroked-button *ngIf="hasFilters" (click)="clearFilters()"><mat-icon>clear_all</mat-icon> Clear</button>
       </div>
@@ -217,6 +217,42 @@ import Swal from 'sweetalert2';
               <div class="row"><span>Time</span><strong>{{ fmtTime(detailData.log?.createdAt) }}</strong></div>
             </div>
             <mat-divider></mat-divider>
+            
+            <!-- Session History Section -->
+            <div class="sec">
+              <h3>
+                <mat-icon>history</mat-icon> Session History
+                <span class="toggle-session" (click)="toggleSessionHistory()">
+                  <mat-icon>{{ showSessionHistory ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </span>
+              </h3>
+              <div class="session-history" *ngIf="showSessionHistory">
+                <mat-progress-bar *ngIf="sessionLoading" mode="indeterminate" color="primary"></mat-progress-bar>
+                <div *ngIf="!sessionLoading && userSessions.length > 0" class="session-list">
+                  <div class="session-item" *ngFor="let session of userSessions" [class.login]="session.activityType === 'Login'" [class.logout]="session.activityType === 'Logout'">
+                    <div class="session-left">
+                      <mat-icon class="session-icon" [style.color]="session.activityType === 'Login' ? '#059669' : '#dc2626'">
+                        {{ session.activityType === 'Login' ? 'login' : 'logout' }}
+                      </mat-icon>
+                      <div class="session-details">
+                        <span class="session-type">{{ session.activityType }}</span>
+                        <span class="session-time-nepali">{{ toNepaliDateTime(session.createdAt) }}</span>
+                        <span class="session-time-english">{{ fmtTime(session.createdAt) }}</span>
+                      </div>
+                    </div>
+                    <div class="session-right">
+                      <span class="session-ip">{{ session.ipAddress || 'N/A' }}</span>
+                      <span class="session-device">{{ session.deviceInfo || 'Unknown Device' }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="no-sessions" *ngIf="!sessionLoading && userSessions.length === 0">
+                  <p>No login/logout history available</p>
+                </div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            
             <div class="sec" *ngIf="detailData.log?.requestBody">
               <h3><mat-icon>code</mat-icon> {{ detailData.log?.activityType==='FailedLogin'?'Failed Login':detailData.log?.activityType==='Approval'?'Approval Details':'Request Body' }}</h3>
               <div class="fail" *ngIf="detailData.log?.activityType==='FailedLogin'">
@@ -292,6 +328,111 @@ import Swal from 'sweetalert2';
     .fail p{margin:4px 0;font-size:.85rem}
     .approval{background:#f3e8ff;border-radius:8px;padding:12px;border-left:4px solid #7c3aed}
     .approval p{margin:4px 0;font-size:.85rem}
+    
+    /* Session History Styles */
+    .toggle-session {
+      margin-left: auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .toggle-session:hover {
+      background: rgba(37, 99, 235, 0.1);
+    }
+    .session-history {
+      margin-top: 8px;
+    }
+    .session-list {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+    .session-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.2s;
+    }
+    .session-item:last-child {
+      border-bottom: none;
+    }
+    .session-item:hover {
+      background: #f9fafb;
+    }
+    .session-item.login {
+      border-left: 3px solid #059669;
+    }
+    .session-item.logout {
+      border-left: 3px solid #dc2626;
+    }
+    .session-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .session-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+    .session-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .session-type {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .session-time-nepali {
+      font-size: 0.78rem;
+      color: #6b7280;
+      font-family: 'Mukta', 'Noto Sans', sans-serif;
+    }
+    .session-time-english {
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+    .session-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .session-ip {
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-family: monospace;
+    }
+    .session-device {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .no-sessions {
+      padding: 24px;
+      text-align: center;
+      color: #9ca3af;
+      background: #f9fafb;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    .no-sessions p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+    
     @media(max-width:768px){.page{padding:14px}.stats{grid-template-columns:repeat(2,1fr)}.panel{width:100vw}.dlg{width:95vw}.cnts{display:none}}
   `]
 })
@@ -311,6 +452,7 @@ export class UserLogListComponent implements OnInit, OnDestroy {
   filterModule = '';
   searchText = '';
   private search$ = new Subject<string>();
+  private searchSubscription!: Subscription;
   autoRefresh = false;
   private refreshSub!: Subscription;
 
@@ -322,6 +464,11 @@ export class UserLogListComponent implements OnInit, OnDestroy {
   detailLog: any = null;
   detailData: any = null;
   detailLoading = false;
+
+  // Session history
+  showSessionHistory = false;
+  sessionLoading = false;
+  userSessions: any[] = [];
 
   // FIX: Only exclude Dashboard and UserLogs, allow everything else including Auth and ApprovalWorkflow
   private readonly EXCLUDE = ['Dashboard', 'UserLogs'];
@@ -358,7 +505,6 @@ export class UserLogListComponent implements OnInit, OnDestroy {
   get loginCount(): number {
     const today = moment().startOf('day').toISOString();
     
-    // Direct Login detection
     const directLogins = this.allRawLogs.filter(l => 
       l.activityType === 'Login' && 
       l.createdAt >= today && 
@@ -372,7 +518,6 @@ export class UserLogListComponent implements OnInit, OnDestroy {
       return users.size;
     }
     
-    // Fallback detection
     const todayUsers = new Map<string, any[]>();
     
     this.allRawLogs
@@ -400,16 +545,10 @@ export class UserLogListComponent implements OnInit, OnDestroy {
         (l.activityType === 'Logout' || l.action?.toLowerCase().includes('logged in') || l.description?.toLowerCase().includes('logged in'))
       );
       
-      const firstActivity = logs.reduce((earliest, current) => 
-        current.createdAt < earliest.createdAt ? current : earliest
-      );
-      
       if (hasLogout || hasAuthActivity) {
         inferredLogins++;
-      } else if (firstActivity && moment(firstActivity.createdAt).isAfter(moment().startOf('day'))) {
-        if (logs.length >= 2) {
-          inferredLogins++;
-        }
+      } else if (logs.length >= 2) {
+        inferredLogins++;
       }
     });
     
@@ -449,25 +588,63 @@ export class UserLogListComponent implements OnInit, OnDestroy {
   get hasFilters(): boolean { return !!(this.filterType || this.filterModule || this.searchText || this.dateRange !== 'today'); }
 
   ngOnInit(): void {
-    this.search$.pipe(debounceTime(400)).subscribe(() => this.loadData());
+    this.searchSubscription = this.search$.pipe(debounceTime(400)).subscribe(() => {
+      this.loadData();
+    });
     this.loadData();
   }
-  ngOnDestroy(): void { if (this.refreshSub) this.refreshSub.unsubscribe(); }
+  
+  ngOnDestroy(): void {
+    if (this.refreshSub) this.refreshSub.unsubscribe();
+    if (this.searchSubscription) this.searchSubscription.unsubscribe();
+  }
+
+  onFilterChange(): void {
+    this.loadData();
+  }
+
+  onSearchChange(value: string): void {
+    this.searchText = value;
+    this.search$.next(value);
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.search$.next('');
+  }
 
   loadData(): void {
     this.loading = true;
     const p: UserLogFilter = {
-      page: 1, pageSize: 2000, sortBy: 'createdAt', sortOrder: 'desc',
+      page: 1,
+      pageSize: 2000,
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
       search: this.searchText || undefined,
       activityType: this.filterType || undefined,
       moduleName: this.filterModule || undefined
     };
+    
     const now = moment();
     switch (this.dateRange) {
-      case 'today': p.startDate = now.startOf('day').toISOString(); break;
-      case 'yesterday': p.startDate = now.subtract(1, 'day').startOf('day').toISOString(); p.endDate = now.startOf('day').toISOString(); break;
-      case 'week': p.startDate = now.startOf('week').toISOString(); break;
-      case 'month': p.startDate = now.startOf('month').toISOString(); break;
+      case 'today':
+        p.startDate = now.startOf('day').toISOString();
+        break;
+      case 'yesterday':
+        const yesterdayStart = moment().subtract(1, 'day').startOf('day');
+        const yesterdayEnd = moment().startOf('day');
+        p.startDate = yesterdayStart.toISOString();
+        p.endDate = yesterdayEnd.toISOString();
+        break;
+      case 'week':
+        p.startDate = now.startOf('week').toISOString();
+        break;
+      case 'month':
+        p.startDate = now.startOf('month').toISOString();
+        break;
+      case 'all':
+        // Don't set any date filter for all time
+        break;
     }
 
     this.srv.getLogs(p).subscribe({
@@ -489,9 +666,18 @@ export class UserLogListComponent implements OnInit, OnDestroy {
       const key = l.userId || l.userEmail || l.userName;
       if (!map.has(key)) {
         map.set(key, {
-          userId: l.userId, userName: l.userName, userEmail: l.userEmail,
-          userRole: l.userRole, totalActions: 0, createCount: 0, updateCount: 0,
-          deleteCount: 0, viewCount: 0, approvalCount: 0, lastActivity: l.createdAt, logs: []
+          userId: l.userId,
+          userName: l.userName,
+          userEmail: l.userEmail,
+          userRole: l.userRole,
+          totalActions: 0,
+          createCount: 0,
+          updateCount: 0,
+          deleteCount: 0,
+          viewCount: 0,
+          approvalCount: 0,
+          lastActivity: l.createdAt,
+          logs: []
         });
       }
       const u = map.get(key);
@@ -518,13 +704,122 @@ export class UserLogListComponent implements OnInit, OnDestroy {
   }
 
   toggleAutoRefresh(): void {
-    if (this.autoRefresh) { this.refreshSub = interval(30000).subscribe(() => this.loadData()); }
-    else { if (this.refreshSub) this.refreshSub.unsubscribe(); }
+    if (this.autoRefresh) {
+      this.refreshSub = interval(30000).subscribe(() => this.loadData());
+    } else {
+      if (this.refreshSub) this.refreshSub.unsubscribe();
+    }
   }
 
-  onSearch(v: string): void { this.searchText = v; this.search$.next(v); }
-  clearFilters(): void { this.filterType = ''; this.filterModule = ''; this.searchText = ''; this.dateRange = 'today'; this.loadData(); }
-  toggle(i: number): void { if (this.expanded.has(i)) this.expanded.delete(i); else this.expanded.add(i); }
+  clearFilters(): void {
+    this.filterType = '';
+    this.filterModule = '';
+    this.searchText = '';
+    this.dateRange = 'today';
+    this.loadData();
+  }
+  
+  toggle(i: number): void {
+    if (this.expanded.has(i)) {
+      this.expanded.delete(i);
+    } else {
+      this.expanded.add(i);
+    }
+  }
+
+  toggleSessionHistory(): void {
+    this.showSessionHistory = !this.showSessionHistory;
+    if (this.showSessionHistory && this.detailData?.log) {
+      this.loadUserSessions();
+    }
+  }
+
+  loadUserSessions(): void {
+    if (!this.detailData?.log) return;
+    
+    this.sessionLoading = true;
+    const userEmail = this.detailData.log.userEmail;
+    const userId = this.detailData.log.userId;
+
+    // Fetch ALL logs without filters to get complete session history
+    const filter: UserLogFilter = {
+      page: 1,
+      pageSize: 5000,
+      sortBy: 'createdAt',
+      sortOrder: 'desc'
+      // Don't set any filters to get all data
+    };
+
+    this.srv.getLogs(filter).subscribe({
+      next: (r: any) => {
+        if (r.success) {
+          // Filter only Login and Logout activities for this user from all records
+          this.userSessions = (r.data || []).filter((l: any) => 
+            (l.activityType === 'Login' || l.activityType === 'Logout') &&
+            (l.userEmail === userEmail || l.userId === userId || l.userName === this.detailData.log.userName)
+          ).sort((a: any, b: any) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+          
+          // If no sessions found, try alternate matching
+          if (this.userSessions.length === 0) {
+            this.userSessions = (r.data || []).filter((l: any) => 
+              (l.activityType === 'Login' || l.activityType === 'Logout') &&
+              (l.userEmail?.toLowerCase() === userEmail?.toLowerCase() || 
+               l.userId === userId ||
+               l.userName?.toLowerCase() === this.detailData.log.userName?.toLowerCase())
+            ).sort((a: any, b: any) => 
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }
+        }
+        this.sessionLoading = false;
+      },
+      error: () => {
+        this.sessionLoading = false;
+      }
+    });
+  }
+
+  // Convert to Nepali date and time
+  toNepaliDateTime(isoString: string): string {
+    if (!isoString) return '-';
+    
+    try {
+      const date = new Date(isoString);
+      
+      const nepaliMonths = [
+        'बैशाख', 'जेठ', 'असार', 'साउन', 'भदौ', 'असोज', 
+        'कार्तिक', 'मंसिर', 'पुष', 'माघ', 'फागुन', 'चैत'
+      ];
+      
+      const nepaliDays = [
+        'आइतबार', 'सोमबार', 'मंगलबार', 'बुधबार', 
+        'बिहिबार', 'शुक्रबार', 'शनिबार'
+      ];
+      
+      const nepaliNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+      
+      const toNepaliNum = (num: number): string => {
+        return num.toString().split('').map(d => nepaliNumbers[parseInt(d)] || d).join('');
+      };
+      
+      const dayOfWeek = nepaliDays[date.getDay()];
+      const day = date.getDate();
+      const monthIndex = date.getMonth();
+      const year = date.getFullYear();
+      const nepaliYear = year + 56;
+      
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const hours12 = hours % 12 || 12;
+      
+      return `${dayOfWeek}, ${nepaliMonths[monthIndex]} ${toNepaliNum(day)}, ${toNepaliNum(nepaliYear)} • ${toNepaliNum(hours12)}:${toNepaliNum(minutes).toString().padStart(2, '०')}`;
+      
+    } catch (e) {
+      return isoString;
+    }
+  }
 
   openStatsDialog(type: string): void {
     this.dialogType = type;
@@ -620,10 +915,18 @@ export class UserLogListComponent implements OnInit, OnDestroy {
       const key = d.userId || d.userEmail || d.userName || d.ipAddress || 'Unknown';
       if (!map.has(key)) {
         map.set(key, {
-          userName: d.userName, userEmail: d.userEmail, userRole: d.userRole,
-          count: 1, lastActivity: d.createdAt,
+          userName: d.userName,
+          userEmail: d.userEmail,
+          userRole: d.userRole,
+          count: 1,
+          lastActivity: d.createdAt,
           attemptedEmail: type === 'failed' ? this.extractEmail(d.requestBody) : undefined,
-          createCount: 0, updateCount: 0, deleteCount: 0, viewCount: 0, approvalCount: 0, logs: [d]
+          createCount: 0,
+          updateCount: 0,
+          deleteCount: 0,
+          viewCount: 0,
+          approvalCount: 0,
+          logs: [d]
         });
       } else {
         const item = map.get(key);
@@ -647,9 +950,21 @@ export class UserLogListComponent implements OnInit, OnDestroy {
     this.detailLog = log;
     this.detailData = null;
     this.detailLoading = true;
+    this.showSessionHistory = true; // Auto-expand session history
+    this.userSessions = [];
+    
     this.srv.getLogDetail(log.id).subscribe({
-      next: (r: any) => { if (r.success) this.detailData = r.data; this.detailLoading = false; },
-      error: () => { this.detailLoading = false; }
+      next: (r: any) => {
+        if (r.success) {
+          this.detailData = r.data;
+          // Load session history immediately
+          this.loadUserSessions();
+        }
+        this.detailLoading = false;
+      },
+      error: () => {
+        this.detailLoading = false;
+      }
     });
   }
 
@@ -717,9 +1032,14 @@ export class UserLogListComponent implements OnInit, OnDestroy {
 
   exportExcel(): void {
     const data = this.businessLogs.map(r => ({
-      User: r.userName, Email: r.userEmail, Activity: r.activityType,
-      Module: r.moduleName, Action: r.action || r.description,
-      Method: r.requestMethod, IP: r.ipAddress, Status: r.responseStatus,
+      User: r.userName,
+      Email: r.userEmail,
+      Activity: r.activityType,
+      Module: r.moduleName,
+      Action: r.action || r.description,
+      Method: r.requestMethod,
+      IP: r.ipAddress,
+      Status: r.responseStatus,
       Time: this.fmtTime(r.createdAt)
     }));
     const ws = XLSX.utils.json_to_sheet(data);
@@ -731,15 +1051,22 @@ export class UserLogListComponent implements OnInit, OnDestroy {
 
   exportPDF(): void {
     const doc = new jsPDF('landscape');
-    doc.setFontSize(14); doc.text('Activity Logs', 14, 15);
+    doc.setFontSize(14);
+    doc.text('Activity Logs', 14, 15);
     const rows = this.businessLogs.map(r => [
-      r.userName, r.activityType, r.moduleName,
+      r.userName,
+      r.activityType,
+      r.moduleName,
       (r.action || r.description || '').substring(0, 50),
-      r.requestMethod, r.ipAddress, this.fmtTime(r.createdAt)
+      r.requestMethod,
+      r.ipAddress,
+      this.fmtTime(r.createdAt)
     ]);
     autoTable(doc, {
       head: [['User', 'Activity', 'Module', 'Action', 'Method', 'IP', 'Time']],
-      body: rows, startY: 22, styles: { fontSize: 7 },
+      body: rows,
+      startY: 22,
+      styles: { fontSize: 7 },
       headStyles: { fillColor: [37, 99, 235] }
     });
     doc.save(`activity_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
@@ -750,9 +1077,21 @@ export class UserLogListComponent implements OnInit, OnDestroy {
     if (!d) return '-';
     return moment(d).tz ? moment(d).tz('Asia/Kathmandu').format('ddd, DD MMM YYYY, hh:mm A') : moment(d).format('DD/MM/YYYY HH:mm');
   }
-  fmtJson(j: string): string { try { return JSON.stringify(JSON.parse(j), null, 2); } catch { return j || '-'; } }
-  extractEmail(b: string): string { if (!b) return 'Unknown'; try { return JSON.parse(b).email || 'Unknown'; } catch { return b.substring(0, 50); } }
-  extractPass(b: string): string { if (!b) return 'N/A'; try { return JSON.parse(b).password ? '••••••••' : 'N/A'; } catch { return 'N/A'; } }
+  
+  fmtJson(j: string): string {
+    try { return JSON.stringify(JSON.parse(j), null, 2); } catch { return j || '-'; }
+  }
+  
+  extractEmail(b: string): string {
+    if (!b) return 'Unknown';
+    try { return JSON.parse(b).email || 'Unknown'; } catch { return b.substring(0, 50); }
+  }
+  
+  extractPass(b: string): string {
+    if (!b) return 'N/A';
+    try { return JSON.parse(b).password ? '••••••••' : 'N/A'; } catch { return 'N/A'; }
+  }
+  
   extractApprovalStatus(b: string): string { 
     if (!b) return 'N/A'; 
     try { 
@@ -762,6 +1101,7 @@ export class UserLogListComponent implements OnInit, OnDestroy {
       return b.includes('approved') ? 'Approved' : b.includes('rejected') ? 'Rejected' : 'Pending';
     }
   }
+  
   extractApprovalComment(b: string): string {
     if (!b) return 'No comment';
     try {
@@ -771,17 +1111,28 @@ export class UserLogListComponent implements OnInit, OnDestroy {
       return b.substring(0, 100) || 'No comment';
     }
   }
+  
   actColor(t: string): string { 
     const m: any = { 
-      Login: '#059669', Logout: '#6b7280', Create: '#2563eb', 
-      Update: '#d97706', Delete: '#dc2626', View: '#0891b2', 
-      FailedLogin: '#dc2626', AccessDenied: '#ea580c', Approval: '#7c3aed' 
+      Login: '#059669', 
+      Logout: '#6b7280', 
+      Create: '#2563eb', 
+      Update: '#d97706', 
+      Delete: '#dc2626', 
+      View: '#0891b2', 
+      FailedLogin: '#dc2626', 
+      AccessDenied: '#ea580c', 
+      Approval: '#7c3aed' 
     }; 
     return m[t] || '#6b7280'; 
   }
+  
   roleColor(r: string): string { 
     const m: any = { 
-      SuperAdmin: '#7c3aed', Admin: '#2563eb', Test: '#059669', Viewer: '#6b7280' 
+      SuperAdmin: '#7c3aed', 
+      Admin: '#2563eb', 
+      Test: '#059669', 
+      Viewer: '#6b7280' 
     }; 
     return m[r] || '#6b7280'; 
   }

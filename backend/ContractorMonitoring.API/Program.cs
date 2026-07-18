@@ -1,7 +1,9 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -11,10 +13,6 @@ using ContractorMonitoring.API.Middleware;
 using ContractorMonitoring.Application;
 using ContractorMonitoring.Infrastructure;
 using ContractorMonitoring.Domain.Constants;
-
-//  Repository Pattern Registration 
-using ContractorMonitoring.Application.Interfaces;
-using ContractorMonitoring.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +29,6 @@ builder.Host.UseSerilog();
 // Add services to the container
 builder.Services.AddControllers(options =>
 {
-    // Add global validation filter
     options.Filters.Add<ValidationFilter>();
 });
 
@@ -52,12 +49,15 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-//  Register Repository for Dependency Injection 
-builder.Services.AddScoped<IApprovalRepository, ApprovalRepository>();
-
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"]!;
+
+// Startup guard: fail if using default key in production
+if (!builder.Environment.IsDevelopment() && secretKey.Contains("YourSuperSecret"))
+{
+    throw new InvalidOperationException("JWT SecretKey must be changed from the default value before deploying to production.");
+}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -68,7 +68,7 @@ builder.Services.AddAuthentication(options =>
 .AddJwtBearer(options =>
 {
     options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
+    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -78,10 +78,10 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        RoleClaimType = "Role" // Use consistent claim type for roles
     };
 
-    // JWT events for additional validation
     options.Events = new JwtBearerEvents
     {
         OnAuthenticationFailed = context =>
@@ -91,16 +91,11 @@ builder.Services.AddAuthentication(options =>
                 context.Response.Headers.Append("Token-Expired", "true");
             }
             return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            // Additional token validation if needed
-            return Task.CompletedTask;
         }
     };
 });
 
-// Register Authorization Policies from Permission Constants
+// FIXED: Authorization - Structured role check, no string-match bypass, no Test backdoor
 builder.Services.AddAuthorization(options =>
 {
     var allPermissions = Permissions.GetAllPermissions();
@@ -108,32 +103,56 @@ builder.Services.AddAuthorization(options =>
     foreach (var permission in allPermissions)
     {
         options.AddPolicy(permission, policy =>
-        {
             policy.RequireAssertion(context =>
             {
-                // Log for debugging
-                var claims = context.User.Claims.Select(c => $"{c.Type}:{c.Value}").ToList();
-                System.Diagnostics.Debug.WriteLine($"Claims: {string.Join(", ", claims)}");
+                // Check role claim specifically (not any claim value)
+                var roleClaims = context.User.FindAll(System.Security.Claims.ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
 
-                // Check SuperAdmin by value
-                var isSuperAdmin = context.User.Claims.Any(c => c.Value == "SuperAdmin");
-                var isTest = context.User.Claims.Any(c => c.Value == "Test");
+                // Also check "Role" claim type for backward compatibility
+                var altRoleClaims = context.User.FindAll("Role")
+                    .Select(c => c.Value)
+                    .ToList();
 
-                if (isSuperAdmin || isTest)
-                {
-                    System.Diagnostics.Debug.WriteLine("SuperAdmin/Test bypass");
+                var allRoles = roleClaims.Union(altRoleClaims).Distinct().ToList();
+
+                // SuperAdmin bypasses all permission checks
+                if (allRoles.Contains("SuperAdmin"))
                     return true;
-                }
 
-                // Check permission
-                var hasPermission = context.User.Claims.Any(c =>
-                    c.Type == "Permission" && c.Value == permission);
+                // Check for specific permission claim
+                var permissionClaims = context.User.FindAll("Permission")
+                    .Select(c => c.Value)
+                    .ToList();
 
-                System.Diagnostics.Debug.WriteLine($"Permission {permission}: {hasPermission}");
-                return hasPermission;
-            });
-        });
+                return permissionClaims.Contains(permission);
+            }));
     }
+});
+
+// FIXED: Rate Limiting for auth endpoints
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = 429;
+
+    // Strict rate limit for auth endpoints
+    options.AddFixedWindowLimiter("AuthPolicy", config =>
+    {
+        config.PermitLimit = 10;      // 10 requests
+        config.Window = TimeSpan.FromMinutes(1);  // per minute
+        config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        config.QueueLimit = 2;
+    });
+
+    // General rate limit for API
+    options.AddFixedWindowLimiter("ApiPolicy", config =>
+    {
+        config.PermitLimit = 100;
+        config.Window = TimeSpan.FromMinutes(1);
+        config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        config.QueueLimit = 10;
+    });
 });
 
 // Configure Swagger
@@ -144,7 +163,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Contractor Monitoring System API",
         Version = "v1",
-        Description = "SaaS-based Government Contractor Monitoring System API",
+        Description = "Government Contractor Monitoring System API",
         Contact = new OpenApiContact
         {
             Name = "Support Team",
@@ -152,14 +171,14 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Add JWT Authentication to Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Description = "JWT Authorization header using the Bearer scheme.",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -176,26 +195,35 @@ builder.Services.AddSwaggerGen(options =>
             Array.Empty<string>()
         }
     });
-
-    // Include XML comments (optional)
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
 });
 
-// Configure CORS
+// FIXED: CORS - Explicit allow-list per environment
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowSpecific", policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.WithOrigins("http://localhost:4200", "http://localhost:5185")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
+        else
+        {
+            // Production origins from configuration
+            var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                          ?? new[] { "https://your-production-domain.com" };
+            policy.WithOrigins(origins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        }
     });
 });
+
+// Add health checks
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -210,30 +238,37 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Global exception handling middleware (should be first)
 app.UseMiddleware<GlobalExceptionMiddleware>();
-
-// Tenant middleware
 app.UseMiddleware<TenantMiddleware>();
-
-// Activity logging middleware - enterprise audit trail
 app.UseMiddleware<ActivityLoggingMiddleware>();
-
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecific");
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Health check endpoint
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 
 // Seed database on startup
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ContractorMonitoring.Infrastructure.Data.ApplicationDbContext>();
-    await ContractorMonitoring.Infrastructure.Data.SeedDataService.SeedAsync(context);
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ContractorMonitoring.Infrastructure.Data.ApplicationDbContext>();
+        await ContractorMonitoring.Infrastructure.Data.SeedDataService.SeedAsync(context);
+        Log.Information("Database seeded successfully");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "An error occurred while seeding the database");
+    }
 }
 
 try
