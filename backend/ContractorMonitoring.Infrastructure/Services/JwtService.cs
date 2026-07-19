@@ -9,16 +9,15 @@ using ContractorMonitoring.Domain.Entities;
 
 namespace ContractorMonitoring.Infrastructure.Services;
 
-// JWT token generation and validation service
 public class JwtService : IJwtService
 {
     private readonly IConfiguration _configuration;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IPermissionResolver _permissionResolver;
 
-    public JwtService(IConfiguration configuration, IUnitOfWork unitOfWork)
+    public JwtService(IConfiguration configuration, IPermissionResolver permissionResolver)
     {
         _configuration = configuration;
-        _unitOfWork = unitOfWork;
+        _permissionResolver = permissionResolver;
     }
 
     public async Task<string> GenerateAccessToken(User user)
@@ -32,9 +31,9 @@ public class JwtService : IJwtService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // Get user roles and permissions from centralized methods
-        var roles = await GetUserRolesAsync(user.Id);
-        var permissions = await GetUserPermissionsAsync(user.Id);
+        // Use centralized PermissionResolver
+        var roles = await _permissionResolver.GetUserRolesAsync(user.Id);
+        var permissions = await _permissionResolver.GetUserPermissionsAsync(user.Id);
 
         var claims = new List<Claim>
         {
@@ -45,25 +44,16 @@ public class JwtService : IJwtService
             new("TenantId", user.TenantId.ToString()),
         };
 
-        // Add role claims
         foreach (var role in roles)
-        {
             claims.Add(new Claim(ClaimTypes.Role, role));
-        }
 
-        // Add permission claims
         foreach (var permission in permissions)
-        {
             claims.Add(new Claim("Permission", permission));
-        }
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
-            claims: claims,
+            issuer: issuer, audience: audience, claims: claims,
             expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
-            signingCredentials: credentials
-        );
+            signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -73,7 +63,6 @@ public class JwtService : IJwtService
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
-
         return await Task.FromResult(Convert.ToBase64String(randomNumber));
     }
 
@@ -81,7 +70,6 @@ public class JwtService : IJwtService
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var secretKey = jwtSettings["SecretKey"]!;
-
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(secretKey);
 
@@ -101,61 +89,22 @@ public class JwtService : IJwtService
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
-
             return await Task.FromResult((true, userId));
         }
-        catch
-        {
-            return await Task.FromResult((false, Guid.Empty));
-        }
+        catch { return await Task.FromResult((false, Guid.Empty)); }
     }
 
     public async Task<DateTime> GetTokenExpiryTime(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadJwtToken(token);
-
         return await Task.FromResult(jwtToken.ValidTo);
     }
 
-    // Public - Centralized role resolution for reuse by Login/Register handlers
+    // Interface methods delegate to PermissionResolver
     public async Task<List<string>> GetUserRolesAsync(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var roles = await _unitOfWork.Roles.GetAllAsync();
+        => await _permissionResolver.GetUserRolesAsync(userId);
 
-        return (from ur in userRoles
-                join r in roles on ur.RoleId equals r.Id
-                where ur.UserId == userId && !ur.IsDeleted && !r.IsDeleted
-                select r.Name).ToList();
-    }
-
-    // Public - Centralized permission resolution for reuse by Login/Register handlers
     public async Task<List<string>> GetUserPermissionsAsync(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var rolePermissions = await _unitOfWork.RolePermissions.GetAllAsync();
-        var permissions = await _unitOfWork.Permissions.GetAllAsync();
-        var roles = await _unitOfWork.Roles.GetAllAsync();
-
-        // Check if user is SuperAdmin - bypass permission checks
-        var userRoleList = (from ur in userRoles
-                            join r in roles on ur.RoleId equals r.Id
-                            where ur.UserId == userId && !ur.IsDeleted && !r.IsDeleted
-                            select r.Name).ToList();
-
-        if (userRoleList.Contains("SuperAdmin"))
-        {
-            return permissions.Where(p => !p.IsDeleted).Select(p => p.Name).ToList();
-        }
-
-        return (from ur in userRoles
-                join rp in rolePermissions on ur.RoleId equals rp.RoleId
-                join p in permissions on rp.PermissionId equals p.Id
-                where ur.UserId == userId
-                    && !ur.IsDeleted
-                    && !rp.IsDeleted
-                    && !p.IsDeleted
-                select p.Name).Distinct().ToList();
-    }
+        => await _permissionResolver.GetUserPermissionsAsync(userId);
 }

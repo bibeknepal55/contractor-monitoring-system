@@ -1,18 +1,20 @@
 using System.Text;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Serilog;
 using Asp.Versioning;
 using ContractorMonitoring.API.Filters;
 using ContractorMonitoring.API.Middleware;
 using ContractorMonitoring.Application;
-using ContractorMonitoring.Infrastructure;
 using ContractorMonitoring.Domain.Constants;
+using ContractorMonitoring.Infrastructure;
+using ContractorMonitoring.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +55,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"]!;
 
-// Startup guard: fail if using default key in production
 if (!builder.Environment.IsDevelopment() && secretKey.Contains("YourSuperSecret"))
 {
     throw new InvalidOperationException("JWT SecretKey must be changed from the default value before deploying to production.");
@@ -79,7 +80,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
         ClockSkew = TimeSpan.Zero,
-        RoleClaimType = "Role" // Use consistent claim type for roles
+        RoleClaimType = "Role"
     };
 
     options.Events = new JwtBearerEvents
@@ -95,7 +96,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// FIXED: Authorization - Structured role check, no string-match bypass, no Test backdoor
+// Authorization - Structured role check only
 builder.Services.AddAuthorization(options =>
 {
     var allPermissions = Permissions.GetAllPermissions();
@@ -105,47 +106,35 @@ builder.Services.AddAuthorization(options =>
         options.AddPolicy(permission, policy =>
             policy.RequireAssertion(context =>
             {
-                // Check role claim specifically (not any claim value)
                 var roleClaims = context.User.FindAll(System.Security.Claims.ClaimTypes.Role)
                     .Select(c => c.Value)
+                    .Union(context.User.FindAll("Role").Select(c => c.Value))
+                    .Distinct()
                     .ToList();
 
-                // Also check "Role" claim type for backward compatibility
-                var altRoleClaims = context.User.FindAll("Role")
-                    .Select(c => c.Value)
-                    .ToList();
-
-                var allRoles = roleClaims.Union(altRoleClaims).Distinct().ToList();
-
-                // SuperAdmin bypasses all permission checks
-                if (allRoles.Contains("SuperAdmin"))
+                if (roleClaims.Contains("SuperAdmin"))
                     return true;
 
-                // Check for specific permission claim
-                var permissionClaims = context.User.FindAll("Permission")
+                return context.User.FindAll("Permission")
                     .Select(c => c.Value)
-                    .ToList();
-
-                return permissionClaims.Contains(permission);
+                    .Contains(permission);
             }));
     }
 });
 
-// FIXED: Rate Limiting for auth endpoints
+// Rate Limiting
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = 429;
 
-    // Strict rate limit for auth endpoints
     options.AddFixedWindowLimiter("AuthPolicy", config =>
     {
-        config.PermitLimit = 10;      // 10 requests
-        config.Window = TimeSpan.FromMinutes(1);  // per minute
+        config.PermitLimit = 10;
+        config.Window = TimeSpan.FromMinutes(1);
         config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         config.QueueLimit = 2;
     });
 
-    // General rate limit for API
     options.AddFixedWindowLimiter("ApiPolicy", config =>
     {
         config.PermitLimit = 100;
@@ -155,10 +144,13 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-// Configure Swagger
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    // Fix duplicate schema IDs across different namespaces
+    options.CustomSchemaIds(type => type.FullName);
+
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Contractor Monitoring System API",
@@ -197,7 +189,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// FIXED: CORS - Explicit allow-list per environment
+// CORS - Explicit allow-list
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecific", policy =>
@@ -211,7 +203,6 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            // Production origins from configuration
             var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
                           ?? new[] { "https://your-production-domain.com" };
             policy.WithOrigins(origins)
@@ -222,8 +213,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add health checks
-builder.Services.AddHealthChecks();
+// Health Checks with Database
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("API is running"), tags: new[] { "live" })
+    .AddNpgSql(
+        builder.Configuration.GetConnectionString("DefaultConnection")!,
+        name: "Database",
+        healthQuery: "SELECT 1;",
+        failureStatus: HealthStatus.Unhealthy,
+        tags: new[] { "ready" }
+    );
 
 var app = builder.Build();
 
@@ -243,16 +242,21 @@ app.UseMiddleware<TenantMiddleware>();
 app.UseMiddleware<ActivityLoggingMiddleware>();
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowSpecific");
-
 app.UseRateLimiter();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Health check endpoint
-app.MapHealthChecks("/health");
+// Health Check Endpoints
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("live")
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 app.MapControllers();
 
@@ -261,8 +265,8 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var context = scope.ServiceProvider.GetRequiredService<ContractorMonitoring.Infrastructure.Data.ApplicationDbContext>();
-        await ContractorMonitoring.Infrastructure.Data.SeedDataService.SeedAsync(context);
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await SeedDataService.SeedAsync(context);
         Log.Information("Database seeded successfully");
     }
     catch (Exception ex)

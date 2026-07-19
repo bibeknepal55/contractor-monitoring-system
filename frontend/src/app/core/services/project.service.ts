@@ -2,7 +2,25 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse, PagedResponse, PagedRequest } from '../models/api-response.model';
-import { Project } from '../models/project.model';
+import { ResourceStore } from './resource-store';
+
+export interface Project {
+  id: string;
+  projectCode: string;
+  projectName: string;
+  description?: string;
+  location?: string;
+  status?: string;
+  priority?: string;
+  budget?: number;
+  startDate?: string;
+  endDate?: string;
+  contractorId?: string;
+  contractorName?: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +28,13 @@ import { Project } from '../models/project.model';
 export class ProjectService {
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/projects';
+
+  // Standardized reactive store for list views
+  private readonly store = new ResourceStore<Project>();
+  public readonly projects$ = this.store.state$;
+  public get currentProjects() { return this.store.current; }
+
+  // ==================== STANDARD CRUD ====================
 
   getProjects(request: PagedRequest): Observable<PagedResponse<Project>> {
     return this.apiService.getPaged<Project>(this.endpoint, request);
@@ -29,5 +54,102 @@ export class ProjectService {
 
   deleteProject(id: string): Observable<ApiResponse<boolean>> {
     return this.apiService.delete<boolean>(`${this.endpoint}/${id}`);
+  }
+
+  // ==================== STANDARDIZED STORE METHODS ====================
+
+  loadProjects(params: PagedRequest): void {
+    this.store.setLoading(true);
+    this.getProjects(params).subscribe({
+      next: (response: PagedResponse<Project>) => {
+        if (response.success) {
+          this.store.setData(response.data, response.totalCount || response.data.length);
+        } else {
+          this.store.setError(response.message || 'Failed to load projects');
+        }
+      },
+      error: (error: any) => {
+        this.store.setError(error?.error?.message || 'Failed to load projects. Please try again.');
+      }
+    });
+  }
+
+  /**
+   * Loads a single project by ID into the store.
+   */
+  loadProjectById(id: string): void {
+    this.store.setLoading(true);
+    this.getProjectById(id).subscribe({
+      next: (response: ApiResponse<Project>) => {
+        if (response.success && response.data) {
+          this.store.setData([response.data], 1);
+        } else {
+          this.store.setError(response.message || 'Project not found');
+        }
+      },
+      error: (error: any) => {
+        this.store.setError(error?.error?.message || 'Failed to load project');
+      }
+    });
+  }
+
+  /**
+   * Creates a project and refreshes the store.
+   */
+  createAndRefresh(project: any): Observable<ApiResponse<Project>> {
+    const observable = this.createProject(project);
+    observable.subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Reload the list in background
+          this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
+        }
+      }
+    });
+    return observable;
+  }
+
+  /**
+   * Updates a project and refreshes the store.
+   */
+  updateAndRefresh(id: string, project: any): Observable<ApiResponse<Project>> {
+    const observable = this.updateProject(id, project);
+    observable.subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
+        }
+      }
+    });
+    return observable;
+  }
+
+  /**
+   * Deletes a project and refreshes the store.
+   */
+  deleteAndRefresh(id: string): Observable<ApiResponse<boolean>> {
+    const observable = this.deleteProject(id);
+    observable.subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
+        }
+      }
+    });
+    return observable;
+  }
+
+  /**
+   * Clears the store (e.g., on component destroy).
+   */
+  clearStore(): void {
+    this.store.clear();
+  }
+
+  /**
+   * Reloads with the last used parameters.
+   */
+  refresh(): void {
+    this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
   }
 }

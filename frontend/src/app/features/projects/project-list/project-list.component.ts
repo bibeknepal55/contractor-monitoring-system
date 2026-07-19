@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,16 +13,20 @@ import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../../core/services/project.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Project } from '../../../core/models/project.model';
-import { debounceTime, Subject } from 'rxjs';
-import moment from 'moment';
+import { DateFormatService } from '../../../core/services/date-format.service';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [
     CommonModule, RouterLink, MatButtonModule, MatIconModule, MatTableModule,
-    MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, FormsModule,
+    MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule,
+    MatProgressBarModule, FormsModule, LoadingSpinnerComponent, EmptyStateComponent,
+    ErrorStateComponent
   ],
   template: `
     <div class="list-page">
@@ -31,7 +35,7 @@ import moment from 'moment';
           <h1>Projects</h1>
           <p>{{ totalItems }} projects total</p>
         </div>
-        <button mat-flat-button color="primary" routerLink="new" *ngIf="auth.hasPermission('Project.Create')">
+        <button mat-flat-button color="primary" routerLink="new" *appHasPermission="'Project.Create'">
           <mat-icon>add</mat-icon> New Project
         </button>
       </div>
@@ -46,9 +50,18 @@ import moment from 'moment';
         </button>
       </div>
 
-      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      <!-- Loading State -->
+      <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
-      <div class="table-wrap" *ngIf="!loading && items.length > 0">
+      <!-- Error State -->
+      <app-error-state 
+        *ngIf="!loading && error" 
+        [message]="error"
+        (retry)="fetch()">
+      </app-error-state>
+
+      <!-- Data Table -->
+      <div class="table-wrap" *ngIf="!loading && !error && items.length > 0">
         <table mat-table [dataSource]="items" matSort (matSortChange)="onSort($event)" class="full-table">
           <ng-container matColumnDef="projectCode">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
@@ -76,27 +89,37 @@ import moment from 'moment';
           </ng-container>
           <ng-container matColumnDef="startDate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
-            <td mat-cell *matCellDef="let r">{{r.startDate ? formatDate(r.startDate) : '-'}}</td>
+            <td mat-cell *matCellDef="let r">{{r.startDate ? dateFmt.formatDate(r.startDate) : '-'}}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let r" class="actions-cell">
-              <button mat-icon-button color="primary" (click)="edit(r)" *ngIf="auth.hasPermission('Project.Update')" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
-              <button mat-icon-button color="warn" (click)="deleteItem(r)" *ngIf="auth.hasPermission('Project.Delete')" matTooltip="Delete"><mat-icon>delete</mat-icon></button>
+              <button mat-icon-button color="primary" (click)="edit(r)" *appHasPermission="'Project.Update'" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteItem(r)" *appHasPermission="'Project.Delete'" matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="cols"></tr>
           <tr mat-row *matRowDef="let row; columns: cols" class="table-row"></tr>
         </table>
-        <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="page - 1" [pageSizeOptions]="[5,10,25]" (page)="onPage($event)" *ngIf="totalItems > 5" showFirstLastButtons></mat-paginator>
+        <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="page - 1" 
+          [pageSizeOptions]="[5,10,25]" (page)="onPage($event)" *ngIf="totalItems > 5" showFirstLastButtons>
+        </mat-paginator>
       </div>
 
-      <div class="empty" *ngIf="!loading && items.length === 0">
-        <mat-icon>folder_open</mat-icon>
-        <h3>No Projects</h3>
-        <p>Create your first project to get started</p>
-        <button mat-flat-button color="primary" routerLink="new" *ngIf="auth.hasPermission('Project.Create')">Create Project</button>
-      </div>
+      <!-- Empty State -->
+      <app-empty-state 
+        *ngIf="!loading && !error && items.length === 0"
+        icon="folder_open"
+        title="No Projects Found"
+        description="Create your first project to get started with contractor monitoring."
+        actionLabel="New Project"
+        actionRoute="new"
+        actionIcon="add">
+      </app-empty-state>
     </div>
   `,
   styles: [`
@@ -119,20 +142,18 @@ import moment from 'moment';
     .badge-onhold { background: #fef7e0; color: #b06000; }
     .badge-delayed { background: #fce8e6; color: #c5221f; }
     .badge-cancelled { background: #f1f3f4; color: #5f6368; }
-    .empty { text-align: center; padding: 60px 20px; color: #888; }
-    .empty mat-icon { font-size: 56px; width: 56px; height: 56px; margin-bottom: 12px; color: #ccc; }
-    .empty h3 { margin: 0 0 4px; font-size: 1.1rem; color: #555; }
     @media (max-width: 768px) { .list-page { padding: 16px; } .search-field { width: 100%; } }
   `]
 })
-export class ProjectListComponent implements OnInit {
+export class ProjectListComponent implements OnInit, OnDestroy {
   private service = inject(ProjectService);
   readonly auth = inject(AuthService);
   private notify = inject(NotificationService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  readonly dateFmt = inject(DateFormatService);
 
-  items: Project[] = [];
+  items: any[] = [];
   totalItems = 0;
   page = 1;
   pageSize = 10;
@@ -140,46 +161,55 @@ export class ProjectListComponent implements OnInit {
   sortDir: 'asc' | 'desc' = 'desc';
   searchText = '';
   loading = false;
+  error: string | null = null;
   private search$ = new Subject<string>();
+  private storeSub!: Subscription;
 
   cols = ['projectCode', 'projectName', 'status', 'priority', 'budget', 'projectManager', 'startDate', 'actions'];
 
   ngOnInit(): void {
     this.search$.pipe(debounceTime(300)).subscribe(() => { this.page = 1; this.fetch(); });
+
+    // Subscribe to reactive store for automatic updates
+    this.storeSub = this.service.projects$.subscribe(state => {
+      this.items = state.data;
+      this.totalItems = state.total;
+      this.loading = state.loading;
+      this.error = state.error;
+      this.cdr.detectChanges();
+    });
+
     this.fetch();
   }
 
+  ngOnDestroy(): void {
+    if (this.storeSub) this.storeSub.unsubscribe();
+    this.service.clearStore();
+  }
+
   fetch(): void {
-    this.loading = true;
-    this.service.getProjects({
-      page: this.page, pageSize: this.pageSize,
+    this.service.loadProjects({
+      page: this.page,
+      pageSize: this.pageSize,
       search: this.searchText || undefined,
-      sortBy: this.sortBy, sortOrder: this.sortDir
-    }).subscribe({
-      next: (r) => {
-        if (r.success) {
-          this.items = r.data;
-          this.totalItems = r.totalCount;
-          console.log('Projects loaded:', this.items.length, 'Total:', this.totalItems);
-          this.cdr.detectChanges();
-        }
-        this.loading = false;
-      },
-      error: () => { this.loading = false; this.notify.error('Failed to load projects'); }
+      sortBy: this.sortBy,
+      sortOrder: this.sortDir
     });
   }
 
   onSearch(v: string): void { this.searchText = v; this.search$.next(v); }
   onSort(s: Sort): void { this.sortBy = s.active; this.sortDir = s.direction === 'desc' ? 'desc' : 'asc'; this.fetch(); }
   onPage(e: PageEvent): void { this.page = e.pageIndex + 1; this.pageSize = e.pageSize; this.fetch(); }
-  formatDate(d: string): string { return moment(d).format('DD/MM/YYYY'); }
-  edit(p: Project): void { this.router.navigate(['/projects', p.id, 'edit']); }
+  edit(p: any): void { this.router.navigate(['/projects', p.id, 'edit']); }
 
-  async deleteItem(p: Project): Promise<void> {
+  async deleteItem(p: any): Promise<void> {
     const ok = await this.notify.confirmDelete(p.projectName || 'this project');
     if (!ok) return;
-    this.service.deleteProject(p.id).subscribe({
-      next: (r) => { if (r.success) { this.notify.success('Project deleted'); this.fetch(); } else this.notify.error(r.message || 'Failed'); },
+    this.service.deleteAndRefresh(p.id).subscribe({
+      next: (r) => {
+        if (r.success) this.notify.success('Project deleted');
+        else this.notify.error(r.message || 'Failed');
+      },
       error: () => this.notify.error('Failed to delete project')
     });
   }

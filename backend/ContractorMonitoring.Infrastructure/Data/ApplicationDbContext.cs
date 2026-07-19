@@ -14,7 +14,6 @@ public class ApplicationDbContext : DbContext
         DbContextOptions<ApplicationDbContext> options,
         IHttpContextAccessor? httpContextAccessor = null) : base(options)
     {
-        // Extract tenant from current HTTP context (set by TenantMiddleware)
         if (httpContextAccessor?.HttpContext?.Items["TenantId"] is Guid tenantId)
         {
             _currentTenantId = tenantId;
@@ -51,29 +50,33 @@ public class ApplicationDbContext : DbContext
     public DbSet<ApprovalWorkflow> ApprovalWorkflows { get; set; } = null!;
     public DbSet<UserActivityLog> UserActivityLogs { get; set; } = null!;
 
+    // Phase 3 Enterprise tables
+    public DbSet<RolePermissionHistory> RolePermissionHistories { get; set; } = null!;
+    public DbSet<RevokedToken> RevokedTokens { get; set; } = null!;
+    public DbSet<NotificationTemplate> NotificationTemplates { get; set; } = null!;
+    public DbSet<NotificationLog> NotificationLogs { get; set; } = null!;
+    public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        // Capture locally for use in the expression tree (ensures thread safety per scoped request)
         var currentTenantId = _currentTenantId;
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            // 1. GLOBAL SOFT DELETE FILTER
+            // 1. GLOBAL SOFT DELETE FILTER - automatically filters IsDeleted=true rows
             if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
             {
                 var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType, "e");
                 var property = System.Linq.Expressions.Expression.Property(parameter, "IsDeleted");
                 var notDeleted = System.Linq.Expressions.Expression.Not(property);
                 var lambda = System.Linq.Expressions.Expression.Lambda(notDeleted, parameter);
-
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
             }
 
-            // 2. GLOBAL MULTI-TENANCY FILTER
-            // Automatically applies to ANY entity that has a 'TenantId' property of type Guid
+            // 2. GLOBAL MULTI-TENANCY FILTER - automatically scopes queries by tenant
             var tenantIdProperty = entityType.FindProperty("TenantId");
             if (tenantIdProperty != null && tenantIdProperty.ClrType == typeof(Guid) && currentTenantId.HasValue)
             {
@@ -82,7 +85,6 @@ public class ApplicationDbContext : DbContext
                 var constant = System.Linq.Expressions.Expression.Constant(currentTenantId.Value, typeof(Guid));
                 var equal = System.Linq.Expressions.Expression.Equal(property, constant);
                 var lambda = System.Linq.Expressions.Expression.Lambda(equal, parameter);
-
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
             }
         }
@@ -102,7 +104,6 @@ public class ApplicationDbContext : DbContext
 
                 case EntityState.Modified:
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
-                    // Prevent malicious or accidental modification of creation metadata
                     entry.Property(x => x.CreatedAt).IsModified = false;
                     entry.Property(x => x.CreatedBy).IsModified = false;
                     break;
@@ -121,7 +122,6 @@ public class ApplicationDbContext : DbContext
     }
 
     // Helper to bypass soft-delete filter for admin purge/recovery operations
-    // Note: Bypassing tenant filters is intentionally omitted here for security reasons.
     public IQueryable<T> WithoutSoftDelete<T>() where T : AuditableEntity
     {
         return Set<T>().IgnoreQueryFilters();

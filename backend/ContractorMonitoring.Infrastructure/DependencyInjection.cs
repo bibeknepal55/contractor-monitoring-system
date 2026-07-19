@@ -38,10 +38,13 @@ public static class DependencyInjection
 
         // Register Approval repositories
         services.AddScoped<IApprovalRepository, ApprovalRepository>();
+        
         // Register Services
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IPasswordService, PasswordService>();
 
+        //Register permission Resolver
+        services.AddScoped<IPermissionResolver, PermissionResolver>();
         return services;
     }
 }

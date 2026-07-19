@@ -24,6 +24,9 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       
+      // ==================== PHASE 3: Organizations ====================
+      { path: 'organizations', loadComponent: () => import('./features/organizations/organization-list/organization-list.component').then(m => m.OrganizationListComponent) },
+      
       // Projects
       { path: 'projects', loadComponent: () => import('./features/projects/project-list/project-list.component').then(m => m.ProjectListComponent) },
       { path: 'projects/new', loadComponent: () => import('./features/projects/project-form/project-form.component').then(m => m.ProjectFormComponent) },
@@ -79,34 +82,29 @@ export const routes: Routes = [
       { path: 'lab-tests/new', loadComponent: () => import('./features/lab-tests/lab-test-form/lab-test-form.component').then(m => m.LabTestFormComponent) },
       { path: 'lab-tests/:id/edit', loadComponent: () => import('./features/lab-tests/lab-test-form/lab-test-form.component').then(m => m.LabTestFormComponent) },
       
-      //sub contractors and officials
-
+      // Subcontractors and Officials
       { path: 'subcontractors', loadComponent: () => import('./features/subcontractors/subcontractor-list/subcontractor-list.component').then(m => m.SubcontractorListComponent) },
-{ path: 'subcontractors/new', loadComponent: () => import('./features/subcontractors/subcontractor-form/subcontractor-form.component').then(m => m.SubcontractorFormComponent) },
-{ path: 'subcontractors/:id/edit', loadComponent: () => import('./features/subcontractors/subcontractor-form/subcontractor-form.component').then(m => m.SubcontractorFormComponent) },
-{ path: 'officials', loadComponent: () => import('./features/officials/official-list/official-list.component').then(m => m.OfficialListComponent) },
-{ path: 'officials/new', loadComponent: () => import('./features/officials/official-form/official-form.component').then(m => m.OfficialFormComponent) },
-{ path: 'officials/:id/edit', loadComponent: () => import('./features/officials/official-form/official-form.component').then(m => m.OfficialFormComponent) },
+      { path: 'subcontractors/new', loadComponent: () => import('./features/subcontractors/subcontractor-form/subcontractor-form.component').then(m => m.SubcontractorFormComponent) },
+      { path: 'subcontractors/:id/edit', loadComponent: () => import('./features/subcontractors/subcontractor-form/subcontractor-form.component').then(m => m.SubcontractorFormComponent) },
+      { path: 'officials', loadComponent: () => import('./features/officials/official-list/official-list.component').then(m => m.OfficialListComponent) },
+      { path: 'officials/new', loadComponent: () => import('./features/officials/official-form/official-form.component').then(m => m.OfficialFormComponent) },
+      { path: 'officials/:id/edit', loadComponent: () => import('./features/officials/official-form/official-form.component').then(m => m.OfficialFormComponent) },
 
-    // approvals and reports 
+      // Approvals and Reports
+      { path: 'approvals', loadComponent: () => import('./features/approvals/approval-list.component').then(m => m.ApprovalListComponent) },
+      { path: 'reports', loadComponent: () => import('./features/reports/reports.component').then(m => m.ReportsComponent) },
 
- { path: 'approvals', loadComponent: () => import('./features/approvals/approval-list.component').then(m => m.ApprovalListComponent) },
-{ path: 'reports', loadComponent: () => import('./features/reports/reports.component').then(m => m.ReportsComponent) },
+      // Users and Roles
+      { path: 'users', loadComponent: () => import('./features/user-management/user-list/user-list.component').then(m => m.UserListComponent) },
+      { path: 'roles', loadComponent: () => import('./features/user-management/role-management/role-management.component').then(m => m.RoleManagementComponent) },
 
-// users and roles 
+      // Profile
+      { path: 'profile', loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) },
 
-{ path: 'users', loadComponent: () => import('./features/user-management/user-list/user-list.component').then(m => m.UserListComponent) },
-{ path: 'roles', loadComponent: () => import('./features/user-management/role-management/role-management.component').then(m => m.RoleManagementComponent) },
+      // User Activity
+      { path: 'user-logs', loadComponent: () => import('./features/user-activity/user-log-list/user-log-list.component').then(m => m.UserLogListComponent) },
 
-// profile
-
-{ path: 'profile', loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) },
-
-// User-Activity
-{ path: 'user-logs', loadComponent: () => import('./features/user-activity/user-log-list/user-log-list.component').then(m => m.UserLogListComponent) },
-
-
-// Photos
+      // Photos
       { path: 'photos', loadComponent: () => import('./features/photos/photo-list/photo-list.component').then(m => m.PhotoListComponent) },
       { path: 'photos/new', loadComponent: () => import('./features/photos/photo-form/photo-form.component').then(m => m.PhotoFormComponent) },
       { path: 'photos/:id/edit', loadComponent: () => import('./features/photos/photo-form/photo-form.component').then(m => m.PhotoFormComponent) },
@@ -115,4 +113,17 @@ export const routes: Routes = [
     ],
   },
   { path: '**', redirectTo: 'auth/login' },
+
+  
+// Session Management
+{ path: 'sessions', loadComponent: () => import('./features/user-management/session-management/session-management.component').then(m => m.SessionManagementComponent) },
+
+// Notification Settings
+{ path: 'settings/notifications', loadComponent: () => import('./features/settings/notification-settings/notification-settings.component').then(m => m.NotificationSettingsComponent) },
+
+// Department Dashboard (scoped admin view)
+{ path: 'department-dashboard', loadComponent: () => import('./features/dashboard/department-dashboard/department-dashboard.component').then(m => m.DepartmentDashboardComponent) },
+
+// MFA Setup (embedded in profile, but accessible directly)
+{ path: 'profile/mfa', loadComponent: () => import('./features/profile/mfa-setup/mfa-setup.component').then(m => m.MfaSetupComponent) },
 ];
