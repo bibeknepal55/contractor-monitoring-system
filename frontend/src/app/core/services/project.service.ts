@@ -17,6 +17,9 @@ export interface Project {
   endDate?: string;
   contractorId?: string;
   contractorName?: string;
+  projectManager?: string;
+  contactNumber?: string;
+  contractNumber?: string;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -29,12 +32,9 @@ export class ProjectService {
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/projects';
 
-  // Standardized reactive store for list views
   private readonly store = new ResourceStore<Project>();
   public readonly projects$ = this.store.state$;
   public get currentProjects() { return this.store.current; }
-
-  // ==================== STANDARD CRUD ====================
 
   getProjects(request: PagedRequest): Observable<PagedResponse<Project>> {
     return this.apiService.getPaged<Project>(this.endpoint, request);
@@ -56,8 +56,6 @@ export class ProjectService {
     return this.apiService.delete<boolean>(`${this.endpoint}/${id}`);
   }
 
-  // ==================== STANDARDIZED STORE METHODS ====================
-
   loadProjects(params: PagedRequest): void {
     this.store.setLoading(true);
     this.getProjects(params).subscribe({
@@ -74,9 +72,6 @@ export class ProjectService {
     });
   }
 
-  /**
-   * Loads a single project by ID into the store.
-   */
   loadProjectById(id: string): void {
     this.store.setLoading(true);
     this.getProjectById(id).subscribe({
@@ -93,15 +88,11 @@ export class ProjectService {
     });
   }
 
-  /**
-   * Creates a project and refreshes the store.
-   */
   createAndRefresh(project: any): Observable<ApiResponse<Project>> {
     const observable = this.createProject(project);
     observable.subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response.success) {
-          // Reload the list in background
           this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
         }
       }
@@ -109,13 +100,10 @@ export class ProjectService {
     return observable;
   }
 
-  /**
-   * Updates a project and refreshes the store.
-   */
   updateAndRefresh(id: string, project: any): Observable<ApiResponse<Project>> {
     const observable = this.updateProject(id, project);
     observable.subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response.success) {
           this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
         }
@@ -124,13 +112,10 @@ export class ProjectService {
     return observable;
   }
 
-  /**
-   * Deletes a project and refreshes the store.
-   */
   deleteAndRefresh(id: string): Observable<ApiResponse<boolean>> {
     const observable = this.deleteProject(id);
     observable.subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response.success) {
           this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
         }
@@ -139,16 +124,10 @@ export class ProjectService {
     return observable;
   }
 
-  /**
-   * Clears the store (e.g., on component destroy).
-   */
   clearStore(): void {
     this.store.clear();
   }
 
-  /**
-   * Reloads with the last used parameters.
-   */
   refresh(): void {
     this.loadProjects({ page: 1, pageSize: this.store.current.data.length || 10 });
   }

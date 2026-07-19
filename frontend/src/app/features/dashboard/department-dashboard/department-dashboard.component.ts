@@ -36,7 +36,6 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
       <app-error-state *ngIf="!loading && error" [message]="error" (retry)="loadDashboard()"></app-error-state>
 
       <div class="stats-grid" *ngIf="!loading && !error">
-        <!-- Quick Stats -->
         <mat-card class="stat-card">
           <mat-icon class="stat-icon" style="color:#1976d2">business</mat-icon>
           <div class="stat-info">
@@ -70,7 +69,6 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
         </mat-card>
       </div>
 
-      <!-- Pending Actions -->
       <div class="section-grid">
         <mat-card class="section-card">
           <div class="section-header">
@@ -98,7 +96,6 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
           </div>
         </mat-card>
 
-        <!-- Recent Activity -->
         <mat-card class="section-card">
           <div class="section-header">
             <h3>Recent Activity</h3>
@@ -118,7 +115,6 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
           </div>
         </mat-card>
 
-        <!-- My Projects -->
         <mat-card class="section-card">
           <div class="section-header">
             <h3>My Projects</h3>
@@ -214,12 +210,20 @@ export class DepartmentDashboardComponent implements OnInit {
         this.loading = false;
         this.error = null;
       },
-      error: (e) => { this.loading = false; this.error = e?.error?.message || 'Failed to load dashboard'; }
+      error: (e: any) => { 
+        this.loading = false; 
+        this.error = e?.error?.message || 'Failed to load dashboard'; 
+      }
     });
   }
 
-  approveItem(item: any): void { /* Call approval service */ }
-  rejectItem(item: any): void { /* Call approval service */ }
+  approveItem(item: any): void { 
+    /* Call approval service */ 
+  }
+  
+  rejectItem(item: any): void { 
+    /* Call approval service */ 
+  }
 
   getPriorityColor(p: string): string {
     const c: any = { High: '#dc2626', Medium: '#f57c00', Low: '#059669' };

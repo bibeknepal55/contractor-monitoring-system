@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { OrganizationService } from '../../../core/services/organization.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -29,6 +31,7 @@ import { debounceTime, Subject, Subscription } from 'rxjs';
     CommonModule, RouterLink, MatButtonModule, MatIconModule, MatTableModule,
     MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule,
     MatSelectModule, MatCardModule, MatChipsModule, MatTooltipModule, FormsModule,
+    MatDividerModule, MatSlideToggleModule,
     HasPermissionDirective, HasAnyRoleDirective, LoadingSpinnerComponent,
     EmptyStateComponent, ErrorStateComponent
   ],
@@ -111,7 +114,6 @@ import { debounceTime, Subject, Subscription } from 'rxjs';
       </app-empty-state>
     </div>
 
-    <!-- Create/Edit Dialog -->
     <div class="dialog-overlay" *ngIf="showForm" (click)="closeForm($event)">
       <div class="dialog-box" (click)="$event.stopPropagation()">
         <div class="dialog-header">
@@ -236,7 +238,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         if (r.success) { this.notify.success(this.editingOrg ? 'Updated!' : 'Created!'); this.showForm = false; }
         else this.notify.error(r.message || 'Failed');
       },
-      error: (e) => { this.saving = false; this.notify.error(e?.error?.message || 'Failed'); }
+      error: (e: any) => { this.saving = false; this.notify.error(e?.error?.message || 'Failed'); }
     });
   }
 
@@ -245,12 +247,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     if (!ok) return;
     this.srv.deleteAndRefresh(org.id).subscribe({
       next: (r: any) => { if (r.success) this.notify.success('Deleted!'); else this.notify.error(r.message || 'Failed'); },
-      error: () => this.notify.error('Failed to delete')
+      error: (e: any) => this.notify.error('Failed to delete')
     });
   }
 
   manageUsers(org: any): void {
-    // Navigate to user management filtered by organization
     window.location.href = `/users?orgId=${org.id}`;
   }
 

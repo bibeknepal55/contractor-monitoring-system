@@ -87,10 +87,12 @@ import Swal from 'sweetalert2';
             <button mat-button color="primary" (click)="viewUserActivity(s)">
               <mat-icon>history</mat-icon> Activity
             </button>
-            <button mat-button color="warn" (click)="revokeSession(s)" 
-              *ngIf="!s.isCurrent" *appHasPermission="'UserManagement.Update'">
-              <mat-icon>block</mat-icon> Force Logout
-            </button>
+            <ng-container *ngIf="!s.isCurrent">
+              <button mat-button color="warn" (click)="revokeSession(s)" 
+                *appHasPermission="'UserManagement.Update'">
+                <mat-icon>block</mat-icon> Force Logout
+              </button>
+            </ng-container>
           </mat-card-actions>
         </mat-card>
       </div>
@@ -132,7 +134,6 @@ export class SessionManagementComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadSessions();
-    // Auto-refresh every 30 seconds
     this.refreshSub = interval(30000).subscribe(() => this.loadSessions());
   }
 
@@ -145,7 +146,7 @@ export class SessionManagementComponent implements OnInit, OnDestroy {
         if (r.success) this.sessions = r.data || [];
         this.loading = false;
       },
-      error: () => { this.loading = false; }
+      error: (e: any) => { this.loading = false; }
     });
   }
 
@@ -185,7 +186,7 @@ export class SessionManagementComponent implements OnInit, OnDestroy {
           this.notify.error(r.message || 'Failed to revoke session');
         }
       },
-      error: () => this.notify.error('Failed to revoke session')
+      error: (e: any) => this.notify.error('Failed to revoke session')
     });
   }
 
@@ -202,7 +203,7 @@ export class SessionManagementComponent implements OnInit, OnDestroy {
     
     if (!result.isConfirmed) return;
 
-    const otherSessions = this.sessions.filter(s => !s.isCurrent);
+    const otherSessions = this.sessions.filter((s: any) => !s.isCurrent);
     let revoked = 0;
     
     for (const s of otherSessions) {
