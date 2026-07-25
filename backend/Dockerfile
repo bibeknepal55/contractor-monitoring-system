@@ -1,35 +1,30 @@
-# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-
-COPY ContractorMonitoring.sln .
-COPY ContractorMonitoring.Domain/ContractorMonitoring.Domain.csproj ContractorMonitoring.Domain/
-COPY ContractorMonitoring.Application/ContractorMonitoring.Application.csproj ContractorMonitoring.Application/
-COPY ContractorMonitoring.Infrastructure/ContractorMonitoring.Infrastructure.csproj ContractorMonitoring.Infrastructure/
-COPY ContractorMonitoring.API/ContractorMonitoring.API.csproj ContractorMonitoring.API/
-
-RUN dotnet restore ContractorMonitoring.sln
-
-COPY . .
-
-RUN dotnet publish ContractorMonitoring.API/ContractorMonitoring.API.csproj \
-    -c Release -o /app/publish --no-restore
-
-# Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Create non-root user for security
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+# Copy only API project files
+COPY ContractorMonitoring.API/ContractorMonitoring.API.csproj ContractorMonitoring.API/
+COPY ContractorMonitoring.Application/ContractorMonitoring.Application.csproj ContractorMonitoring.Application/
+COPY ContractorMonitoring.Domain/ContractorMonitoring.Domain.csproj ContractorMonitoring.Domain/
+COPY ContractorMonitoring.Infrastructure/ContractorMonitoring.Infrastructure.csproj ContractorMonitoring.Infrastructure/
 
-COPY --from=build /app/publish .
+# Restore only the API project
+RUN dotnet restore ContractorMonitoring.API/ContractorMonitoring.API.csproj
 
-# Ensure uploads directory exists with correct permissions
-RUN mkdir -p Uploads/profiles && chown -R appuser:appgroup /app
+# Copy everything
+COPY . .
 
-USER appuser
+# Publish only the API project
+WORKDIR /app/ContractorMonitoring.API
+RUN dotnet publish -c Release -o /out --no-restore
 
-EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
+# Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /out .
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:80
+
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "ContractorMonitoring.API.dll"]
