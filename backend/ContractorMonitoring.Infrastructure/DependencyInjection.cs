@@ -72,7 +72,9 @@ public static class DependencyInjection
         services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
 
         // Phase 6 — Hangfire (PostgreSQL storage)
-        var connStr = configuration.GetConnectionString("DefaultConnection")!;
+     var connStr = configuration.GetConnectionString("DefaultConnection") 
+    ?? configuration["ConnectionStrings:DefaultConnection"]
+    ?? throw new InvalidOperationException("Database connection string not found");
         services.AddHangfire(cfg => cfg
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
             .UseSimpleAssemblyNameTypeSerializer()
