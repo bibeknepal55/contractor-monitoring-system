@@ -73,9 +73,12 @@ import Swal from 'sweetalert2';
           <div class="step" *ngIf="setupStep === 2">
             <h3>Step 2: Scan QR Code</h3>
             <p>Scan this QR code with Google Authenticator, Microsoft Authenticator, or Authy.</p>
-            <div class="qr-placeholder">
-              <mat-icon>qr_code_2</mat-icon>
-              <span>QR Code will appear here</span>
+            <div class="qr-container">
+              <img *ngIf="qrCodeDataUrl" [src]="qrCodeDataUrl" alt="MFA QR Code" class="qr-image">
+              <div *ngIf="!qrCodeDataUrl" class="qr-placeholder">
+                <mat-icon>qr_code_2</mat-icon>
+                <span>Loading QR Code...</span>
+              </div>
             </div>
             <mat-form-field appearance="outline">
               <mat-label>Or enter setup key manually</mat-label>
@@ -139,8 +142,8 @@ import Swal from 'sweetalert2';
     .setup-info{font-size:.85rem;color:#666;line-height:1.5;margin-bottom:16px}
     .step{padding:8px 0}.step h3{font-size:.95rem;font-weight:600;color:#333;margin:0 0 8px}
     .step p{font-size:.82rem;color:#666;margin:0 0 12px}
-    .qr-placeholder{width:200px;height:200px;background:#f5f5f5;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;color:#999}
-    .qr-placeholder mat-icon{font-size:48px;width:48px;height:48px}
+    .qr-container{margin-bottom:16px}
+    .qr-image{width:200px;height:200px;border-radius:8px;border:1px solid #e5e7eb}
     .warning-text{font-size:.82rem;color:#dc2626;margin-bottom:12px}
     .backup-section{margin-top:20px}.backup-section h4{font-size:.9rem;font-weight:600;color:#333;margin:0 0 4px}
     .backup-section p{font-size:.8rem;color:#666;margin:0 0 8px}
@@ -161,6 +164,7 @@ export class MfaSetupComponent {
   setupStep = 1;
   password = '';
   setupKey = '';
+  qrCodeDataUrl = '';
   verificationCode = '';
   settingUp = false;
   backupCodes: string[] = [];
@@ -176,7 +180,8 @@ export class MfaSetupComponent {
       next: (r: any) => {
         this.settingUp = false;
         if (r.success) {
-          this.setupKey = r.data?.setupKey || 'XXXX-XXXX-XXXX';
+          this.setupKey = r.data?.secret || r.data?.setupKey || '';
+          this.qrCodeDataUrl = r.data?.qrCode || '';
           this.setupStep = 2;
         } else {
           this.notify.error(r.message || 'Invalid password');

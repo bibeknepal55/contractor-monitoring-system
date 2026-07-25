@@ -21,8 +21,45 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedRe
     {
         var paged = await _unitOfWork.Users.GetPagedAsync(request.Filter);
 
+        // Apply isActive filter post-paging (in-memory since GetPagedAsync doesn't support it)
+        var allUsers = await _unitOfWork.Users.GetAllAsync();
+        IEnumerable<ContractorMonitoring.Domain.Entities.User> filtered = allUsers;
+
+        if (!string.IsNullOrEmpty(request.IsActiveFilter) && bool.TryParse(request.IsActiveFilter, out var isActive))
+            filtered = filtered.Where(u => u.IsActive == isActive);
+
+        // Apply role filter
+        if (!string.IsNullOrEmpty(request.RoleFilter))
+        {
+            var allUserRoles = await _unitOfWork.UserRoles.GetAllAsync();
+            var allRoles = await _unitOfWork.Roles.GetAllAsync();
+            var userIdsWithRole = (from ur in allUserRoles
+                                   join r in allRoles on ur.RoleId equals r.Id
+                                   where r.Name == request.RoleFilter && !ur.IsDeleted
+                                   select ur.UserId).ToHashSet();
+            filtered = filtered.Where(u => userIdsWithRole.Contains(u.Id));
+        }
+
+        // Apply search filter
+        if (!string.IsNullOrEmpty(request.Filter.Search))
+        {
+            var s = request.Filter.Search.ToLower();
+            filtered = filtered.Where(u =>
+                u.Email.ToLower().Contains(s) ||
+                u.FirstName.ToLower().Contains(s) ||
+                u.LastName.ToLower().Contains(s) ||
+                (u.PhoneNumber != null && u.PhoneNumber.ToLower().Contains(s)));
+        }
+
+        var totalCount = filtered.Count();
+        var users = filtered
+            .OrderByDescending(u => u.CreatedAt)
+            .Skip(request.Filter.Skip)
+            .Take(request.Filter.PageSize)
+            .ToList();
+
         var dtos = new List<UserManagementDto>();
-        foreach (var user in paged.Data)
+        foreach (var user in users)
         {
             var userRoles = await GetUserRoles(user.Id);
             var userPermissions = await GetUserPermissions(user.Id);
@@ -45,10 +82,10 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedRe
         return new PagedResponse<UserManagementDto>
         {
             Data = dtos,
-            Page = paged.Page,
-            PageSize = paged.PageSize,
-            TotalCount = paged.TotalCount,
-            TotalPages = paged.TotalPages,
+            Page = request.Filter.Page,
+            PageSize = request.Filter.PageSize,
+            TotalCount = totalCount,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)request.Filter.PageSize),
             Message = "Users retrieved successfully"
         };
     }

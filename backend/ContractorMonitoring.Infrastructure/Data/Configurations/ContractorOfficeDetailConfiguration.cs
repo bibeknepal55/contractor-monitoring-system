@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -84,6 +84,5 @@ public class ContractorOfficeDetailConfiguration : IEntityTypeConfiguration<Cont
         builder.HasIndex(c => c.Status);
 
         // Soft delete filter
-        builder.HasQueryFilter(c => !c.IsDeleted);
     }
 }

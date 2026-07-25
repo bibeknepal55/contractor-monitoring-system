@@ -43,15 +43,23 @@ export class ApiService {
       .pipe(finalize(() => this.hideLoader()));
   }
 
-  getPaged<T>(endpoint: string, request: PagedRequest): Observable<PagedResponse<T>> {
+  getPaged<T>(endpoint: string, request: any): Observable<PagedResponse<T>> {
     this.showLoader();
     let httpParams = new HttpParams()
-      .set('page', request.page.toString())
-      .set('pageSize', request.pageSize.toString());
+      .set('page', String(request.page ?? 1))
+      .set('pageSize', String(request.pageSize ?? 10));
 
     if (request.search) httpParams = httpParams.set('search', request.search);
     if (request.sortBy) httpParams = httpParams.set('sortBy', request.sortBy);
     if (request.sortOrder) httpParams = httpParams.set('sortOrder', request.sortOrder);
+
+    // Pass any extra filter params (isActive, role, status, etc.)
+    const knownKeys = new Set(['page', 'pageSize', 'search', 'sortBy', 'sortOrder']);
+    Object.entries(request).forEach(([key, value]) => {
+      if (!knownKeys.has(key) && value !== undefined && value !== null && value !== '') {
+        httpParams = httpParams.set(key, String(value));
+      }
+    });
 
     return this.http.get<PagedResponse<T>>(`${this.baseUrl}${endpoint}`, { params: httpParams })
       .pipe(finalize(() => this.hideLoader()));

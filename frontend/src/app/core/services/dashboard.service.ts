@@ -16,14 +16,15 @@ export class DashboardService {
   }
 
   getDepartmentDashboard(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/dashboard/department`);
+    // Routes to executive dashboard — department-level filtering is done server-side via TenantId claim
+    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/dashboard/executive`);
   }
 
   getStats(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/dashboard/stats`);
+    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/dashboard/executive`);
   }
 
   getRecentActivity(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/dashboard/activity`);
+    return this.http.get<ApiResponse<any>>(`${this.baseUrl}/user-logs?page=1&pageSize=10`);
   }
 }

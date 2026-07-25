@@ -1,62 +1,73 @@
-﻿using MediatR;
+using MediatR;
 using ContractorMonitoring.Application.Common.Models;
 using ContractorMonitoring.Application.DTOs.Auth;
 using ContractorMonitoring.Application.Interfaces;
 
 namespace ContractorMonitoring.Application.Features.Auth.Commands.RefreshToken;
 
-// Handler for refreshing JWT tokens
 public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, ApiResponse<AuthResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJwtService _jwtService;
+    private readonly IPermissionResolver _permissionResolver;
 
-    public RefreshTokenCommandHandler(IUnitOfWork unitOfWork, IJwtService jwtService)
+    public RefreshTokenCommandHandler(
+        IUnitOfWork unitOfWork,
+        IJwtService jwtService,
+        IPermissionResolver permissionResolver)
     {
         _unitOfWork = unitOfWork;
         _jwtService = jwtService;
+        _permissionResolver = permissionResolver;
     }
 
     public async Task<ApiResponse<AuthResponse>> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
     {
-        // Validate access token to get user ID
-        var (isValid, userId) = await _jwtService.ValidateToken(command.AccessToken);
+        var (isValid, userId) = await _jwtService.ValidateToken(command.AccessToken, validateLifetime: false);
 
         if (!isValid)
-        {
             return ApiResponse<AuthResponse>.Fail("Invalid access token");
-        }
 
-        // Get user
         var user = await _unitOfWork.Users.GetByIdAsync(userId);
 
-        if (user == null || user.RefreshToken != command.RefreshToken)
+        if (user == null)
+            return ApiResponse<AuthResponse>.Fail("User not found");
+
+        // Token reuse detection: if the submitted token doesn't match the stored one
+        // but a family exists, this is a replay attack — invalidate all tokens for this user
+        if (user.RefreshToken != command.RefreshToken)
         {
+            if (!string.IsNullOrEmpty(user.RefreshTokenFamily))
+            {
+                // Potential token theft — revoke entire family
+                user.RefreshToken = null;
+                user.RefreshTokenExpiryTime = null;
+                user.RefreshTokenFamily = null;
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+            }
             return ApiResponse<AuthResponse>.Fail("Invalid refresh token");
         }
 
-        // Check if refresh token is expired
         if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-        {
             return ApiResponse<AuthResponse>.Fail("Refresh token has expired. Please login again.");
-        }
 
-        // Generate new tokens
+        // Rotate: issue new token, revoke old one, preserve family
         var newAccessToken = await _jwtService.GenerateAccessToken(user);
         var newRefreshToken = await _jwtService.GenerateRefreshToken();
         var expiresAt = await _jwtService.GetTokenExpiryTime(newAccessToken);
 
-        // Update user with new refresh token
+        // Preserve family (set on first login if null)
+        user.RefreshTokenFamily ??= Guid.NewGuid().ToString();
         user.RefreshToken = newRefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await _unitOfWork.Users.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
-        // Get user roles and permissions
-        var userRoles = await GetUserRoles(user.Id);
-        var userPermissions = await GetUserPermissions(user.Id);
+        var userRoles = await _permissionResolver.GetUserRolesAsync(user.Id);
+        var userPermissions = await _permissionResolver.GetUserPermissionsAsync(user.Id);
 
-        var authResponse = new AuthResponse
+        return ApiResponse<AuthResponse>.Ok(new AuthResponse
         {
             AccessToken = newAccessToken,
             RefreshToken = newRefreshToken,
@@ -71,32 +82,6 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, A
                 Roles = userRoles,
                 Permissions = userPermissions
             }
-        };
-
-        return ApiResponse<AuthResponse>.Ok(authResponse, "Token refreshed successfully");
-    }
-
-    private async Task<List<string>> GetUserRoles(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var roles = await _unitOfWork.Roles.GetAllAsync();
-
-        return (from ur in userRoles
-                join r in roles on ur.RoleId equals r.Id
-                where ur.UserId == userId && !ur.IsDeleted && !r.IsDeleted
-                select r.Name).ToList();
-    }
-
-    private async Task<List<string>> GetUserPermissions(Guid userId)
-    {
-        var userRoles = await _unitOfWork.UserRoles.GetAllAsync();
-        var rolePermissions = await _unitOfWork.RolePermissions.GetAllAsync();
-        var permissions = await _unitOfWork.Permissions.GetAllAsync();
-
-        return (from ur in userRoles
-                join rp in rolePermissions on ur.RoleId equals rp.RoleId
-                join p in permissions on rp.PermissionId equals p.Id
-                where ur.UserId == userId && !ur.IsDeleted && !rp.IsDeleted && !p.IsDeleted
-                select p.Name).Distinct().ToList();
+        }, "Token refreshed successfully");
     }
 }

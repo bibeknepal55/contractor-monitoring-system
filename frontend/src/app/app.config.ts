@@ -9,27 +9,42 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { environment } from '../environments/environment';
 
+// Derive the domain from the API URL so it works in all environments
+function getApiDomain(): string {
+  try {
+    return new URL(environment.apiUrl).host;
+  } catch {
+    return 'localhost:5185';
+  }
+}
+
+// Used only by JwtHelperService for token decoding — NOT for attaching headers
+// Header attachment is handled exclusively by jwtInterceptor
 export function tokenGetter(): string | null {
-  return localStorage.getItem('accessToken');
+  return null; // tokens are in memory, not localStorage
 }
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withViewTransitions()),
+    // Only our custom interceptors handle auth headers — JwtModule does NOT add its own interceptor here
     provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
     provideAnimations(),
     importProvidersFrom(
+      // JwtModule registered only for JwtHelperService (token decoding/expiry checks)
+      // allowedDomains is set but header injection is disabled via tokenGetter returning null
       JwtModule.forRoot({
         config: {
-          tokenGetter: tokenGetter,
-          allowedDomains: ['localhost:5185'],
-          disallowedRoutes: ['localhost:5185/api/v1/auth/login', 'localhost:5185/api/v1/auth/register'],
+          tokenGetter,
+          allowedDomains: [getApiDomain()],
+          disallowedRoutes: [],
         },
       }),
       NgxSpinnerModule.forRoot({ type: 'ball-spin-clockwise-fade' }),
       MatNativeDateModule,
-      NgxChartsModule
+      NgxChartsModule,
     ),
   ],
 };

@@ -8,7 +8,7 @@ export class UserService {
   private api = inject(ApiService);
   private ep = '/users';
 
-  getUsers(req: PagedRequest): Observable<PagedResponse<any>> {
+  getUsers(req: any): Observable<PagedResponse<any>> {
     return this.api.getPaged(this.ep, req);
   }
 

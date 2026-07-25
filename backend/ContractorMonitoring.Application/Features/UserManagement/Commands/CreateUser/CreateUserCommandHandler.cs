@@ -28,9 +28,25 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ApiRe
         if (string.IsNullOrEmpty(command.Request.Password) || command.Request.Password.Length < 8)
             return ApiResponse<UserManagementDto>.Fail("Password must be at least 8 characters");
 
-        // Get creator's roles for RBAC check
         var allUserRoles = await _unitOfWork.UserRoles.GetAllAsync();
         var allRoles = await _unitOfWork.Roles.GetAllAsync();
+
+        // Resolve role names: support both RoleId (single) and Roles (list of names)
+        var resolvedRoleNames = new List<string>();
+        if (!string.IsNullOrEmpty(command.Request.RoleId) && Guid.TryParse(command.Request.RoleId, out var roleGuid))
+        {
+            var role = allRoles.FirstOrDefault(r => r.Id == roleGuid && !r.IsDeleted);
+            if (role != null) resolvedRoleNames.Add(role.Name);
+        }
+        else if (command.Request.Roles.Any())
+        {
+            resolvedRoleNames.AddRange(command.Request.Roles);
+        }
+
+        if (!resolvedRoleNames.Any())
+            return ApiResponse<UserManagementDto>.Fail("At least one role must be assigned");
+
+        // Get creator's roles for RBAC check
         var creatorRoles = (from ur in allUserRoles
                             join r in allRoles on ur.RoleId equals r.Id
                             where ur.UserId == command.CreatedBy && !ur.IsDeleted
@@ -39,10 +55,13 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ApiRe
         var isAdmin = creatorRoles.Contains("Admin");
 
         // RBAC: Validate role assignment
-        foreach (var roleName in command.Request.Roles)
+        foreach (var roleName in resolvedRoleNames)
         {
             if (isSuperAdmin) continue;
             if (isAdmin && (roleName == "Test" || roleName == "Viewer")) continue;
+            // Admin can assign custom (non-system) roles
+            var targetRole = allRoles.FirstOrDefault(r => r.Name == roleName && !r.IsDeleted);
+            if (isAdmin && targetRole != null && !targetRole.IsSystem) continue;
             if (creatorRoles.Contains("Test") && roleName == "Test") continue;
             return ApiResponse<UserManagementDto>.Fail($"You cannot assign the role: {roleName}");
         }
@@ -56,7 +75,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ApiRe
             FirstName = command.Request.FirstName.Trim(),
             LastName = command.Request.LastName.Trim(),
             PhoneNumber = command.Request.PhoneNumber?.Trim(),
-            IsActive = true,
+            IsActive = command.Request.IsActive,
+            MustChangePassword = true,
             CreatedAt = DateTime.UtcNow,
             CreatedBy = command.CreatedBy.ToString(),
             TenantId = Guid.Empty
@@ -66,7 +86,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ApiRe
         await _unitOfWork.SaveChangesAsync();
 
         // Assign roles
-        foreach (var roleName in command.Request.Roles)
+        foreach (var roleName in resolvedRoleNames)
         {
             var role = allRoles.FirstOrDefault(r => r.Name == roleName && !r.IsDeleted);
             if (role != null)
@@ -94,7 +114,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ApiRe
             LastName = user.LastName,
             PhoneNumber = user.PhoneNumber,
             IsActive = user.IsActive,
-            Roles = command.Request.Roles,
+            Roles = resolvedRoleNames,
             Permissions = new List<string>(),
             CreatedAt = user.CreatedAt
         }, "User created successfully");

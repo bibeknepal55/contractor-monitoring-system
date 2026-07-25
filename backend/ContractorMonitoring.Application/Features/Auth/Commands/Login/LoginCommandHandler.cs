@@ -29,9 +29,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Aut
 
     public async Task<ApiResponse<AuthResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var users = await _unitOfWork.Users.GetAllAsync();
-        var user = users.FirstOrDefault(u =>
-            string.Equals(u.Email, command.Request.Email.Trim(), StringComparison.OrdinalIgnoreCase));
+        var email = command.Request.Email.Trim().ToLowerInvariant();
+        var user = await _unitOfWork.Users.FindAsync(u => u.Email == email);
 
         if (user == null)
             return ApiResponse<AuthResponse>.Fail("Invalid email or password");
@@ -67,18 +66,19 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Aut
         user.LockoutEnd = null;
         user.LastLoginAt = DateTime.UtcNow;
 
-        var accessToken = await _jwtService.GenerateAccessToken(user);
+        // Fetch roles & permissions ONCE — reused for both JWT claims and response
+        var userRoles = await _permissionResolver.GetUserRolesAsync(user.Id);
+        var userPermissions = await _permissionResolver.GetUserPermissionsAsync(user.Id);
+
+        var accessToken = await _jwtService.GenerateAccessToken(user, userRoles, userPermissions);
         var refreshToken = await _jwtService.GenerateRefreshToken();
         var expiresAt = await _jwtService.GetTokenExpiryTime(accessToken);
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.RefreshTokenFamily = Guid.NewGuid().ToString();
         await _unitOfWork.Users.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
-
-        // Use centralized PermissionResolver
-        var userRoles = await _permissionResolver.GetUserRolesAsync(user.Id);
-        var userPermissions = await _permissionResolver.GetUserPermissionsAsync(user.Id);
 
         return ApiResponse<AuthResponse>.Ok(new AuthResponse
         {
@@ -93,7 +93,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Aut
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 Roles = userRoles,
-                Permissions = userPermissions
+                Permissions = userPermissions,
+                MustChangePassword = user.MustChangePassword
             }
         }, "Login successful");
     }

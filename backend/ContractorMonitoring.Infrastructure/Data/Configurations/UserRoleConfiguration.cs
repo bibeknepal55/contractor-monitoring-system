@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -27,7 +27,5 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
         builder.HasIndex(ur => new { ur.UserId, ur.RoleId })
             .IsUnique()
             .HasFilter("\"IsDeleted\" = false");
-
-        builder.HasQueryFilter(ur => !ur.IsDeleted);
     }
 }

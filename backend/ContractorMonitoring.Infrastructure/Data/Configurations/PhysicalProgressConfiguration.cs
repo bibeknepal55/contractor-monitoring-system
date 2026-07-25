@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -56,6 +56,5 @@ public class PhysicalProgressConfiguration : IEntityTypeConfiguration<PhysicalPr
         builder.HasIndex(p => p.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

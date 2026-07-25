@@ -23,7 +23,10 @@ public class CreateUserDto
     public string Email { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
     public string Password { get; set; } = string.Empty;
+    public string? ConfirmPassword { get; set; }
     public List<string> Roles { get; set; } = new();
+    public string? RoleId { get; set; }  // Single role by ID (from admin create user dialog)
+    public bool IsActive { get; set; } = true;
 }
 // Update user roles request DTO
 public class UpdateUserRolesDto

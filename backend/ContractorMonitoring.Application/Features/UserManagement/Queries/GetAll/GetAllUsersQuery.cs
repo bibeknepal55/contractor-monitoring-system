@@ -8,4 +8,6 @@ public record GetAllUsersQuery : IRequest<PagedResponse<UserManagementDto>>
 {
     public PaginationFilter Filter { get; init; } = new();
     public Guid TenantId { get; init; }
+    public string? RoleFilter { get; init; }
+    public string? IsActiveFilter { get; init; }
 }

@@ -7,6 +7,7 @@ namespace ContractorMonitoring.Application.Interfaces.Repositories;
 public interface IGenericRepository<T> where T : class
 {
     Task<T?> GetByIdAsync(Guid id);
+    Task<T?> FindAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
     Task<IEnumerable<T>> GetAllAsync();
     Task<PagedResponse<T>> GetPagedAsync(
         PaginationFilter filter,

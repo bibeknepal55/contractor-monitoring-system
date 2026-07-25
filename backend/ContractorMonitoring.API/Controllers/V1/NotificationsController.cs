@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ContractorMonitoring.Application.Common.Models;
 using ContractorMonitoring.Application.DTOs.Notification;
 using ContractorMonitoring.Domain.Constants;
 using ContractorMonitoring.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractorMonitoring.API.Controllers.V1;
 
@@ -22,9 +22,8 @@ public class NotificationsController : ControllerBase
 
     private Guid CurrentUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty);
 
-    // GET /api/v1/notifications - User's in-app notifications
     [HttpGet("notifications")]
-    public async Task<ActionResult<ApiResponse<List<NotificationDto>>>> GetNotifications([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<ActionResult<ApiResponse<object>>> GetNotifications([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         var notifications = await _context.Set<Domain.Entities.NotificationLog>()
             .Where(n => n.UserId == CurrentUserId)
@@ -49,7 +48,6 @@ public class NotificationsController : ControllerBase
         return Ok(ApiResponse<object>.Ok(new { UnreadCount = unreadCount, Notifications = notifications }, "Notifications retrieved"));
     }
 
-    // PUT /api/v1/notifications/{id}/read - Mark as read
     [HttpPut("notifications/{id:guid}/read")]
     public async Task<ActionResult<ApiResponse<bool>>> MarkRead(Guid id)
     {
@@ -61,7 +59,6 @@ public class NotificationsController : ControllerBase
         return ApiResponse<bool>.Ok(true, "Marked as read");
     }
 
-    // GET /api/v1/settings/notifications - Get notification preferences
     [HttpGet("settings/notifications")]
     public async Task<ActionResult<ApiResponse<NotificationSettingsDto>>> GetSettings()
     {
@@ -76,7 +73,6 @@ public class NotificationsController : ControllerBase
         }, "Settings retrieved");
     }
 
-    // PUT /api/v1/settings/notifications - Update preferences
     [HttpPut("settings/notifications")]
     public async Task<ActionResult<ApiResponse<bool>>> UpdateSettings([FromBody] NotificationSettingsDto request)
     {
@@ -91,7 +87,6 @@ public class NotificationsController : ControllerBase
         return ApiResponse<bool>.Ok(true, "Notification settings updated");
     }
 
-    // GET /api/v1/settings/webhooks - List webhooks
     [HttpGet("settings/webhooks")]
     [Authorize(Policy = Permissions.UserManagement.View)]
     public async Task<ActionResult<ApiResponse<List<WebhookSubscriptionDto>>>> GetWebhooks()
@@ -114,7 +109,6 @@ public class NotificationsController : ControllerBase
         return ApiResponse<List<WebhookSubscriptionDto>>.Ok(webhooks, "Webhooks retrieved");
     }
 
-    // POST /api/v1/settings/webhooks - Create webhook
     [HttpPost("settings/webhooks")]
     [Authorize(Policy = Permissions.UserManagement.Create)]
     public async Task<ActionResult<ApiResponse<WebhookSubscriptionDto>>> CreateWebhook([FromBody] CreateWebhookDto request)
@@ -146,7 +140,6 @@ public class NotificationsController : ControllerBase
         }, "Webhook created");
     }
 
-    // DELETE /api/v1/settings/webhooks/{id}
     [HttpDelete("settings/webhooks/{id:guid}")]
     [Authorize(Policy = Permissions.UserManagement.Delete)]
     public async Task<ActionResult<ApiResponse<bool>>> DeleteWebhook(Guid id)

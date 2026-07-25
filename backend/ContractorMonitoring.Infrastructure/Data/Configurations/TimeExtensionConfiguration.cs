@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -48,6 +48,5 @@ public class TimeExtensionConfiguration : IEntityTypeConfiguration<TimeExtension
         builder.HasIndex(t => t.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }

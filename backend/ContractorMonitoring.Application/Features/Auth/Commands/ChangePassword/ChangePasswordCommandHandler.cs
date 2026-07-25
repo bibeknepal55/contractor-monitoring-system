@@ -33,9 +33,13 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
             return ApiResponse<bool>.Fail("Current password is incorrect");
         }
 
-        // Update password
+        // Update password and invalidate all existing sessions
         user.PasswordHash = _passwordService.HashPassword(command.Request.NewPassword);
         user.UpdatedAt = DateTime.UtcNow;
+        user.LastPasswordChange = DateTime.UtcNow;
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+        user.MustChangePassword = false;
         await _unitOfWork.Users.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
 

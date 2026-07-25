@@ -30,7 +30,5 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         // Indexes
         builder.HasIndex(r => r.Name)
             .IsUnique();
-
-        builder.HasQueryFilter(r => !r.IsDeleted);
     }
 }

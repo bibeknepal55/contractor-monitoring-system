@@ -5,7 +5,7 @@ public class AuthResponse
 {
     public string AccessToken { get; set; } = string.Empty;
     public string RefreshToken { get; set; } = string.Empty;
-    public DateTime ExpiresAt { get; set; }
+    public string ExpiresAt { get; set; } = string.Empty;
     public UserDto User { get; set; } = null!;
 }
 
@@ -19,4 +19,5 @@ public class UserDto
     public string? PhoneNumber { get; set; }
     public List<string> Roles { get; set; } = new();
     public List<string> Permissions { get; set; } = new();
+    public bool MustChangePassword { get; set; }
 }

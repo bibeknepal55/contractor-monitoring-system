@@ -39,12 +39,15 @@ public class BudgetByProjectDto
     public string ProjectName { get; set; } = string.Empty;
     public decimal Budget { get; set; }
     public decimal Spent { get; set; }
+    public int Progress { get; set; }
 }
 
 public class DelaySummaryDto
 {
     public string ProjectName { get; set; } = string.Empty;
+    public string ContractorName { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
+    public int Days { get; set; }
     public string DelayCategory { get; set; } = string.Empty;
-    public int DelayDays { get; set; }
     public string ImpactLevel { get; set; } = string.Empty;
 }

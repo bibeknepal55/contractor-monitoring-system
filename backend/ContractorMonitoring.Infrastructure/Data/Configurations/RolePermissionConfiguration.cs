@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -27,7 +27,5 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermissi
         builder.HasIndex(rp => new { rp.RoleId, rp.PermissionId })
      .IsUnique()
      .HasFilter("\"IsDeleted\" = false");
-
-        builder.HasQueryFilter(rp => !rp.IsDeleted);
     }
 }

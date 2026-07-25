@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -68,6 +68,5 @@ public class LabTestConfiguration : IEntityTypeConfiguration<LabTest>
         builder.HasIndex(l => l.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(l => !l.IsDeleted);
     }
 }

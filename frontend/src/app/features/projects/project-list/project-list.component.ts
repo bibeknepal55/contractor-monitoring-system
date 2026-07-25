@@ -9,11 +9,13 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../../core/services/project.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { DateFormatService } from '../../../core/services/date-format.service';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
@@ -25,8 +27,8 @@ import { debounceTime, Subject, Subscription } from 'rxjs';
   imports: [
     CommonModule, RouterLink, MatButtonModule, MatIconModule, MatTableModule,
     MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule,
-    MatProgressBarModule, FormsModule, LoadingSpinnerComponent, EmptyStateComponent,
-    ErrorStateComponent
+    MatProgressBarModule, MatTooltipModule, FormsModule, HasPermissionDirective,
+    LoadingSpinnerComponent, EmptyStateComponent, ErrorStateComponent
   ],
   template: `
     <div class="list-page">

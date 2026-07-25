@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/Logs/
+**/Uploads/
+**/.vs/
+**/*.user
+**/node_modules/
+**/.angular/
+**/dist/
+.git/
+.gitignore
+README.md
+docker-compose.yml

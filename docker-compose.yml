@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cms_postgres
+    environment:
+      POSTGRES_DB: contractor_monitoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: cms_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: cms_mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cms_api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=contractor_monitoring;Username=postgres;Password=password"
+      ConnectionStrings__Redis: "redis:6379"
+      JwtSettings__SecretKey: "DevelopmentSecretKeyThatIsAtLeast32Chars!@#123"
+      JwtSettings__Issuer: "ContractorMonitoringSystem"
+      JwtSettings__Audience: "ContractorMonitoringClients"
+      JwtSettings__ExpirationMinutes: "1440"
+      Email__SmtpHost: "mailhog"
+      Email__SmtpPort: "1025"
+      Email__EnableSsl: "false"
+      Seed__SuperAdminPassword: "SuperAdmin@123"
+    ports:
+      - "5185:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cms_frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # Dev-only: MailHog web UI at http://localhost:8025
+  # Dev-only: Hangfire dashboard at http://localhost:5185/hangfire
+
+volumes:
+  postgres_data:

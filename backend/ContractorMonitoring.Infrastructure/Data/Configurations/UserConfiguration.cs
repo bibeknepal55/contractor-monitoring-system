@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -42,7 +42,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.TenantId);
 
         // Soft delete query filter
-        builder.HasQueryFilter(u => !u.IsDeleted);
 
         // Global query filter for tenant isolation
         builder.Property(u => u.TenantId)

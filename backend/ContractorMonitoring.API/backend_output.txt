@@ -1,0 +1,157 @@
+Using launch settings from D:\ContractorMonitoring\backend\contractorMonitoring.API\Properties\launchSettings.json...
+Building...
+D:\ContractorMonitoring\backend\contractorMonitoring.API\ContractorMonitoring.API.csproj : warning NU1902: Package 'OpenTelemetry.Exporter.OpenTelemetryProtocol' 1.11.2 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-4625-4j76-fww9
+D:\ContractorMonitoring\backend\contractorMonitoring.API\ContractorMonitoring.API.csproj : warning NU1902: Package 'OpenTelemetry.Exporter.OpenTelemetryProtocol' 1.11.2 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-4625-4j76-fww9
+[14:57:20 INF] Start installing Hangfire SQL objects...
+[14:57:21 INF] Hangfire SQL objects installed.
+[14:57:23 INF] Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+[14:57:23 INF] Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:57:23 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+[14:57:24 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+[14:57:24 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+[14:57:24 INF] No migrations were applied. The database is already up to date.
+[14:57:24 INF] Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+            ALTER TABLE "Roles"
+            ADD COLUMN IF NOT EXISTS "CreatedByUser" character varying(200),
+            ADD COLUMN IF NOT EXISTS "IsSystem" boolean NOT NULL DEFAULT false;
+[14:57:24 INF] Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+            ALTER TABLE "Users"
+            ADD COLUMN IF NOT EXISTS "IsApproved" boolean NOT NULL DEFAULT true,
+            ADD COLUMN IF NOT EXISTS "RefreshTokenFamily" character varying(500);
+[14:57:24 INF] Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+            INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+            SELECT '20260726000001_AddMissingIndexes', '8.0.0'
+            WHERE NOT EXISTS (
+                SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260726000001_AddMissingIndexes'
+            );
+[14:57:24 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+            INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+            SELECT '20260726000002_AddRefreshTokenFamily', '8.0.0'
+            WHERE NOT EXISTS (
+                SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260726000002_AddRefreshTokenFamily'
+            );
+[14:57:24 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Permissions" AS p
+    WHERE NOT (p."IsDeleted"))
+[14:57:24 INF] Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Roles" AS r
+    WHERE NOT (r."IsDeleted"))
+[14:57:24 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."CreatedByUser", r."Description", r."IsDeleted", r."IsSystem", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted")
+[14:57:24 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "RolePermissions" AS r
+    WHERE NOT (r."IsDeleted"))
+[14:57:24 INF] Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT u."Id", u."Bio", u."Company", u."CreatedAt", u."CreatedBy", u."Department", u."Email", u."EmailNotifications", u."FirstName", u."IsActive", u."IsApproved", u."IsDeleted", u."JobTitle", u."Language", u."LastKnownDevice", u."LastKnownIp", u."LastLoginAt", u."LastName", u."LastPasswordChange", u."LastProfileUpdate", u."LockoutEnd", u."LoginAttempts", u."MustChangePassword", u."PasswordHash", u."PhoneNumber", u."ProfilePicture", u."PushNotifications", u."RefreshToken", u."RefreshTokenExpiryTime", u."RefreshTokenFamily", u."SecurityAnswerHash", u."SecurityQuestion", u."SmsNotifications", u."TenantId", u."Theme", u."Timezone", u."TwoFactorEnabled", u."TwoFactorSecret", u."UpdatedAt", u."UpdatedBy"
+FROM "Users" AS u
+WHERE NOT (u."IsDeleted") AND u."Email" = 'superadmin@contractor.monitoring'
+LIMIT 1
+[14:57:24 INF] Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT r."Id", r."CreatedAt", r."CreatedBy", r."CreatedByUser", r."Description", r."IsDeleted", r."IsSystem", r."Name", r."TenantId", r."UpdatedAt", r."UpdatedBy"
+FROM "Roles" AS r
+WHERE NOT (r."IsDeleted") AND r."Name" = 'SuperAdmin'
+LIMIT 1
+[14:57:25 INF] Executed DbCommand (6ms) [Parameters=[@p2='?' (DbType = Guid), @p0='?', @p1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+UPDATE "Users" SET "PasswordHash" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2;
+[14:57:25 INF] Executed DbCommand (4ms) [Parameters=[@__existingSuperAdmin_Id_0='?' (DbType = Guid), @__superAdminRole_Id_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "UserRoles" AS u
+    WHERE NOT (u."IsDeleted") AND u."UserId" = @__existingSuperAdmin_Id_0 AND u."RoleId" = @__superAdminRole_Id_1)
+[14:57:25 INF] Database migrated and seeded successfully
+[14:57:25 INF] Starting Contractor Monitoring System API
+[14:57:25 INF] User profile is available. Using 'C:\Users\nabin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[14:57:25 INF] Now listening on: http://localhost:5185
+[14:57:25 INF] Starting Hangfire Server using job storage: 'PostgreSQL Server: Host: localhost, DB: contractor-monitoring-backend, Schema: hangfire'
+[14:57:25 INF] Using the following options for PostgreSQL job storage:
+[14:57:25 INF]     Queue poll interval: 00:00:15.
+[14:57:25 INF]     Invisibility timeout: 00:30:00.
+[14:57:25 INF]     Use sliding invisibility timeout: False.
+[14:57:25 INF] Using the following options for Hangfire Server:
+    Worker count: 20
+    Listening queues: 'default'
+    Shutdown timeout: 00:00:15
+    Schedule polling interval: 00:00:15
+[14:57:25 DBG] Execution loop BackgroundServerProcess:d729c394 has started in 2.7435 ms
+[14:57:25 INF] Application started. Press Ctrl+C to shut down.
+[14:57:25 INF] Hosting environment: Development
+[14:57:25 INF] Content root path: D:\ContractorMonitoring\backend\contractorMonitoring.API
+[14:57:25 INF] Server desktop-oqc8l2g:14232:0cfa3df7 successfully announced in 19.2586 ms
+[14:57:25 DBG] Execution loop ServerHeartbeatProcess:3e62e6e4 has started in 2.1456 ms
+[14:57:25 INF] Server desktop-oqc8l2g:14232:0cfa3df7 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, Worker, DelayedJobScheduler, RecurringJobScheduler...
+[14:57:25 DBG] Execution loop ServerWatchdog:7b3c2990 has started in 0.3552 ms
+[14:57:25 DBG] Execution loop ServerJobCancellationWatcher:761aeedd has started in 0.1785 ms
+[14:57:25 DBG] Execution loop ExpirationManager:940afc1f has started in 0.4124 ms
+[14:57:25 DBG] Execution loop CountersAggregator:65d73f5f has started in 0.2443 ms
+[14:57:25 INF] 1 servers were removed due to timeout
+[14:57:25 DBG] Execution loop Worker:e3be9ae4 has started in 0.4719 ms
+[14:57:25 DBG] Removing outdated records from table 'aggregatedcounter'...
+[14:57:25 DBG] Aggregating records in 'Counter' table...
+[14:57:25 DBG] Execution loop Worker:c1f436cc has started in 6.7767 ms
+[14:57:25 DBG] Execution loop Worker:703d5af6 has started in 10.505 ms
+[14:57:25 DBG] Removing outdated records from table 'counter'...
+[14:57:25 DBG] Removing outdated records from table 'job'...
+[14:57:25 DBG] Removing outdated records from table 'list'...
+[14:57:25 DBG] Removing outdated records from table 'set'...
+[14:57:25 DBG] Execution loop Worker:6e313b85 has started in 38.3244 ms
+[14:57:25 DBG] Removing outdated records from table 'hash'...
+[14:57:25 DBG] Execution loop Worker:38a7ceeb has started in 117.4001 ms
+[14:57:25 DBG] Execution loop Worker:bb66fc88 has started in 135.8132 ms
+[14:57:25 DBG] Execution loop Worker:815097cf has started in 153.5939 ms
+[14:57:25 DBG] Execution loop Worker:0539b638 has started in 167.6803 ms
+[14:57:25 DBG] Execution loop Worker:0e9ae084 has started in 192.1172 ms
+[14:57:25 DBG] Execution loop Worker:82f61fbd has started in 193.4384 ms
+[14:57:25 DBG] Execution loop Worker:7469ad5d has started in 196.5287 ms
+[14:57:25 DBG] Execution loop Worker:64c1daa3 has started in 200.2173 ms
+[14:57:25 DBG] Execution loop Worker:401f4603 has started in 216.2966 ms
+[14:57:25 DBG] Execution loop Worker:5a00b167 has started in 224.6979 ms
+[14:57:25 DBG] Execution loop Worker:851ca981 has started in 226.8936 ms
+[14:57:25 DBG] Execution loop Worker:ea103106 has started in 230.9452 ms
+[14:57:25 DBG] Execution loop Worker:cc5e8f1c has started in 232.7601 ms
+[14:57:25 DBG] Execution loop Worker:d35b838b has started in 234.4094 ms
+[14:57:25 DBG] Execution loop Worker:4ba3a836 has started in 236.4309 ms
+[14:57:25 DBG] Execution loop Worker:54ff348c has started in 238.2103 ms
+[14:57:25 DBG] Execution loop DelayedJobScheduler:3b5b3dd4 has started in 0.2746 ms
+[14:57:25 DBG] Execution loop RecurringJobScheduler:9d983321 has started in 7.4963 ms
+[14:57:25 INF] Server desktop-oqc8l2g:14232:0cfa3df7 all the dispatchers started
+[14:57:55 DBG] Server desktop-oqc8l2g:14232:0cfa3df7 heartbeat successfully sent
+[14:58:25 DBG] Server desktop-oqc8l2g:14232:0cfa3df7 heartbeat successfully sent
+[14:58:55 DBG] Server desktop-oqc8l2g:14232:0cfa3df7 heartbeat successfully sent
+[14:59:25 DBG] Server desktop-oqc8l2g:14232:0cfa3df7 heartbeat successfully sent

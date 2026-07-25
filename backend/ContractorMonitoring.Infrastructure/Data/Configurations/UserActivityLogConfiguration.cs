@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -59,6 +59,5 @@ public class UserActivityLogConfiguration : IEntityTypeConfiguration<UserActivit
 
         // No soft delete filter - audit logs should be immutable
         // Logs can only be purged manually by SuperAdmin
-        builder.HasQueryFilter(u => true);
     }
 }

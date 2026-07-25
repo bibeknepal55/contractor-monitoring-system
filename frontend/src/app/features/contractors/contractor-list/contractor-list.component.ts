@@ -142,7 +142,7 @@ export class ContractorListComponent implements OnInit {
   fetch(): void {
     this.loading = true;
     this.service.getContractors({ page: this.page, pageSize: this.pageSize, search: this.searchText || undefined, sortBy: this.sortBy, sortOrder: this.sortDir }).subscribe({
-      next: (r) => { if (r.success) { this.items = r.data; this.totalItems = r.totalCount; } this.loading = false; },
+      next: (r: any) => { if (r.success) { this.items = r.data; this.totalItems = r.totalCount; } this.loading = false; },
       error: () => { this.loading = false; this.notify.error('Failed'); }
     });
   }
@@ -156,7 +156,7 @@ export class ContractorListComponent implements OnInit {
     const ok = await this.notify.confirmDelete(c.companyName);
     if (!ok) return;
     this.service.deleteContractor(c.id).subscribe({
-      next: (r) => { if (r.success) { this.notify.success('Deleted'); this.fetch(); } },
+      next: (r: any) => { if (r.success) { this.notify.success('Deleted'); this.fetch(); } },
       error: () => this.notify.error('Failed')
     });
   }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -63,6 +63,5 @@ public class ContractFinancialDetailConfiguration : IEntityTypeConfiguration<Con
         builder.HasIndex(c => c.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(c => !c.IsDeleted);
     }
 }

@@ -66,6 +66,7 @@ export interface UserProfile {
   phoneNumber?: string;
   roles: string[];
   permissions: string[];
+  mustChangePassword?: boolean;
 }
 
 export interface TokenPayload {

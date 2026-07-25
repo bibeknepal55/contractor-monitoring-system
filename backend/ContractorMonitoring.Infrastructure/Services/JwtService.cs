@@ -20,7 +20,7 @@ public class JwtService : IJwtService
         _permissionResolver = permissionResolver;
     }
 
-    public async Task<string> GenerateAccessToken(User user)
+    public async Task<string> GenerateAccessToken(User user, List<string>? roles = null, List<string>? permissions = null)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var secretKey = jwtSettings["SecretKey"]!;
@@ -31,9 +31,9 @@ public class JwtService : IJwtService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // Use centralized PermissionResolver
-        var roles = await _permissionResolver.GetUserRolesAsync(user.Id);
-        var permissions = await _permissionResolver.GetUserPermissionsAsync(user.Id);
+        // Use pre-fetched roles/permissions if provided, otherwise resolve from DB
+        roles ??= await _permissionResolver.GetUserRolesAsync(user.Id);
+        permissions ??= await _permissionResolver.GetUserPermissionsAsync(user.Id);
 
         var claims = new List<Claim>
         {
@@ -66,7 +66,7 @@ public class JwtService : IJwtService
         return await Task.FromResult(Convert.ToBase64String(randomNumber));
     }
 
-    public async Task<(bool isValid, Guid userId)> ValidateToken(string token)
+    public async Task<(bool isValid, Guid userId)> ValidateToken(string token, bool validateLifetime = true)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var secretKey = jwtSettings["SecretKey"]!;
@@ -83,7 +83,7 @@ public class JwtService : IJwtService
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidateAudience = true,
                 ValidAudience = jwtSettings["Audience"],
-                ValidateLifetime = true,
+                ValidateLifetime = validateLifetime,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 
@@ -94,11 +94,11 @@ public class JwtService : IJwtService
         catch { return await Task.FromResult((false, Guid.Empty)); }
     }
 
-    public async Task<DateTime> GetTokenExpiryTime(string token)
+    public async Task<string> GetTokenExpiryTime(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadJwtToken(token);
-        return await Task.FromResult(jwtToken.ValidTo);
+        return await Task.FromResult(jwtToken.ValidTo.ToString("o"));
     }
 
     // Interface methods delegate to PermissionResolver

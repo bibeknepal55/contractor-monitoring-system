@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -32,7 +32,5 @@ public class PriceAdjustmentConfiguration : IEntityTypeConfiguration<PriceAdjust
         builder.HasIndex(p => p.Status);
         builder.HasIndex(p => p.AdjustmentDate);
         builder.HasIndex(p => p.TenantId);
-
-        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

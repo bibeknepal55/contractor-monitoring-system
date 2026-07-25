@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -33,7 +33,5 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
             .IsUnique();
 
         builder.HasIndex(p => p.Group);
-
-        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

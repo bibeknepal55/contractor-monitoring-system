@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -48,6 +48,5 @@ public class DelayReasonConfiguration : IEntityTypeConfiguration<DelayReason>
         builder.HasIndex(d => d.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(d => !d.IsDeleted);
     }
 }

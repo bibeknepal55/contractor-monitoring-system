@@ -7,13 +7,18 @@ using ContractorMonitoring.Application;
 using ContractorMonitoring.Domain.Constants;
 using ContractorMonitoring.Infrastructure;
 using ContractorMonitoring.Infrastructure.Data;
+using ContractorMonitoring.Infrastructure.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +38,7 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
 });
+builder.Services.AddSignalR();
 
 // Configure API Versioning
 builder.Services.AddApiVersioning(options =>
@@ -53,12 +59,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"]!;
+var secretKey = jwtSettings["SecretKey"]
+    ?? throw new InvalidOperationException(
+        "JwtSettings:SecretKey is not configured. Set via environment variable JWTSETTINGS__SECRETKEY or user-secrets.");
 
-if (!builder.Environment.IsDevelopment() && secretKey.Contains("YourSuperSecret"))
-{
-    throw new InvalidOperationException("JWT SecretKey must be changed from the default value before deploying to production.");
-}
+if (secretKey.Length < 32)
+    throw new InvalidOperationException("JwtSettings:SecretKey must be at least 32 characters.");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -189,6 +195,20 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Phase 6 — OpenTelemetry tracing (OTLP exporter — works with Jaeger, Zipkin, Grafana Tempo)
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =>
+    {
+        tracing
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ContractorMonitoringAPI"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation();
+
+        var otlpEndpoint = builder.Configuration["OpenTelemetry:OtlpEndpoint"];
+        if (!string.IsNullOrWhiteSpace(otlpEndpoint))
+            tracing.AddOtlpExporter(o => o.Endpoint = new Uri(otlpEndpoint));
+    });
+
 // CORS - Explicit allow-list
 builder.Services.AddCors(options =>
 {
@@ -196,7 +216,12 @@ builder.Services.AddCors(options =>
     {
         if (builder.Environment.IsDevelopment())
         {
-            policy.WithOrigins("http://localhost:4200", "http://localhost:5185")
+            policy.WithOrigins(
+                      "http://localhost:4200",
+                      "http://localhost:5185",
+                      "http://localhost:52650",
+                      "http://127.0.0.1:4200",
+                      "http://127.0.0.1:52650")
                   .AllowAnyMethod()
                   .AllowAnyHeader()
                   .AllowCredentials();
@@ -227,7 +252,8 @@ builder.Services.AddHealthChecks()
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Swagger — enabled in Development and Staging, disabled in Production
+if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
@@ -237,15 +263,28 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors("AllowSpecific");
 app.UseMiddleware<GlobalExceptionMiddleware>();
-app.UseMiddleware<TenantMiddleware>();
+app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<ActivityLoggingMiddleware>();
 
-app.UseHttpsRedirection();
-app.UseCors("AllowSpecific");
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseRateLimiter();
 app.UseAuthentication();
+app.UseMiddleware<TenantMiddleware>();
+app.UseMiddleware<IpSecurityMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthorization();
+
+// Phase 6 — Hangfire dashboard (admin-only in production)
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = [new Hangfire.Dashboard.LocalRequestsOnlyAuthorizationFilter()]
+});
+HangfireJobService.RegisterRecurringJobs();
 
 // Health Check Endpoints
 app.MapHealthChecks("/health/live", new HealthCheckOptions
@@ -259,19 +298,24 @@ app.MapHealthChecks("/health/ready", new HealthCheckOptions
 });
 
 app.MapControllers();
+app.MapHub<ContractorMonitoring.Infrastructure.Services.PermissionHub>($"/hubs/{nameof(ContractorMonitoring.Infrastructure.Services.PermissionHub).ToLowerInvariant()}");
+app.MapHub<ContractorMonitoring.Infrastructure.Services.NotificationHub>($"/hubs/{nameof(ContractorMonitoring.Infrastructure.Services.NotificationHub).ToLowerInvariant()}");
 
-// Seed database on startup
+// Ensure the database schema is up to date before seeding and serving requests
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await SeedDataService.SeedAsync(context);
-        Log.Information("Database seeded successfully");
+        await context.Database.MigrateAsync();
+
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        await SeedDataService.SeedAsync(context, config);
+        Log.Information("Database migrated and seeded successfully");
     }
     catch (Exception ex)
     {
-        Log.Error(ex, "An error occurred while seeding the database");
+        Log.Error(ex, "An error occurred while migrating or seeding the database");
     }
 }
 
@@ -288,3 +332,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// Required for WebApplicationFactory<Program> in integration tests
+public partial class Program { }

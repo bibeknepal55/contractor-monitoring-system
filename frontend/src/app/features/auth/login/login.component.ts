@@ -161,7 +161,11 @@ export class LoginComponent {
           if (response.success && response.data) {
             this.authService.setSession(response.data);
             this.notificationService.success('Welcome back!');
-            this.router.navigate(['/dashboard']);
+            if (response.data.user?.mustChangePassword) {
+              this.router.navigate(['/change-password']);
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
           } else {
             this.loginError = response.message || 'Login failed. Please try again.';
           }

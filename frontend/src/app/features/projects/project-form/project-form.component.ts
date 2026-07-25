@@ -113,7 +113,7 @@ export class ProjectFormComponent implements OnInit {
 
   loadContractors(): void {
     this.contractorService.getContractors({ page: 1, pageSize: 100 }).subscribe({
-      next: (r) => { if (r.success) { this.contractors = r.data; console.log('Contractors loaded:', this.contractors); } }
+      next: (r) => { if (r.success) this.contractors = r.data; }
     });
   }
 
@@ -158,9 +158,6 @@ export class ProjectFormComponent implements OnInit {
       contractorId: v.contractorId,
     };
     if (v.endDate) { body.endDate = moment(v.endDate).toISOString(); }
-
-    console.log('SAVING PROJECT - Full body:', JSON.stringify(body, null, 2));
-    console.log('Contractor ID being sent:', body.contractorId);
 
     const req$ = this.isEdit ? this.service.updateProject(this.projectId!, body) : this.service.createProject(body);
     req$.subscribe({

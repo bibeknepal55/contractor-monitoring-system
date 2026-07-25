@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -65,6 +65,5 @@ public class SubcontractorConfiguration : IEntityTypeConfiguration<Subcontractor
         builder.HasIndex(s => s.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(s => !s.IsDeleted);
     }
 }

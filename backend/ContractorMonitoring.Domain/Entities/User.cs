@@ -15,6 +15,7 @@ public class User : AuditableEntity
     public DateTime? LastLoginAt { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
+    public string? RefreshTokenFamily { get; set; }  // Token family for reuse-detection
 
     // Navigation properties
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
@@ -41,6 +42,8 @@ public class User : AuditableEntity
     public DateTime? LockoutEnd { get; set; }
     public string? LastKnownIp { get; set; }
     public string? LastKnownDevice { get; set; }
+    public bool MustChangePassword { get; set; }
+    public bool IsApproved { get; set; } = true;
     public List<UserSession> Sessions { get; set; } = new();
     public List<UserActivity> Activities { get; set; } = new();
 }

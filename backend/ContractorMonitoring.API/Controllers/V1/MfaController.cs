@@ -1,117 +1,102 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ContractorMonitoring.Application.Common.Models;
-using ContractorMonitoring.Application.DTOs.Mfa;
 using ContractorMonitoring.Application.Interfaces;
 using ContractorMonitoring.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractorMonitoring.API.Controllers.V1;
 
 [ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/profile/two-factor")]
+[Route("api/v{version:apiVersion}/mfa")]
 [ApiController]
 [Authorize]
 public class MfaController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IPasswordService _passwordService;
+    private readonly IMfaService _mfa;
+    private readonly ApplicationDbContext _db;
 
-    public MfaController(ApplicationDbContext context, IPasswordService passwordService)
+    public MfaController(IMfaService mfa, ApplicationDbContext db)
     {
-        _context = context;
-        _passwordService = passwordService;
+        _mfa = mfa; _db = db;
     }
 
-    private Guid CurrentUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty);
+    private Guid UserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.Empty.ToString());
 
-    // POST /api/v1/profile/two-factor/setup - Generate TOTP setup
-    [HttpPost("setup")]
-    public async Task<ActionResult<ApiResponse<MfaSetupResponseDto>>> Setup([FromBody] MfaSetupDto request)
+    // GET /api/v1/mfa/setup — generate secret + QR code
+    [HttpGet("setup")]
+    public async Task<ActionResult<ApiResponse<object>>> Setup()
     {
-        var user = await _context.Users.FindAsync(CurrentUserId);
-        if (user == null) return ApiResponse<MfaSetupResponseDto>.Fail("User not found");
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+        if (user == null) return NotFound(ApiResponse<object>.Fail("User not found"));
+        if (user.TwoFactorEnabled)
+            return BadRequest(ApiResponse<object>.Fail("MFA is already enabled"));
 
-        if (!_passwordService.VerifyPassword(request.Password, user.PasswordHash))
-            return ApiResponse<MfaSetupResponseDto>.Fail("Invalid password");
+        var secret = _mfa.GenerateSecret();
+        var qrCode = _mfa.GenerateQrCodeBase64(user.Email, secret);
 
-        // Generate TOTP secret
-        var secretKey = GenerateRandomBase32();
-        var qrCodeUri = $"otpauth://totp/ContractorMonitoring:{user.Email}?secret={secretKey}&issuer=ContractorMonitoring";
-
-        // Generate backup codes
-        var backupCodes = Enumerable.Range(0, 8).Select(_ => Guid.NewGuid().ToString("N")[..8]).ToList();
-
-        user.TwoFactorSecret = secretKey;
+        // Store secret temporarily (not yet confirmed)
+        user.TwoFactorSecret = secret;
         user.UpdatedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
+        await _db.SaveChangesAsync();
 
-        return ApiResponse<MfaSetupResponseDto>.Ok(new MfaSetupResponseDto
-        {
-            SecretKey = secretKey,
-            QrCodeUri = qrCodeUri,
-            BackupCodes = backupCodes
-        }, "TOTP setup initialized");
+        return Ok(ApiResponse<object>.Ok(new { secret, qrCode }, "Scan QR code with Google Authenticator"));
     }
 
-    // POST /api/v1/profile/two-factor/verify - Verify and enable MFA
+    // POST /api/v1/mfa/verify — confirm TOTP code to enable MFA
     [HttpPost("verify")]
-    public async Task<ActionResult<ApiResponse<bool>>> Verify([FromBody] MfaVerifyDto request)
+    public async Task<ActionResult<ApiResponse<object>>> Verify([FromBody] MfaVerifyRequest req)
     {
-        var user = await _context.Users.FindAsync(CurrentUserId);
-        if (user == null) return ApiResponse<bool>.Fail("User not found");
-        if (string.IsNullOrEmpty(user.TwoFactorSecret)) return ApiResponse<bool>.Fail("MFA not set up");
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+        if (user == null) return NotFound(ApiResponse<object>.Fail("User not found"));
+        if (string.IsNullOrEmpty(user.TwoFactorSecret))
+            return BadRequest(ApiResponse<object>.Fail("MFA setup not initiated"));
 
-        // Verify TOTP code
-        if (!VerifyTotp(user.TwoFactorSecret, request.Code))
-            return ApiResponse<bool>.Fail("Invalid verification code");
+        if (!_mfa.ValidateTotp(user.TwoFactorSecret, req.Code))
+            return BadRequest(ApiResponse<object>.Fail("Invalid TOTP code"));
 
         user.TwoFactorEnabled = true;
         user.UpdatedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
+        await _db.SaveChangesAsync();
 
-        return ApiResponse<bool>.Ok(true, "Two-factor authentication enabled");
+        var backupCodes = _mfa.GenerateBackupCodes();
+        return Ok(ApiResponse<object>.Ok(new { backupCodes }, "MFA enabled successfully. Save your backup codes."));
     }
 
-    // POST /api/v1/profile/two-factor/disable - Disable MFA
-    [HttpPost("disable")]
-    public async Task<ActionResult<ApiResponse<bool>>> Disable([FromBody] MfaDisableDto request)
+    // POST /api/v1/mfa/validate — validate TOTP during login
+    [HttpPost("validate")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ApiResponse<bool>>> Validate([FromBody] MfaValidateRequest req)
     {
-        var user = await _context.Users.FindAsync(CurrentUserId);
-        if (user == null) return ApiResponse<bool>.Fail("User not found");
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == req.Email.ToLower());
+        if (user == null || !user.TwoFactorEnabled || string.IsNullOrEmpty(user.TwoFactorSecret))
+            return BadRequest(ApiResponse<bool>.Fail("MFA not configured for this user"));
 
-        if (!_passwordService.VerifyPassword(request.Password, user.PasswordHash))
-            return ApiResponse<bool>.Fail("Invalid password");
+        var valid = _mfa.ValidateTotp(user.TwoFactorSecret, req.Code);
+        return Ok(ApiResponse<bool>.Ok(valid, valid ? "MFA validated" : "Invalid code"));
+    }
 
-        if (!string.IsNullOrEmpty(user.TwoFactorSecret) && !VerifyTotp(user.TwoFactorSecret, request.Code))
-            return ApiResponse<bool>.Fail("Invalid verification code");
+    // DELETE /api/v1/mfa/disable
+    [HttpDelete("disable")]
+    public async Task<ActionResult<ApiResponse<bool>>> Disable([FromBody] MfaVerifyRequest req)
+    {
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+        if (user == null) return NotFound(ApiResponse<bool>.Fail("User not found"));
+        if (!user.TwoFactorEnabled) return BadRequest(ApiResponse<bool>.Fail("MFA is not enabled"));
+
+        if (!_mfa.ValidateTotp(user.TwoFactorSecret!, req.Code))
+            return BadRequest(ApiResponse<bool>.Fail("Invalid TOTP code"));
 
         user.TwoFactorEnabled = false;
         user.TwoFactorSecret = null;
         user.UpdatedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
+        await _db.SaveChangesAsync();
 
-        return ApiResponse<bool>.Ok(true, "Two-factor authentication disabled");
-    }
-
-    // Helper: Generate random Base32 secret for TOTP
-    private static string GenerateRandomBase32()
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        var random = new Random();
-        return new string(Enumerable.Range(0, 32).Select(_ => chars[random.Next(chars.Length)]).ToArray());
-    }
-
-    // Helper: Verify TOTP code (simplified - use Otp.NET in production)
-    private static bool VerifyTotp(string secret, string code)
-    {
-        // For production, use Otp.NET library: https://www.nuget.org/packages/Otp.NET
-        // var totp = new Totp(Base32Encoding.ToBytes(secret));
-        // return totp.VerifyTotp(code, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
-
-        // Simplified demo version - accepts any 6-digit code for testing
-        return code.Length == 6 && code.All(char.IsDigit);
+        return Ok(ApiResponse<bool>.Ok(true, "MFA disabled"));
     }
 }
+
+public record MfaVerifyRequest(string Code);
+public record MfaValidateRequest(string Email, string Code);

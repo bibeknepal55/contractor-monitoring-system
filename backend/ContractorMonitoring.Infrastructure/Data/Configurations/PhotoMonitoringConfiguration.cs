@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -53,6 +53,5 @@ public class PhotoMonitoringConfiguration : IEntityTypeConfiguration<PhotoMonito
         builder.HasIndex(p => p.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

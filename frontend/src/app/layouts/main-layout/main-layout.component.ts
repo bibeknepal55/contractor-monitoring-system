@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
@@ -103,7 +103,7 @@ interface NavItem {
     @media (max-width: 768px) { .app-logo-text { display: none; } .user-name, .user-role, .user-info { display: none; } .user-button { padding: 4px 10px 4px 4px; } .dropdown-arrow { margin-left: 0; } }
   `]
 })
-export class MainLayoutComponent implements OnInit {
+export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   readonly langSrv = inject(LanguageService);
   private readonly notificationService = inject(NotificationService);
@@ -122,6 +122,7 @@ export class MainLayoutComponent implements OnInit {
   profilePictureUrl: string = '';
   isViewerOnly = false;
   showTraining = false;
+  private picIntervalId: ReturnType<typeof setInterval> | null = null;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait]).pipe(map((result) => result.matches), shareReplay(1));
   expandedGroups: Set<string> = new Set(['Business Modules']);
@@ -183,7 +184,7 @@ export class MainLayoutComponent implements OnInit {
     this.isViewerOnly = roles.length === 1 && roles[0] === 'Viewer';
     this.refreshProfilePicture();
     this.zone.runOutsideAngular(() => {
-      setInterval(() => {
+      this.picIntervalId = setInterval(() => {
         const savedPic = localStorage.getItem(this.userPictureKey);
         if (savedPic && savedPic !== 'undefined' && savedPic !== 'null' && savedPic.length > 100) {
           if (savedPic !== this.profilePictureUrl) {
@@ -199,6 +200,13 @@ export class MainLayoutComponent implements OnInit {
     this.isHandset$.subscribe(isHandset => { if (this.sidenav) { this.sidenav.mode = isHandset ? 'over' : 'side'; isHandset ? this.sidenav.close() : this.sidenav.open(); } });
     this.loadPendingCount();
     setTimeout(() => this.checkTrainingPopup(), 1500);
+  }
+
+  ngOnDestroy(): void {
+    if (this.picIntervalId !== null) {
+      clearInterval(this.picIntervalId);
+      this.picIntervalId = null;
+    }
   }
 
   async checkTrainingPopup(): Promise<void> {

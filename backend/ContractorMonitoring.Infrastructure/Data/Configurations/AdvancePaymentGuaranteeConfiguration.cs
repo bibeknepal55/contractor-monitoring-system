@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -54,6 +54,5 @@ public class AdvancePaymentGuaranteeConfiguration : IEntityTypeConfiguration<Adv
         builder.HasIndex(a => a.TenantId);
 
         // Soft delete filter
-        builder.HasQueryFilter(a => !a.IsDeleted);
     }
 }

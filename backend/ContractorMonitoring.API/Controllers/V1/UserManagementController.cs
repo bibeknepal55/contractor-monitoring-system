@@ -29,13 +29,16 @@ public class UserManagementController : ControllerBase
     [Authorize(Policy = Permissions.UserManagement.View)]
     public async Task<ActionResult<PagedResponse<UserManagementDto>>> GetAll(
         [FromQuery] int page = 1, [FromQuery] int pageSize = 10,
-        [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortOrder = "asc")
+        [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortOrder = "asc",
+        [FromQuery] string? isActive = null, [FromQuery] string? role = null)
     {
         var tenantId = Guid.Parse(User.FindFirst("TenantId")?.Value ?? Guid.Empty.ToString());
         return Ok(await _mediator.Send(new GetAllUsersQuery
         {
             Filter = new PaginationFilter { Page = page, PageSize = pageSize, Search = search, SortBy = sortBy, SortOrder = sortOrder },
-            TenantId = tenantId
+            TenantId = tenantId,
+            IsActiveFilter = isActive,
+            RoleFilter = role
         }));
     }
 

@@ -9,16 +9,13 @@ public class GlobalExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
-    private readonly IHostEnvironment _environment;
 
     public GlobalExceptionMiddleware(
         RequestDelegate next,
-        ILogger<GlobalExceptionMiddleware> logger,
-        IHostEnvironment environment)
+        ILogger<GlobalExceptionMiddleware> logger)
     {
         _next = next;
         _logger = logger;
-        _environment = environment;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -35,15 +32,19 @@ public class GlobalExceptionMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "An unhandled exception occurred");
+        var correlationId = context.TraceIdentifier;
+        _logger.LogError(exception, "Unhandled exception. CorrelationId: {CorrelationId}", correlationId);
+
+        if (context.Response.HasStarted)
+        {
+            _logger.LogWarning("Response already started, cannot write error response. CorrelationId: {CorrelationId}", correlationId);
+            return;
+        }
 
         context.Response.ContentType = "application/json";
+        context.Response.Headers.Append("X-Correlation-Id", correlationId);
 
-        var response = new ApiResponse<object>
-        {
-            Success = false,
-            Message = _environment.IsDevelopment() ? exception.Message : "An error occurred processing your request"
-        };
+        var response = new ApiResponse<object> { Success = false };
 
         switch (exception)
         {
@@ -70,20 +71,12 @@ public class GlobalExceptionMiddleware
 
             default:
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                // Never expose internal details to clients — use correlation ID for tracing
+                response.Message = $"An error occurred. Reference ID: {correlationId}";
                 break;
         }
 
-        if (_environment.IsDevelopment())
-        {
-            response.Errors.Add(exception.StackTrace ?? string.Empty);
-        }
-
-        var jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-
-        var jsonResponse = JsonSerializer.Serialize(response, jsonOptions);
-        await context.Response.WriteAsync(jsonResponse);
+        var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response, jsonOptions));
     }
 }

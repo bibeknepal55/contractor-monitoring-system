@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ContractorMonitoring.Application.Interfaces;
+using ContractorMonitoring.Infrastructure.Data;
 
 namespace ContractorMonitoring.Infrastructure.Services;
 
-// Background service for monitoring expiring bonds, guarantees, and sending notifications
 public class BackgroundJobService : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<BackgroundJobService> _logger;
-    private readonly TimeSpan _checkInterval = TimeSpan.FromHours(6); // Run every 6 hours
+    private readonly TimeSpan _checkInterval = TimeSpan.FromHours(6);
 
     public BackgroundJobService(IServiceScopeFactory scopeFactory, ILogger<BackgroundJobService> logger)
     {
@@ -26,15 +26,14 @@ public class BackgroundJobService : BackgroundService
         {
             try
             {
-                using (var scope = _scopeFactory.CreateScope())
-                {
-                    var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                using var scope = _scopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
 
-                    await CheckExpiringPerformanceBonds(unitOfWork);
-                    await CheckExpiringAdvancePaymentGuarantees(unitOfWork);
-                    await CheckLicenseExpiry(unitOfWork);
-                    await CheckDelayedProjects(unitOfWork);
-                }
+                await CheckExpiringPerformanceBonds(db, emailService, stoppingToken);
+                await CheckExpiringAdvancePaymentGuarantees(db, emailService, stoppingToken);
+                await CheckLicenseExpiry(db, emailService, stoppingToken);
+                await CheckDelayedProjects(db, emailService, stoppingToken);
             }
             catch (Exception ex)
             {
@@ -45,70 +44,90 @@ public class BackgroundJobService : BackgroundService
         }
     }
 
-    private async Task CheckExpiringPerformanceBonds(IUnitOfWork unitOfWork)
+    private async Task CheckExpiringPerformanceBonds(
+        ApplicationDbContext db, IEmailService emailService, CancellationToken ct)
     {
-        var bonds = await unitOfWork.PerformanceBonds.GetAllAsync();
-        var expiringBonds = bonds.Where(b =>
-            b.Status == "Active" &&
-            b.ExpiryDate <= DateTime.UtcNow.AddDays(30) &&
-            b.ExpiryDate > DateTime.UtcNow);
+        var threshold = DateTime.UtcNow.AddDays(30);
+        var expiring = await db.PerformanceBonds
+            .Where(b => b.Status == "Active" && b.ExpiryDate <= threshold && b.ExpiryDate > DateTime.UtcNow)
+            .Select(b => new { b.BondNumber, b.ExpiryDate, b.ProjectId })
+            .ToListAsync(ct);
 
-        foreach (var bond in expiringBonds)
+        foreach (var bond in expiring)
         {
-            var daysUntilExpiry = (bond.ExpiryDate - DateTime.UtcNow).Days;
+            var days = (bond.ExpiryDate - DateTime.UtcNow).Days;
             _logger.LogWarning("Performance Bond {BondNumber} expires in {Days} days on {ExpiryDate}",
-                bond.BondNumber, daysUntilExpiry, bond.ExpiryDate.ToShortDateString());
+                bond.BondNumber, days, bond.ExpiryDate.ToShortDateString());
 
-            // TODO: Send email notification
+            await emailService.SendAsync(
+                subject: $"Performance Bond Expiring: {bond.BondNumber}",
+                body: $"Performance Bond <strong>{bond.BondNumber}</strong> will expire in <strong>{days} days</strong> on {bond.ExpiryDate:dd MMM yyyy}. Please arrange renewal.",
+                eventType: "BondExpiry");
         }
     }
 
-    private async Task CheckExpiringAdvancePaymentGuarantees(IUnitOfWork unitOfWork)
+    private async Task CheckExpiringAdvancePaymentGuarantees(
+        ApplicationDbContext db, IEmailService emailService, CancellationToken ct)
     {
-        var guarantees = await unitOfWork.AdvancePaymentGuarantees.GetAllAsync();
-        var expiringGuarantees = guarantees.Where(g =>
-            g.Status == "Active" &&
-            g.ExpiryDate <= DateTime.UtcNow.AddDays(30) &&
-            g.ExpiryDate > DateTime.UtcNow);
+        var threshold = DateTime.UtcNow.AddDays(30);
+        var expiring = await db.AdvancePaymentGuarantees
+            .Where(g => g.Status == "Active" && g.ExpiryDate <= threshold && g.ExpiryDate > DateTime.UtcNow)
+            .Select(g => new { g.GuaranteeNumber, g.ExpiryDate })
+            .ToListAsync(ct);
 
-        foreach (var guarantee in expiringGuarantees)
+        foreach (var apg in expiring)
         {
-            var daysUntilExpiry = (guarantee.ExpiryDate - DateTime.UtcNow).Days;
+            var days = (apg.ExpiryDate - DateTime.UtcNow).Days;
             _logger.LogWarning("APG {GuaranteeNumber} expires in {Days} days on {ExpiryDate}",
-                guarantee.GuaranteeNumber, daysUntilExpiry, guarantee.ExpiryDate.ToShortDateString());
+                apg.GuaranteeNumber, days, apg.ExpiryDate.ToShortDateString());
 
-            // TODO: Send email notification
+            await emailService.SendAsync(
+                subject: $"Advance Payment Guarantee Expiring: {apg.GuaranteeNumber}",
+                body: $"APG <strong>{apg.GuaranteeNumber}</strong> will expire in <strong>{days} days</strong> on {apg.ExpiryDate:dd MMM yyyy}.",
+                eventType: "GuaranteeExpiry");
         }
     }
 
-    private async Task CheckLicenseExpiry(IUnitOfWork unitOfWork)
+    private async Task CheckLicenseExpiry(
+        ApplicationDbContext db, IEmailService emailService, CancellationToken ct)
     {
-        var contractors = await unitOfWork.ContractorOfficeDetails.GetAllAsync();
-        var expiredLicenses = contractors.Where(c =>
-            c.LicenseExpiryDate.HasValue &&
-            c.LicenseExpiryDate.Value <= DateTime.UtcNow.AddDays(30) &&
-            c.Status == "Active");
+        var threshold = DateTime.UtcNow.AddDays(30);
+        var expiring = await db.ContractorOfficeDetails
+            .Where(c => c.Status == "Active" &&
+                        c.LicenseExpiryDate.HasValue &&
+                        c.LicenseExpiryDate.Value <= threshold)
+            .Select(c => new { c.CompanyName, c.LicenseExpiryDate })
+            .ToListAsync(ct);
 
-        foreach (var contractor in expiredLicenses)
+        foreach (var contractor in expiring)
         {
             _logger.LogWarning("Contractor {CompanyName} license expires on {ExpiryDate}",
                 contractor.CompanyName, contractor.LicenseExpiryDate?.ToShortDateString());
+
+            await emailService.SendAsync(
+                subject: $"Contractor License Expiring: {contractor.CompanyName}",
+                body: $"Contractor <strong>{contractor.CompanyName}</strong> license expires on {contractor.LicenseExpiryDate:dd MMM yyyy}. Please ensure renewal.",
+                eventType: "LicenseExpiry");
         }
     }
 
-    private async Task CheckDelayedProjects(IUnitOfWork unitOfWork)
+    private async Task CheckDelayedProjects(
+        ApplicationDbContext db, IEmailService emailService, CancellationToken ct)
     {
-        var projects = await unitOfWork.Projects.GetAllAsync();
-        var delayedProjects = projects.Where(p =>
-            p.Status == "InProgress" &&
-            p.EndDate.HasValue &&
-            p.EndDate.Value < DateTime.UtcNow);
+        var delayed = await db.Projects
+            .Where(p => p.Status == "InProgress" && p.EndDate.HasValue && p.EndDate.Value < DateTime.UtcNow)
+            .Select(p => new { p.ProjectName, p.EndDate })
+            .ToListAsync(ct);
 
-        foreach (var project in delayedProjects)
+        foreach (var project in delayed)
         {
             var delayDays = (DateTime.UtcNow - project.EndDate!.Value).Days;
-            _logger.LogWarning("Project {ProjectName} is delayed by {Days} days",
-                project.ProjectName, delayDays);
+            _logger.LogWarning("Project {ProjectName} is delayed by {Days} days", project.ProjectName, delayDays);
+
+            await emailService.SendAsync(
+                subject: $"Project Delayed: {project.ProjectName}",
+                body: $"Project <strong>{project.ProjectName}</strong> is delayed by <strong>{delayDays} days</strong> past its end date.",
+                eventType: "ProjectDelay");
         }
     }
 }

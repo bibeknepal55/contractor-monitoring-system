@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -26,7 +26,5 @@ public class ApprovalWorkflowConfiguration : IEntityTypeConfiguration<ApprovalWo
         builder.HasIndex(a => a.RecordId);
         builder.HasIndex(a => a.Status);
         builder.HasIndex(a => a.TenantId);
-
-        builder.HasQueryFilter(a => !a.IsDeleted);
     }
 }

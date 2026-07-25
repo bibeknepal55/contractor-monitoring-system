@@ -32,26 +32,21 @@ public class ActivityLoggingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        // FIXED: Skip OPTIONS (CORS preflight) requests - they are browser-generated, not user actions
         if (context.Request.Method == "OPTIONS")
         {
             await _next(context);
             return;
         }
 
-        // Skip logging for excluded paths
         if (ExcludedPaths.Any(p => context.Request.Path.StartsWithSegments(p)))
         {
             await _next(context);
             return;
         }
 
-        // Capture request body for CRUD operations only (NOT for auth endpoints)
         string? requestBody = null;
         var isAuthEndpoint = context.Request.Path.StartsWithSegments("/api/v1/auth");
-        var isCrudOperation = context.Request.Method == "POST" ||
-                             context.Request.Method == "PUT" ||
-                             context.Request.Method == "PATCH";
+        var isCrudOperation = context.Request.Method is "POST" or "PUT" or "PATCH";
 
         if (isCrudOperation && !isAuthEndpoint)
         {
@@ -63,27 +58,45 @@ public class ActivityLoggingMiddleware
             context.Request.Body.Position = 0;
         }
 
-        // For login attempts, capture a sanitized description
         if (isAuthEndpoint && context.Request.Path.Value?.Contains("/login") == true && isCrudOperation)
         {
             context.Request.EnableBuffering();
             using var reader = new StreamReader(context.Request.Body, Encoding.UTF8, leaveOpen: true);
-            var body = await reader.ReadToEndAsync();
+            await reader.ReadToEndAsync();
             context.Request.Body.Position = 0;
             requestBody = "Login attempt";
         }
 
-        // Capture response
+        // Capture response body
         var originalBodyStream = context.Response.Body;
-        using var responseBody = new MemoryStream();
-        context.Response.Body = responseBody;
+        using var responseBodyBuffer = new MemoryStream();
+        context.Response.Body = responseBodyBuffer;
 
-        // Execute the request
         await _next(context);
 
         var statusCode = context.Response.StatusCode;
 
-        // Log to database asynchronously (non-blocking)
+        // Copy response back BEFORE firing background work
+        responseBodyBuffer.Seek(0, SeekOrigin.Begin);
+        await responseBodyBuffer.CopyToAsync(originalBodyStream);
+        context.Response.Body = originalBodyStream;
+
+        // Capture all values needed for logging before async work
+        var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userEmail = context.User.FindFirst(ClaimTypes.Email)?.Value ?? "anonymous";
+        var userFirstName = context.User.FindFirst(ClaimTypes.GivenName)?.Value ?? "";
+        var userLastName = context.User.FindFirst(ClaimTypes.Surname)?.Value ?? "";
+        var userRole = context.User.FindFirst(ClaimTypes.Role)?.Value
+                       ?? context.User.FindFirst("Role")?.Value ?? "Anonymous";
+        var tenantId = context.User.FindFirst("TenantId")?.Value;
+        var ipAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var userAgent = context.Request.Headers.UserAgent.ToString();
+        var requestMethod = context.Request.Method;
+        var requestUrl = context.Request.GetDisplayUrl();
+        var requestPath = context.Request.Path;
+        var sessionId = context.Request.Headers["X-Session-Id"].FirstOrDefault();
+
+        // Safe fire-and-forget using captured values (no HttpContext access after this point)
         _ = Task.Run(async () =>
         {
             try
@@ -91,26 +104,11 @@ public class ActivityLoggingMiddleware
                 using var scope = _scopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                // Extract user information from JWT claims
-                var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var userEmail = context.User.FindFirst(ClaimTypes.Email)?.Value ?? "anonymous";
-                var userFirstName = context.User.FindFirst(ClaimTypes.GivenName)?.Value ?? "";
-                var userLastName = context.User.FindFirst(ClaimTypes.Surname)?.Value ?? "";
-                var userRole = context.User.FindFirst(ClaimTypes.Role)?.Value ??
-                               context.User.FindFirst("Role")?.Value ?? "Anonymous";
-                var tenantId = context.User.FindFirst("TenantId")?.Value;
-
-                // Determine activity type, module, and action
-                var activityType = DetermineActivityType(context.Request.Method, context.Request.Path, statusCode);
-                var moduleName = DetermineModuleName(context.Request.Path);
-                var action = DetermineAction(context.Request.Method, context.Request.Path, moduleName);
-
-                // Get client information
-                var ipAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-                var userAgent = context.Request.Headers.UserAgent.ToString();
+                var activityType = DetermineActivityType(requestMethod, requestPath, statusCode);
+                var moduleName = DetermineModuleName(requestPath);
+                var action = DetermineAction(requestMethod, requestPath, moduleName);
                 var deviceInfo = ParseDeviceInfo(userAgent);
 
-                // Create log entry
                 var log = new UserActivityLog
                 {
                     Id = Guid.NewGuid(),
@@ -126,11 +124,11 @@ public class ActivityLoggingMiddleware
                     Location = null,
                     DeviceInfo = deviceInfo,
                     UserAgent = userAgent,
-                    RequestMethod = context.Request.Method,
-                    RequestUrl = context.Request.GetDisplayUrl(),
+                    RequestMethod = requestMethod,
+                    RequestUrl = requestUrl,
                     RequestBody = requestBody,
                     ResponseStatus = statusCode,
-                    SessionId = context.Request.Headers["X-Session-Id"].FirstOrDefault(),
+                    SessionId = sessionId,
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = userId ?? "system",
                     TenantId = tenantId != null ? Guid.Parse(tenantId) : Guid.Empty
@@ -144,10 +142,6 @@ public class ActivityLoggingMiddleware
                 _logger.LogError(ex, "Failed to log user activity");
             }
         });
-
-        // Restore original response body
-        responseBody.Seek(0, SeekOrigin.Begin);
-        await responseBody.CopyToAsync(originalBodyStream);
     }
 
     // Activity type detection

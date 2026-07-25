@@ -39,11 +39,15 @@ public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, ApiRe
 
         await _unitOfWork.Roles.UpdateAsync(role);
 
-        // Remove existing permissions
+        // Remove existing permissions (soft delete)
         var existingPermissions = await _unitOfWork.RolePermissions.GetAllAsync();
-        var toRemove = existingPermissions.Where(rp => rp.RoleId == request.RoleId).ToList();
+        var toRemove = existingPermissions.Where(rp => rp.RoleId == request.RoleId && !rp.IsDeleted).ToList();
         foreach (var rp in toRemove)
-            await _unitOfWork.RolePermissions.DeleteAsync(rp);
+        {
+            rp.IsDeleted = true;
+            rp.UpdatedAt = DateTime.UtcNow;
+            await _unitOfWork.RolePermissions.UpdateAsync(rp);
+        }
 
         // Add new permissions
         foreach (var permId in request.PermissionIds)

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ContractorMonitoring.Domain.Entities;
 
@@ -69,6 +69,5 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasIndex(p => new { p.ProjectCode, p.TenantId }).IsUnique();
 
         // Soft delete filter
-        builder.HasQueryFilter(p => !p.IsDeleted);
     }
 }

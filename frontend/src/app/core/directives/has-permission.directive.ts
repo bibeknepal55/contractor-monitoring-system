@@ -32,7 +32,7 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
 
   private updateView(): void {
     if (this.auth.hasPermission(this.requiredPermission)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
+      if (!this.viewContainer.length) this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }
@@ -48,15 +48,17 @@ export class HasRoleDirective implements OnInit, OnDestroy {
   private templateRef = inject(TemplateRef<any>);
   private viewContainer = inject(ViewContainerRef);
   private userSub!: Subscription;
+  private currentRole = '';
 
   @Input('appHasRole')
   set role(role: string) {
-    this.updateView(role);
+    this.currentRole = role;
+    this.updateView();
   }
 
   ngOnInit(): void {
     this.userSub = this.auth.currentUser$.subscribe(() => {
-      // Re-evaluate with the last set role
+      this.updateView();
     });
   }
 
@@ -64,9 +66,9 @@ export class HasRoleDirective implements OnInit, OnDestroy {
     if (this.userSub) this.userSub.unsubscribe();
   }
 
-  private updateView(role: string): void {
-    if (this.auth.hasRole(role)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
+  private updateView(): void {
+    if (this.auth.hasRole(this.currentRole)) {
+      if (!this.viewContainer.length) this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }
@@ -98,7 +100,7 @@ export class HasAnyRoleDirective implements OnInit, OnDestroy {
 
   private updateView(roles: string[]): void {
     if (this.auth.hasAnyRole(roles)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
+      if (!this.viewContainer.length) this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }

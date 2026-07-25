@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ContractorMonitoring.Domain.Constants;
 using ContractorMonitoring.Domain.Entities;
 
@@ -7,8 +8,10 @@ namespace ContractorMonitoring.Infrastructure.Data;
 // Database seed service for initial roles, permissions, and admin user
 public static class SeedDataService
 {
-    public static async Task SeedAsync(ApplicationDbContext context)
+    public static async Task SeedAsync(ApplicationDbContext context, IConfiguration configuration)
     {
+        await EnsureRequiredDatabaseColumnsAsync(context);
+
         // Seed Permissions
         await SeedPermissionsAsync(context);
 
@@ -19,7 +22,35 @@ public static class SeedDataService
         await SeedRolePermissionsAsync(context);
 
         // Seed SuperAdmin user
-        await SeedSuperAdminAsync(context);
+        await SeedSuperAdminAsync(context, configuration);
+    }
+
+    private static async Task EnsureRequiredDatabaseColumnsAsync(ApplicationDbContext context)
+    {
+        await context.Database.ExecuteSqlRawAsync(@"
+            ALTER TABLE ""Roles""
+            ADD COLUMN IF NOT EXISTS ""CreatedByUser"" character varying(200),
+            ADD COLUMN IF NOT EXISTS ""IsSystem"" boolean NOT NULL DEFAULT false;");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            ALTER TABLE ""Users""
+            ADD COLUMN IF NOT EXISTS ""IsApproved"" boolean NOT NULL DEFAULT true,
+            ADD COLUMN IF NOT EXISTS ""RefreshTokenFamily"" character varying(500);");
+
+        // Register any out-of-band migrations so EF Core doesn't attempt to re-apply them
+        await context.Database.ExecuteSqlRawAsync(@"
+            INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
+            SELECT '20260726000001_AddMissingIndexes', '8.0.0'
+            WHERE NOT EXISTS (
+                SELECT 1 FROM ""__EFMigrationsHistory"" WHERE ""MigrationId"" = '20260726000001_AddMissingIndexes'
+            );");
+
+        await context.Database.ExecuteSqlRawAsync(@"
+            INSERT INTO ""__EFMigrationsHistory"" (""MigrationId"", ""ProductVersion"")
+            SELECT '20260726000002_AddRefreshTokenFamily', '8.0.0'
+            WHERE NOT EXISTS (
+                SELECT 1 FROM ""__EFMigrationsHistory"" WHERE ""MigrationId"" = '20260726000002_AddRefreshTokenFamily'
+            );");
     }
 
     private static async Task SeedPermissionsAsync(ApplicationDbContext context)
@@ -56,7 +87,24 @@ public static class SeedDataService
     private static async Task SeedRolesAsync(ApplicationDbContext context)
     {
         if (await context.Roles.AnyAsync())
+        {
+            var existingRoles = await context.Roles.ToListAsync();
+            if (!existingRoles.Any(r => r.Name == "SuperAdmin"))
+            {
+                await context.Roles.AddAsync(new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "SuperAdmin",
+                    Description = "Super Administrator with full system access",
+                    IsSystem = true,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "System",
+                    TenantId = Guid.Empty
+                });
+                await context.SaveChangesAsync();
+            }
             return;
+        }
 
         var roles = new List<Role>
         {
@@ -65,6 +113,7 @@ public static class SeedDataService
                 Id = Guid.NewGuid(),
                 Name = "SuperAdmin",
                 Description = "Super Administrator with full system access",
+                IsSystem = true,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "System",
                 TenantId = Guid.Empty
@@ -74,6 +123,7 @@ public static class SeedDataService
                 Id = Guid.NewGuid(),
                 Name = "Admin",
                 Description = "Administrator with management capabilities",
+                IsSystem = true,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "System",
                 TenantId = Guid.Empty
@@ -83,6 +133,7 @@ public static class SeedDataService
                 Id = Guid.NewGuid(),
                 Name = "Viewer",
                 Description = "Read-only access to the system",
+                IsSystem = true,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "System",
                 TenantId = Guid.Empty
@@ -92,6 +143,7 @@ public static class SeedDataService
                 Id = Guid.NewGuid(),
                 Name = "Test",
                 Description = "Test role with full CRUD access for testing",
+                IsSystem = true,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "System",
                 TenantId = Guid.Empty
@@ -181,41 +233,71 @@ public static class SeedDataService
         await context.SaveChangesAsync();
     }
 
-    private static async Task SeedSuperAdminAsync(ApplicationDbContext context)
+    private static async Task SeedSuperAdminAsync(ApplicationDbContext context, IConfiguration configuration)
     {
-        if (await context.Users.AnyAsync(u => u.Email == "superadmin@contractor.monitoring"))
-            return;
+        var existingSuperAdmin = await context.Users.FirstOrDefaultAsync(u => u.Email == "superadmin@contractor.monitoring");
 
         var superAdminRole = await context.Roles.FirstAsync(r => r.Name == "SuperAdmin");
 
-        var superAdmin = new User
-        {
-            Id = Guid.NewGuid(),
-            Email = "superadmin@contractor.monitoring",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("SuperAdmin@123"),
-            FirstName = "Super",
-            LastName = "Admin",
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            CreatedBy = "System",
-            TenantId = Guid.Empty
-        };
+        var rawPassword = configuration["Seed:SuperAdminPassword"]
+            ?? throw new InvalidOperationException(
+                "Seed:SuperAdminPassword is not configured. Set it via environment variable SEED__SUPERADMINPASSWORD or user-secrets.");
 
-        await context.Users.AddAsync(superAdmin);
+        if (existingSuperAdmin == null)
+        {
+            var superAdmin = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = "superadmin@contractor.monitoring",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(rawPassword),
+                FirstName = "Super",
+                LastName = "Admin",
+                IsActive = true,
+                IsApproved = true,
+                MustChangePassword = true,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "System",
+                TenantId = Guid.Empty
+            };
+
+            await context.Users.AddAsync(superAdmin);
+            await context.SaveChangesAsync();
+
+            var userRole = new UserRole
+            {
+                Id = Guid.NewGuid(),
+                UserId = superAdmin.Id,
+                RoleId = superAdminRole.Id,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "System",
+                TenantId = Guid.Empty
+            };
+
+            await context.UserRoles.AddAsync(userRole);
+            await context.SaveChangesAsync();
+            return;
+        }
+
+        existingSuperAdmin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(rawPassword);
+        existingSuperAdmin.IsActive = true;
+        existingSuperAdmin.IsApproved = true;
+        existingSuperAdmin.MustChangePassword = true;
+        existingSuperAdmin.UpdatedAt = DateTime.UtcNow;
+        existingSuperAdmin.UpdatedBy = "System";
         await context.SaveChangesAsync();
 
-        // Assign SuperAdmin role
-        var userRole = new UserRole
+        if (!await context.UserRoles.AnyAsync(ur => ur.UserId == existingSuperAdmin.Id && ur.RoleId == superAdminRole.Id))
         {
-            Id = Guid.NewGuid(),
-            UserId = superAdmin.Id,
-            RoleId = superAdminRole.Id,
-            CreatedAt = DateTime.UtcNow,
-            CreatedBy = "System",
-            TenantId = Guid.Empty
-        };
-
-        await context.UserRoles.AddAsync(userRole);
-        await context.SaveChangesAsync();
+            await context.UserRoles.AddAsync(new UserRole
+            {
+                Id = Guid.NewGuid(),
+                UserId = existingSuperAdmin.Id,
+                RoleId = superAdminRole.Id,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "System",
+                TenantId = Guid.Empty
+            });
+            await context.SaveChangesAsync();
+        }
     }
 }
