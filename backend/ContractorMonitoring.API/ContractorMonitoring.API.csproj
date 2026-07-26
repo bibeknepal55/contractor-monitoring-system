@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>cms-api-dev-secrets</UserSecretsId>
     <!-- GHSA-4625-4j76-fww9: OTLP endpoint exposure — mitigated: OtlpEndpoint is empty by default
          and only configured via environment variable in trusted infrastructure. -->
     <NuGetAuditSuppress>https://github.com/advisories/GHSA-4625-4j76-fww9</NuGetAuditSuppress>

@@ -40,7 +40,7 @@ public class LoginCommandHandlerTests
         _users.Setup(r => r.FindAsync(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>()))
               .ReturnsAsync(user);
         _pwd.Setup(p => p.VerifyPassword("pass", "hash")).Returns(true);
-        _jwt.Setup(j => j.GenerateAccessToken(user)).ReturnsAsync("access_token");
+        _jwt.Setup(j => j.GenerateAccessToken(user, It.IsAny<List<string>?>(), It.IsAny<List<string>?>())).ReturnsAsync("access_token");
         _jwt.Setup(j => j.GenerateRefreshToken()).ReturnsAsync("refresh_token");
         _jwt.Setup(j => j.GetTokenExpiryTime("access_token")).ReturnsAsync("2099-01-01T00:00:00Z");
         _resolver.Setup(r => r.GetUserRolesAsync(user.Id)).ReturnsAsync(["Admin"]);

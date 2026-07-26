@@ -37,7 +37,7 @@ public class RefreshTokenCommandHandlerTests
         var user = ValidUser();
         _jwt.Setup(j => j.ValidateToken("access", false)).ReturnsAsync((true, user.Id));
         _users.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-        _jwt.Setup(j => j.GenerateAccessToken(user)).ReturnsAsync("new_access");
+        _jwt.Setup(j => j.GenerateAccessToken(user, It.IsAny<List<string>?>(), It.IsAny<List<string>?>())).ReturnsAsync("new_access");
         _jwt.Setup(j => j.GenerateRefreshToken()).ReturnsAsync("new_rt");
         _jwt.Setup(j => j.GetTokenExpiryTime("new_access")).ReturnsAsync("2099-01-01T00:00:00Z");
         _resolver.Setup(r => r.GetUserRolesAsync(user.Id)).ReturnsAsync([]);

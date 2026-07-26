@@ -32,9 +32,10 @@
 **/appsettings.Development.json
 **/appsettings.*.json
 !**/appsettings.example.json
-**/environment.ts
-**/environment.prod.ts
+**/environment.production.ts
 **/launchSettings.json
+**/backend_output.txt
+.env
 
 # ============================================
 # MIGRATIONS (optional - keep if you want)
