@@ -1,5 +1,4 @@
 using ContractorMonitoring.API.Middleware;
-using ContractorMonitoring.API.Services;
 using ContractorMonitoring.Application;
 using ContractorMonitoring.Infrastructure;
 using ContractorMonitoring.Infrastructure.Data;
